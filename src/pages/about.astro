@@ -10,87 +10,66 @@ import SEOHead from '../components/SEOHead.astro';
     description="OKINAWA!GO!!について。沖縄在住フリーランスが運営する、地元目線の沖縄旅行メディア。"
   />
 
-  <section class="px-6 md:px-12 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[780px] mx-auto">
-    <p class="meta-text text-[var(--color-text-tertiary)] mb-4">About</p>
-    <h1 class="text-[28px] md:text-[32px] font-medium leading-[1.3] tracking-[-0.01em] text-[var(--color-text-primary)] mb-12">
-      OKINAWA!GO!! について
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[680px] mx-auto">
+    <span class="label-text block mb-3 reveal">About</span>
+
+    <!-- Big statement -->
+    <h1 class="text-[28px] md:text-[40px] font-medium leading-[1.25] tracking-[-0.02em] text-[var(--text)] mb-16 md:mb-24 reveal">
+      沖縄在住フリーランス<br />1人社長。<br />妻が沖縄出身。<br />私は関西人。
     </h1>
 
     <div class="space-y-16">
-      <!-- About the site -->
-      <div>
-        <h2 class="text-[18px] font-medium leading-[1.5] text-[var(--color-text-primary)] mb-4">
-          このサイトについて
-        </h2>
-        <div class="space-y-4 text-[16px] leading-[1.9] text-[var(--color-text-secondary)]">
-          <p>
-            OKINAWA!GO!! は、沖縄在住者の目線で沖縄旅行の情報を発信するメディアです。
-          </p>
-          <p>
-            ガイドブックに載っている定番スポットだけじゃなく、住んでるからこそ知っている穴場や、地元民の過ごし方を紹介しています。
-          </p>
-          <p>
-            「観光客としてではなく、地元の友達に案内してもらうような旅」を、このサイトを通して提供できたらと思っています。
-          </p>
-        </div>
+      <!-- Site info -->
+      <div class="reveal">
+        <span class="label-text block mb-4">Site</span>
+        <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#333] mb-4">
+          OKINAWA!GO!! は、沖縄在住者の目線で沖縄旅行の情報を発信するメディアです。
+        </p>
+        <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#333]">
+          ガイドブックに載っている定番スポットだけじゃなく、住んでるからこそ知っている穴場や、地元民の過ごし方を紹介しています。
+        </p>
       </div>
 
-      <!-- About the author -->
-      <div>
-        <h2 class="text-[18px] font-medium leading-[1.5] text-[var(--color-text-primary)] mb-4">
-          運営者
-        </h2>
-        <div class="space-y-4 text-[16px] leading-[1.9] text-[var(--color-text-secondary)]">
-          <p>
-            沖縄在住フリーランス1人社長。妻が沖縄出身。私は関西人。
-          </p>
-          <p>
-            沖縄に移住して、毎日のように島のあちこちを回っています。在住歴が長くなるほど「まだまだ知らない沖縄がある」と実感する日々。
-          </p>
-          <p>
-            Xアカウント
+      <!-- Concept -->
+      <div class="reveal">
+        <span class="label-text block mb-4">Concept</span>
+        <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#333] mb-4">
+          「住んでるからこそわかる沖縄」がコンセプトです。
+        </p>
+        <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#333]">
+          観光客向けの情報は世の中にたくさんある。でも、在住者だからこそ知っている「本当にいい場所」「本当においしい店」「本当に心地いい過ごし方」は、なかなか表に出てこない。そういう情報を、友達に教えるような感覚で発信していきます。
+        </p>
+      </div>
+
+      <!-- Profile -->
+      <div class="reveal">
+        <span class="label-text block mb-4">Profile</span>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-6 py-3 border-t" style="border-color: var(--border); border-width: 0.5px;">
+            <span class="font-['Inter'] text-[9px] tracking-[0.12em] text-[#aaa] uppercase shrink-0 pt-[2px] w-16">Name</span>
+            <span class="text-[14px] text-[var(--text)]">KOUMEI</span>
+          </li>
+          <li class="flex items-start gap-6 py-3 border-t" style="border-color: var(--border); border-width: 0.5px;">
+            <span class="font-['Inter'] text-[9px] tracking-[0.12em] text-[#aaa] uppercase shrink-0 pt-[2px] w-16">Base</span>
+            <span class="text-[14px] text-[var(--text)]">沖縄県</span>
+          </li>
+          <li class="flex items-start gap-6 py-3 border-t" style="border-color: var(--border); border-width: 0.5px;">
+            <span class="font-['Inter'] text-[9px] tracking-[0.12em] text-[#aaa] uppercase shrink-0 pt-[2px] w-16">X</span>
             <a
               href="https://x.com/KOUMEI_GO"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-[var(--color-accent)] underline underline-offset-2 hover:opacity-70 transition-opacity duration-300"
+              class="text-[14px] text-[var(--text)] no-underline hover:opacity-60 transition-opacity duration-300"
             >@KOUMEI_GO</a>
-            （KOUMEI ! GO!!）では、沖縄のリアルな情報を毎日発信しています。
-          </p>
-        </div>
-      </div>
-
-      <!-- Concept -->
-      <div>
-        <h2 class="text-[18px] font-medium leading-[1.5] text-[var(--color-text-primary)] mb-4">
-          コンセプト
-        </h2>
-        <div class="space-y-4 text-[16px] leading-[1.9] text-[var(--color-text-secondary)]">
-          <p>
-            「住んでるからこそわかる沖縄」がコンセプトです。
-          </p>
-          <p>
-            観光客向けの情報は世の中にたくさんある。でも、在住者だからこそ知っている「本当にいい場所」「本当においしい店」「本当に心地いい過ごし方」は、なかなか表に出てこない。
-          </p>
-          <p>
-            そういう情報を、友達に教えるような感覚で発信していきます。
-          </p>
-        </div>
+          </li>
+        </ul>
       </div>
 
       <!-- Contact -->
-      <div>
-        <h2 class="text-[18px] font-medium leading-[1.5] text-[var(--color-text-primary)] mb-4">
-          お問い合わせ
-        </h2>
-        <p class="text-[16px] leading-[1.9] text-[var(--color-text-secondary)]">
-          お問い合わせは X の DM にてお気軽にどうぞ。→
-          <a
-            href="https://x.com/KOUMEI_GO"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-[var(--color-accent)] underline underline-offset-2 hover:opacity-70 transition-opacity duration-300"
-          >@KOUMEI_GO</a>
+      <div class="reveal">
+        <span class="label-text block mb-4">Contact</span>
+        <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#333]">
+          お問い合わせは X の DM にてお気軽にどうぞ。
         </p>
       </div>
     </div>

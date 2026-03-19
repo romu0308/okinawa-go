@@ -1,17 +1,19 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
 interface Props {
   class?: string;
+  darkMode?: boolean;
 }
 
-const { class: className } = Astro.props;
+const { class: className, darkMode = false } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" transition:animate="none">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,13 +37,53 @@ const { class: className } = Astro.props;
     gtag('config', 'G-XXXXXXXXXX');
   </script>
 
+  <ClientRouter />
   <slot name="head" />
 </head>
-<body class:list={["min-h-screen flex flex-col bg-[var(--color-bg)]", className]}>
-  <Header />
+<body class:list={[
+  "min-h-screen flex flex-col",
+  darkMode ? "bg-[var(--dark-bg)] text-white" : "bg-[var(--bg)] text-[var(--text)]",
+  className
+]}>
+  <Header darkMode={darkMode} />
   <main class="flex-1">
     <slot />
   </main>
-  <Footer />
+  <Footer darkMode={darkMode} />
+
+  <script>
+    import Lenis from 'lenis';
+
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    reveals.forEach((el) => observer.observe(el));
+
+    // Re-init on view transition
+    document.addEventListener('astro:page-load', () => {
+      const newReveals = document.querySelectorAll('.reveal:not(.is-visible)');
+      newReveals.forEach((el) => observer.observe(el));
+    });
+  </script>
 </body>
 </html>

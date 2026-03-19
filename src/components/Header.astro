@@ -1,16 +1,30 @@
 ---
+interface Props {
+  darkMode?: boolean;
+}
+
+const { darkMode = false } = Astro.props;
+
 const navLinks = [
-  { href: '/articles/?category=area-guide', label: 'Area' },
-  { href: '/plan/', label: 'Plan' },
-  { href: '/articles/?category=food', label: 'Spot' },
+  { href: '/articles/', label: 'Work' },
+  { href: '/shindan/', label: 'Shindan' },
   { href: '/about/', label: 'About' },
 ];
 ---
 
-<header class="w-full">
-  <div class="mx-auto max-w-[1200px] px-6 md:px-12 py-6 flex items-center justify-between">
-    <a href="/" class="text-[var(--color-text-primary)] no-underline hover:opacity-70 transition-opacity duration-300">
-      <span class="font-['Inter'] text-[15px] font-medium tracking-[0.02em]">OKINAWA!GO!!</span>
+<header class="w-full relative z-50">
+  <div class:list={[
+    "flex items-center justify-between",
+    "px-5 py-[14px] md:px-10 md:py-4"
+  ]}>
+    <a
+      href="/"
+      class:list={[
+        "no-underline transition-opacity duration-300 hover:opacity-60",
+        darkMode ? "text-white" : "text-[var(--text)]"
+      ]}
+    >
+      <span class="font-['Inter'] text-[11px] font-medium tracking-[0.18em] uppercase">OKINAWA!GO!!</span>
     </a>
 
     <!-- Desktop nav -->
@@ -18,7 +32,10 @@ const navLinks = [
       {navLinks.map((link) => (
         <a
           href={link.href}
-          class="nav-text text-[var(--color-text-secondary)] no-underline hover:text-[var(--color-text-primary)] transition-colors duration-300"
+          class:list={[
+            "font-['Inter'] text-[11px] tracking-[0.08em] uppercase no-underline transition-opacity duration-300 hover:opacity-60",
+            darkMode ? "text-white/50" : "text-[var(--text-secondary)]"
+          ]}
         >
           {link.label}
         </a>
@@ -28,35 +45,41 @@ const navLinks = [
     <!-- Mobile hamburger -->
     <button
       id="menu-toggle"
-      class="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-[5px] bg-transparent border-none cursor-pointer"
+      class="md:hidden flex flex-col justify-center items-end w-8 h-8 gap-[6px] bg-transparent border-none cursor-pointer"
       aria-label="メニューを開く"
     >
-      <span class="hamburger-line block w-5 h-[1px] bg-[var(--color-text-primary)] transition-all duration-300"></span>
-      <span class="hamburger-line block w-5 h-[1px] bg-[var(--color-text-primary)] transition-all duration-300"></span>
+      <span class:list={[
+        "block h-[1.5px] transition-all duration-300",
+        darkMode ? "bg-white" : "bg-[var(--text)]"
+      ]} style="width: 20px"></span>
+      <span class:list={[
+        "block h-[1.5px] transition-all duration-300",
+        darkMode ? "bg-white" : "bg-[var(--text)]"
+      ]} style="width: 14px"></span>
     </button>
   </div>
 
   <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-50 bg-[var(--color-bg)]">
-    <div class="px-6 py-6 flex items-center justify-between">
-      <a href="/" class="text-[var(--color-text-primary)] no-underline">
-        <span class="font-['Inter'] text-[15px] font-medium tracking-[0.02em]">OKINAWA!GO!!</span>
+  <div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-[100] bg-[var(--bg)]">
+    <div class="px-5 py-[14px] flex items-center justify-between">
+      <a href="/" class="text-[var(--text)] no-underline">
+        <span class="font-['Inter'] text-[11px] font-medium tracking-[0.18em] uppercase">OKINAWA!GO!!</span>
       </a>
       <button
         id="menu-close"
         class="flex items-center justify-center w-8 h-8 bg-transparent border-none cursor-pointer"
         aria-label="メニューを閉じる"
       >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M1 1L15 15M15 1L1 15" stroke="currentColor" stroke-width="1"/>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1"/>
         </svg>
       </button>
     </div>
-    <nav class="flex flex-col items-start gap-8 px-6 pt-12">
+    <nav class="flex flex-col items-start gap-10 px-5 pt-16">
       {navLinks.map((link) => (
         <a
           href={link.href}
-          class="nav-text text-[18px] tracking-[0.08em] uppercase text-[var(--color-text-primary)] no-underline"
+          class="font-['Inter'] text-[24px] font-medium tracking-[0.04em] uppercase text-[var(--text)] no-underline"
         >
           {link.label}
         </a>
@@ -80,7 +103,6 @@ const navLinks = [
     document.body.style.overflow = '';
   });
 
-  // Close on link click
   menu?.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => {
       menu?.classList.add('hidden');

@@ -1,0 +1,327 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SEOHead from '../components/SEOHead.astro';
+---
+
+<BaseLayout darkMode={true}>
+  <SEOHead
+    slot="head"
+    title="沖縄旅行タイプ診断"
+    description="5つの質問に答えるだけで、あなたにぴったりの沖縄旅行スタイルがわかる。沖縄在住者が考えた旅行タイプ診断。"
+  />
+
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[680px] mx-auto min-h-[80vh]">
+    <!-- Intro -->
+    <div id="shindan-intro">
+      <span class="font-['Inter'] text-[9px] tracking-[0.25em] uppercase block mb-8" style="color: rgba(255,255,255,0.25);">Travel Type Diagnosis</span>
+      <h1 class="text-[32px] md:text-[48px] font-medium leading-[1.2] tracking-[-0.03em] text-white mb-6">
+        あなたの<br />沖縄旅行タイプを<br />診断しよう。
+      </h1>
+      <p class="text-[11px] leading-[1.7] mb-12" style="color: rgba(255,255,255,0.35); max-width: 360px;">
+        5つの質問に答えるだけで、あなたにぴったりの沖縄旅行スタイルがわかります。結果に合わせたおすすめエリアと記事もご紹介。
+      </p>
+      <button
+        id="start-btn"
+        class="inline-flex items-center gap-4 bg-transparent border-none cursor-pointer group"
+      >
+        <span class="font-['Inter'] text-[13px] tracking-[0.04em] text-white transition-opacity duration-300 group-hover:opacity-60">Start</span>
+        <span class="flex items-center justify-center w-8 h-8 rounded-full transition-opacity duration-300 group-hover:opacity-60" style="border: 0.5px solid rgba(255,255,255,0.2);">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6H9.5M9.5 6L6.5 3M9.5 6L6.5 9" stroke="white" stroke-width="0.8"/></svg>
+        </span>
+      </button>
+    </div>
+
+    <!-- Quiz -->
+    <div id="shindan-quiz" class="hidden">
+      <!-- Progress -->
+      <div class="mb-12">
+        <div class="flex items-center justify-between mb-3">
+          <span class="font-['Inter'] text-[9px] tracking-[0.12em]" style="color: rgba(255,255,255,0.3);" id="progress-label">1 / 5</span>
+        </div>
+        <div class="w-full h-[1px] overflow-hidden" style="background: rgba(255,255,255,0.1);">
+          <div id="progress-bar" class="h-full bg-white transition-all duration-500 ease-out" style="width: 20%"></div>
+        </div>
+      </div>
+
+      <!-- Question -->
+      <div id="question-card" class="transition-opacity duration-300">
+        <span class="font-['Inter'] text-[9px] tracking-[0.2em] uppercase block mb-4" style="color: rgba(255,255,255,0.25);" id="question-number">Q1</span>
+        <h2 class="text-[24px] md:text-[32px] font-medium leading-[1.3] tracking-[-0.02em] text-white mb-10" id="question-text"></h2>
+        <div id="choices" class="space-y-3"></div>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="shindan-result" class="hidden">
+      <span class="font-['Inter'] text-[9px] tracking-[0.25em] uppercase block mb-8" style="color: rgba(255,255,255,0.25);">Your Type</span>
+
+      <h2 class="text-[28px] md:text-[40px] font-medium leading-[1.2] tracking-[-0.02em] text-white mb-6" id="result-type"></h2>
+      <p class="text-[14px] leading-[1.8] mb-10" style="color: rgba(255,255,255,0.5);" id="result-description"></p>
+
+      <div class="py-5 border-t mb-5" style="border-color: rgba(255,255,255,0.1); border-width: 0.5px;">
+        <span class="font-['Inter'] text-[9px] tracking-[0.12em] uppercase block mb-2" style="color: rgba(255,255,255,0.2);">Recommended Area</span>
+        <p class="text-[14px] text-white" id="result-area"></p>
+      </div>
+
+      <div class="py-5 border-t mb-10" style="border-color: rgba(255,255,255,0.1); border-width: 0.5px;" id="result-article-section">
+        <span class="font-['Inter'] text-[9px] tracking-[0.12em] uppercase block mb-2" style="color: rgba(255,255,255,0.2);">Recommended Article</span>
+        <a id="result-article-link" href="/" class="text-[14px] text-white no-underline hover:opacity-60 transition-opacity duration-300"></a>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-6 pt-6">
+        <a
+          id="share-x-btn"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 font-['Inter'] text-[11px] tracking-[0.04em] text-white no-underline hover:opacity-60 transition-opacity duration-300"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Share
+        </a>
+        <button
+          id="retry-btn"
+          class="font-['Inter'] text-[11px] tracking-[0.04em] bg-transparent border-none cursor-pointer hover:opacity-60 transition-opacity duration-300"
+          style="color: rgba(255,255,255,0.4);"
+        >
+          Retry
+        </button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const questions = [
+    {
+      id: 1,
+      text: '沖縄旅行で一番やりたいことは？',
+      choices: [
+        { text: '海でのんびり', scores: { beach: 2, relax: 1 } },
+        { text: 'アクティビティを楽しむ', scores: { active: 2 } },
+        { text: 'グルメを堪能', scores: { gourmet: 2 } },
+        { text: '文化・歴史を巡る', scores: { culture: 2 } },
+      ],
+    },
+    {
+      id: 2,
+      text: '旅行のテンポは？',
+      choices: [
+        { text: '朝から晩まで詰め込む', scores: { active: 1, allin: 2 } },
+        { text: '午前だけ動いて午後はゆっくり', scores: { beach: 1, relax: 1 } },
+        { text: '完全ノープラン', scores: { relax: 2 } },
+        { text: '日によって変える', scores: { allin: 1, gourmet: 1 } },
+      ],
+    },
+    {
+      id: 3,
+      text: '食事で一番重視するのは？',
+      choices: [
+        { text: '地元の人が通う店', scores: { gourmet: 2, culture: 1 } },
+        { text: '映える・おしゃれな店', scores: { beach: 1, allin: 1 } },
+        { text: 'がっつりボリューム', scores: { active: 1, allin: 1 } },
+        { text: 'その土地の伝統料理', scores: { culture: 2 } },
+      ],
+    },
+    {
+      id: 4,
+      text: '宿泊先に求めるものは？',
+      choices: [
+        { text: 'オーシャンビュー', scores: { beach: 2 } },
+        { text: 'コスパ重視', scores: { allin: 1, active: 1 } },
+        { text: 'おしゃれなデザインホテル', scores: { beach: 1, gourmet: 1 } },
+        { text: '地元感のある民宿・ゲストハウス', scores: { culture: 1, relax: 1 } },
+      ],
+    },
+    {
+      id: 5,
+      text: '旅の思い出で一番大事なのは？',
+      choices: [
+        { text: '写真映えするスポット', scores: { beach: 1, allin: 1 } },
+        { text: '現地の人との交流', scores: { culture: 1, gourmet: 1 } },
+        { text: '非日常体験', scores: { active: 2 } },
+        { text: '心からリラックスできた時間', scores: { relax: 2 } },
+      ],
+    },
+  ];
+
+  type TypeKey = 'beach' | 'active' | 'gourmet' | 'culture' | 'relax' | 'allin';
+
+  interface ResultType {
+    name: string;
+    description: string;
+    area: string;
+    articleTitle: string;
+    articleUrl: string;
+  }
+
+  const results: Record<TypeKey, ResultType> = {
+    beach: {
+      name: 'ビーチリゾート\n満喫タイプ',
+      description: '海とリゾートを全力で楽しむあなた。透き通った海を眺めながら、のんびりとした島時間を過ごすのが最高の贅沢。恩納村〜北谷エリアのリゾートホテルを拠点に、ビーチホッピングを楽しんで。',
+      area: '恩納村〜北谷エリア',
+      articleTitle: '北谷で過ごす1日。地元民が毎週通うルート',
+      articleUrl: '/articles/chatan-local-guide/',
+    },
+    active: {
+      name: 'アクティブ\n冒険タイプ',
+      description: 'シュノーケル、カヤック、トレッキング...動き回ってこそ旅！沖縄の大自然を体で感じたいあなたには、北部〜やんばるエリアがぴったり。手つかずの自然が待っています。',
+      area: '北部〜やんばるエリア',
+      articleTitle: '沖縄2泊3日、地元民が本気で組んだモデルコース',
+      articleUrl: '/articles/okinawa-2nights-3days-model-course/',
+    },
+    gourmet: {
+      name: 'グルメハンター\nタイプ',
+      description: '沖縄そば、タコス、海ぶどう、島豆腐...食べ尽くす旅。地元民が通う名店を巡って、沖縄の食文化をとことん味わい尽くしましょう。那覇〜中部の食べ歩きルートがおすすめ。',
+      area: '那覇〜中部エリア',
+      articleTitle: '地元民が週3で通う沖縄そば屋、5選',
+      articleUrl: '/articles/local-okinawa-soba-5/',
+    },
+    culture: {
+      name: '文化・歴史\n探訪タイプ',
+      description: '首里城、斎場御嶽、やちむん通り...沖縄には琉球王国から続く深い歴史と独自の文化がある。それを肌で感じたいあなたは、南部エリアを中心にじっくり巡る旅を。',
+      area: '南部エリア（那覇・南城市周辺）',
+      articleTitle: '沖縄2泊3日、地元民が本気で組んだモデルコース',
+      articleUrl: '/articles/okinawa-2nights-3days-model-course/',
+    },
+    relax: {
+      name: 'のんびり\n癒しタイプ',
+      description: '何もしない贅沢。カフェ巡り、サンセット、波の音。頑張らない旅こそ、最高の旅。離島か北部の静かなエリアで、日常から完全に離れる時間を過ごして。',
+      area: '離島 or 北部の静かなエリア',
+      articleTitle: '雨の日の沖縄、地元民はこう過ごす',
+      articleUrl: '/articles/okinawa-rainy-day-guide/',
+    },
+    allin: {
+      name: '欲張り\n全部タイプ',
+      description: '海もグルメも文化も全部楽しみたい！限られた日数で沖縄を最大限に満喫するなら、効率よく回れるモデルコースを参考に。詰め込むからこそ見える沖縄がある。',
+      area: '南部〜中部〜北部（全域）',
+      articleTitle: '沖縄2泊3日、地元民が本気で組んだモデルコース',
+      articleUrl: '/articles/okinawa-2nights-3days-model-course/',
+    },
+  };
+
+  let currentQuestion = 0;
+  const scores: Record<TypeKey, number> = { beach: 0, active: 0, gourmet: 0, culture: 0, relax: 0, allin: 0 };
+
+  const introEl = document.getElementById('shindan-intro')!;
+  const quizEl = document.getElementById('shindan-quiz')!;
+  const resultEl = document.getElementById('shindan-result')!;
+  const startBtn = document.getElementById('start-btn')!;
+  const retryBtn = document.getElementById('retry-btn')!;
+  const progressLabel = document.getElementById('progress-label')!;
+  const progressBar = document.getElementById('progress-bar')!;
+  const questionCard = document.getElementById('question-card')!;
+  const questionNumber = document.getElementById('question-number')!;
+  const questionText = document.getElementById('question-text')!;
+  const choicesEl = document.getElementById('choices')!;
+  const resultType = document.getElementById('result-type')!;
+  const resultDescription = document.getElementById('result-description')!;
+  const resultArea = document.getElementById('result-area')!;
+  const resultArticleLink = document.getElementById('result-article-link') as HTMLAnchorElement;
+  const shareXBtn = document.getElementById('share-x-btn') as HTMLAnchorElement;
+
+  function renderQuestion(index: number) {
+    const q = questions[index];
+    progressLabel.textContent = `${index + 1} / 5`;
+    progressBar.style.width = `${((index + 1) / 5) * 100}%`;
+    questionNumber.textContent = `Q${index + 1}`;
+    questionText.textContent = q.text;
+
+    choicesEl.innerHTML = '';
+    q.choices.forEach((choice, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'w-full text-left px-5 py-4 rounded-[4px] text-[14px] leading-[1.6] text-white bg-transparent cursor-pointer transition-all duration-200';
+      btn.style.cssText = 'border: 0.5px solid rgba(255,255,255,0.15);';
+      btn.textContent = choice.text;
+      btn.addEventListener('mouseenter', () => {
+        btn.style.borderColor = 'rgba(255,255,255,0.4)';
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.borderColor = 'rgba(255,255,255,0.15)';
+      });
+      btn.addEventListener('click', () => handleChoice(i));
+      choicesEl.appendChild(btn);
+    });
+  }
+
+  function handleChoice(choiceIndex: number) {
+    const choice = questions[currentQuestion].choices[choiceIndex];
+    for (const [key, value] of Object.entries(choice.scores)) {
+      scores[key as TypeKey] += value;
+    }
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+      questionCard.style.opacity = '0';
+      setTimeout(() => {
+        renderQuestion(currentQuestion);
+        questionCard.style.opacity = '1';
+      }, 300);
+    } else {
+      showResult();
+    }
+  }
+
+  function getResultType(): TypeKey {
+    let maxScore = -1;
+    let maxKey: TypeKey = 'beach';
+    for (const [key, value] of Object.entries(scores)) {
+      if (value > maxScore) {
+        maxScore = value;
+        maxKey = key as TypeKey;
+      }
+    }
+    return maxKey;
+  }
+
+  function showResult() {
+    quizEl.classList.add('hidden');
+
+    const typeKey = getResultType();
+    const result = results[typeKey];
+
+    const typeName = result.name.replace('\n', '');
+    resultType.innerHTML = result.name.replace('\n', '<br />');
+    resultDescription.textContent = result.description;
+    resultArea.textContent = result.area;
+    resultArticleLink.textContent = result.articleTitle;
+    resultArticleLink.href = result.articleUrl;
+
+    const shareText = encodeURIComponent(
+      `私の沖縄旅行タイプは【${typeName}】でした！\nあなたも診断してみて→ https://okinawa-go.jp/shindan\n#沖縄旅行 #OKINAWAGO`
+    );
+    shareXBtn.href = `https://x.com/intent/tweet?text=${shareText}`;
+
+    resultEl.classList.remove('hidden');
+    resultEl.style.opacity = '0';
+    requestAnimationFrame(() => {
+      resultEl.style.transition = 'opacity 0.5s ease';
+      resultEl.style.opacity = '1';
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function reset() {
+    currentQuestion = 0;
+    for (const key of Object.keys(scores)) {
+      scores[key as TypeKey] = 0;
+    }
+    resultEl.classList.add('hidden');
+    resultEl.style.opacity = '';
+    resultEl.style.transition = '';
+    quizEl.classList.remove('hidden');
+    renderQuestion(0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  startBtn.addEventListener('click', () => {
+    introEl.classList.add('hidden');
+    quizEl.classList.remove('hidden');
+    renderQuestion(0);
+  });
+
+  retryBtn.addEventListener('click', reset);
+</script>

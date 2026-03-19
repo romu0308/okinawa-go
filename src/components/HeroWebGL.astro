@@ -1,0 +1,296 @@
+---
+interface ArticleData {
+  slug: string;
+  title: string;
+  description: string;
+  publishedAt: string;
+  category: string;
+  thumbnail: string;
+  thumbnailAlt: string;
+  number: string;
+}
+
+interface Props {
+  articles: ArticleData[];
+}
+
+const { articles } = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  'model-course': 'Model Course',
+  'area-guide': 'Area Guide',
+  'food': 'Food',
+  'activity': 'Activity',
+  'tips': 'Tips',
+  'seasonal': 'Seasonal',
+};
+
+const formatDate = (dateStr: string) => {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+};
+
+const totalCount = articles.length;
+---
+
+<a href="#" id="hero-link" class="block no-underline">
+  <div class="hero-webgl relative w-full overflow-hidden cursor-pointer" style="height: 560px" id="hero-container">
+    <!-- Fallback image -->
+    <img
+      src=""
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover"
+      id="hero-fallback-img"
+      loading="eager"
+      fetchpriority="high"
+    />
+
+    <!-- WebGL canvas overlay -->
+    <canvas id="hero-canvas" class="absolute inset-0 w-full h-full" style="opacity: 0; transition: opacity 0.6s ease;"></canvas>
+
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.01) 30%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0.55) 100%);"></div>
+
+    <!-- Content overlay -->
+    <div class="absolute inset-0 flex flex-col justify-between px-5 py-6 md:px-10 md:py-10 pointer-events-none">
+      <!-- Top row -->
+      <div class="flex items-start justify-between">
+        <!-- Top left label -->
+        <span class="font-['Inter'] text-[9px] tracking-[0.2em] uppercase" style="color: rgba(255,255,255,0.4);">
+          Okinawa Local Guide
+        </span>
+        <!-- Top right indicator -->
+        <div class="flex items-center gap-[6px]" id="hero-indicators">
+          {articles.map((_, i) => (
+            <span
+              class="hero-indicator block rounded-[1px]"
+              style="width: 16px; height: 1.5px; background: rgba(255,255,255,0.2);"
+              data-index={i}
+            ></span>
+          ))}
+        </div>
+      </div>
+
+      <!-- Bottom row -->
+      <div class="flex items-end justify-between">
+        <!-- Left: article info -->
+        <div class="max-w-[560px]">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="font-['Inter'] text-[9px] tracking-[0.12em]" style="color: rgba(255,255,255,0.45);" id="hero-number"></span>
+            <span class="font-['Inter'] text-[9px] tracking-[0.12em] uppercase" style="color: rgba(255,255,255,0.45);" id="hero-category"></span>
+            <span class="font-['Inter'] text-[9px] tracking-[0.12em]" style="color: rgba(255,255,255,0.45);" id="hero-date"></span>
+          </div>
+          <h2 class="hero-line text-[26px] md:text-[32px] font-medium leading-[1.35] text-white mb-3" id="hero-title"></h2>
+          <p class="hero-line text-[11px] leading-[1.7] mb-5 line-clamp-2 hidden md:block" style="color: rgba(255,255,255,0.5);" id="hero-desc"></p>
+          <span class="hero-line inline-flex items-center gap-3 font-['Inter'] text-[10px] tracking-[0.08em]" style="color: rgba(255,255,255,0.6);">
+            Read article
+            <span class="block w-6 h-[0.5px]" style="background: rgba(255,255,255,0.4);"></span>
+          </span>
+        </div>
+
+        <!-- Right: scroll indicator -->
+        <div class="flex flex-col items-center gap-2 shrink-0 ml-6">
+          <span class="font-['Inter'] text-[9px] tracking-[0.2em] uppercase" style="color: rgba(255,255,255,0.35); writing-mode: vertical-lr;">Scroll</span>
+          <div class="w-[1px] h-6" style="background: rgba(255,255,255,0.3);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</a>
+
+<!-- Article data for client-side random pick -->
+<script
+  id="hero-articles-data"
+  type="application/json"
+  set:html={JSON.stringify(articles.map((a) => ({
+    ...a,
+    categoryLabel: categoryLabels[a.category] || a.category,
+    formattedDate: formatDate(a.publishedAt),
+  })))}
+/>
+
+<style>
+  @media (min-width: 768px) {
+    .hero-webgl {
+      height: 90vh !important;
+    }
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+
+  function initHero() {
+    const dataEl = document.getElementById('hero-articles-data');
+    if (!dataEl) return;
+
+    const articles = JSON.parse(dataEl.textContent || '[]');
+    if (articles.length === 0) return;
+
+    // Random pick
+    const randomIndex = Math.floor(Math.random() * articles.length);
+    const article = articles[randomIndex];
+
+    // Populate DOM
+    const heroLink = document.getElementById('hero-link') as HTMLAnchorElement;
+    const heroTitle = document.getElementById('hero-title');
+    const heroDesc = document.getElementById('hero-desc');
+    const heroNumber = document.getElementById('hero-number');
+    const heroCategory = document.getElementById('hero-category');
+    const heroDate = document.getElementById('hero-date');
+    const fallbackImg = document.getElementById('hero-fallback-img') as HTMLImageElement;
+
+    if (heroLink) heroLink.href = `/articles/${article.slug}/`;
+    if (heroTitle) heroTitle.textContent = article.title;
+    if (heroDesc) heroDesc.textContent = article.description;
+    if (heroNumber) heroNumber.textContent = article.number;
+    if (heroCategory) heroCategory.textContent = article.categoryLabel;
+    if (heroDate) heroDate.textContent = article.formattedDate;
+    if (fallbackImg) {
+      fallbackImg.src = article.thumbnail;
+      fallbackImg.alt = article.thumbnailAlt;
+    }
+
+    // Highlight indicator
+    const indicators = document.querySelectorAll('.hero-indicator');
+    indicators.forEach((ind, i) => {
+      (ind as HTMLElement).style.background =
+        i === randomIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)';
+    });
+
+    // Hero line stagger animation
+    const lines = document.querySelectorAll('.hero-line');
+    lines.forEach((line, i) => {
+      const el = line as HTMLElement;
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(12px)';
+      el.style.transition = `opacity 0.7s ease ${i * 0.15 + 0.2}s, transform 0.7s ease ${i * 0.15 + 0.2}s`;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        });
+      });
+    });
+
+    // WebGL
+    initHeroWebGL(article.thumbnail);
+  }
+
+  function initHeroWebGL(imageUrl: string) {
+    const container = document.getElementById('hero-container');
+    const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
+    const fallbackImg = document.getElementById('hero-fallback-img') as HTMLImageElement;
+    if (!container || !canvas) return;
+
+    const isMobile = window.innerWidth < 768;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+    camera.position.z = 1;
+
+    const vertexShader = `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = vec4(position, 1.0);
+      }
+    `;
+
+    const fragmentShader = `
+      precision mediump float;
+      uniform sampler2D uTexture;
+      uniform float uTime;
+      uniform vec2 uMouse;
+      uniform float uMouseIntensity;
+      varying vec2 vUv;
+
+      void main() {
+        vec2 uv = vUv;
+        float dist = distance(uv, uMouse);
+        float ripple = sin(dist * 20.0 - uTime * 2.0) * exp(-dist * 5.0) * 0.008 * uMouseIntensity;
+        float autoWave = sin(uv.x * 4.0 + uTime * 0.5) * cos(uv.y * 3.0 + uTime * 0.3) * 0.003;
+        uv += vec2(ripple + autoWave, ripple + autoWave);
+        vec4 color = texture2D(uTexture, uv);
+        float noise = fract(sin(dot(uv * uTime * 0.01, vec2(12.9898, 78.233))) * 43758.5453);
+        color.rgb += (noise - 0.5) * 0.015;
+        gl_FragColor = color;
+      }
+    `;
+
+    const uniforms = {
+      uTexture: { value: new THREE.Texture() },
+      uTime: { value: 0 },
+      uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+      uMouseIntensity: { value: isMobile ? 0.6 : 0.0 },
+    };
+
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    const material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms });
+    scene.add(new THREE.Mesh(geometry, material));
+
+    const loader = new THREE.TextureLoader();
+    loader.load(
+      imageUrl,
+      (texture) => {
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        uniforms.uTexture.value = texture;
+        canvas.style.opacity = '1';
+        if (fallbackImg) fallbackImg.style.opacity = '0';
+      },
+      undefined,
+      () => {} // keep fallback on error
+    );
+
+    if (!isMobile) {
+      let targetMouse = new THREE.Vector2(0.5, 0.5);
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        targetMouse.x = (e.clientX - rect.left) / rect.width;
+        targetMouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
+        uniforms.uMouseIntensity.value = 1.0;
+      });
+      container.addEventListener('mouseleave', () => {
+        uniforms.uMouseIntensity.value = 0.0;
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        uniforms.uTime.value = clock.getElapsedTime();
+        uniforms.uMouse.value.x += (targetMouse.x - uniforms.uMouse.value.x) * 0.05;
+        uniforms.uMouse.value.y += (targetMouse.y - uniforms.uMouse.value.y) * 0.05;
+        renderer.render(scene, camera);
+      }
+      animate();
+    } else {
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const t = clock.getElapsedTime();
+        uniforms.uTime.value = t;
+        uniforms.uMouse.value.x = 0.5 + Math.sin(t * 0.3) * 0.2;
+        uniforms.uMouse.value.y = 0.5 + Math.cos(t * 0.4) * 0.15;
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(container.offsetWidth, container.offsetHeight);
+    });
+  }
+
+  // Init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHero);
+  } else {
+    initHero();
+  }
+  document.addEventListener('astro:page-load', initHero);
+</script>
