@@ -1,0 +1,31 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="w-full border-t border-[var(--color-border)]">
+  <div class="mx-auto max-w-[1200px] px-6 md:px-12 py-16 md:py-20">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div>
+        <a href="/" class="text-[var(--color-text-primary)] no-underline hover:opacity-70 transition-opacity duration-300">
+          <span class="font-['Inter'] text-[15px] font-medium tracking-[0.02em]">OKINAWA!GO!!</span>
+        </a>
+        <p class="mt-3 text-[13px] text-[var(--color-text-secondary)] leading-relaxed">
+          住んでるからこそわかる沖縄を発信。
+        </p>
+      </div>
+      <div class="flex flex-col items-start md:items-end gap-3">
+        <a
+          href="https://x.com/KOUMEI_GO"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="meta-text text-[var(--color-text-secondary)] no-underline hover:text-[var(--color-text-primary)] transition-colors duration-300"
+        >
+          @KOUMEI_GO
+        </a>
+        <p class="meta-text text-[var(--color-text-tertiary)]">
+          &copy; {year} OKINAWA!GO!!
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>

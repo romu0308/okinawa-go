@@ -1,0 +1,53 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  publishedAt: string;
+  category: string;
+  thumbnail?: string;
+  thumbnailAlt?: string;
+}
+
+const { slug, title, description, publishedAt, category, thumbnail, thumbnailAlt } = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  'model-course': 'Model Course',
+  'area-guide': 'Area Guide',
+  'food': 'Food',
+  'activity': 'Activity',
+  'tips': 'Tips',
+  'seasonal': 'Seasonal',
+};
+
+const formatDate = (dateStr: string) => {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+};
+---
+
+<a href={`/articles/${slug}/`} class="group block no-underline">
+  <article>
+    <div class="w-full aspect-[16/10] rounded-[6px] overflow-hidden bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-light)] mb-4">
+      {thumbnail ? (
+        <img src={thumbnail} alt={thumbnailAlt || title} class="w-full h-full object-cover group-hover:opacity-80 transition-opacity duration-300" loading="lazy" />
+      ) : (
+        <div class="w-full h-full group-hover:opacity-80 transition-opacity duration-300"></div>
+      )}
+    </div>
+    <div class="flex items-center gap-3 mb-2">
+      <span class="meta-text text-[var(--color-accent)]">
+        {categoryLabels[category] || category}
+      </span>
+      <span class="meta-text text-[var(--color-text-tertiary)]">
+        {formatDate(publishedAt)}
+      </span>
+    </div>
+    <h3 class="text-[16px] font-medium leading-[1.5] text-[var(--color-text-primary)] mb-2 group-hover:opacity-70 transition-opacity duration-300">
+      {title}
+    </h3>
+    <p class="text-[13px] leading-[1.8] text-[var(--color-text-secondary)] line-clamp-2">
+      {description}
+    </p>
+  </article>
+</a>

@@ -1,0 +1,21 @@
+---
+interface Props {
+  category: string;
+  class?: string;
+}
+
+const { category, class: className } = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  'model-course': 'Model Course',
+  'area-guide': 'Area Guide',
+  'food': 'Food',
+  'activity': 'Activity',
+  'tips': 'Tips',
+  'seasonal': 'Seasonal',
+};
+---
+
+<span class:list={["meta-text text-[var(--color-accent)]", className]}>
+  {categoryLabels[category] || category}
+</span>

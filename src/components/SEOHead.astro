@@ -1,0 +1,74 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  canonicalURL?: string;
+  ogImage?: string;
+  ogType?: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  isArticle?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonicalURL = Astro.url.href,
+  ogImage = '/images/og-default.jpg',
+  ogType = 'website',
+  publishedAt,
+  updatedAt,
+  isArticle = false,
+} = Astro.props;
+
+const siteName = 'OKINAWA!GO!!';
+const fullTitle = `${title} | ${siteName}`;
+const ogImageURL = new URL(ogImage, Astro.site).href;
+const canonical = canonicalURL.startsWith('http') ? canonicalURL : new URL(canonicalURL, Astro.site).href;
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+<!-- OGP -->
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:url" content={canonical} />
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="ja_JP" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@KOUMEI_GO" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageURL} />
+
+{isArticle && publishedAt && (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description: description,
+    image: ogImageURL,
+    datePublished: publishedAt,
+    dateModified: updatedAt || publishedAt,
+    author: {
+      '@type': 'Person',
+      name: 'KOUMEI',
+      url: 'https://x.com/KOUMEI_GO',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: siteName,
+      url: 'https://okinawa-go.jp',
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonical,
+    },
+  })} />
+)}
