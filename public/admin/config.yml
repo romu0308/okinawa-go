@@ -1,0 +1,113 @@
+backend:
+  name: github
+  repo: romu0308/okinawa-go
+  branch: main
+
+locale: ja
+
+media_folder: public/images/articles
+public_folder: /images/articles
+
+collections:
+  - name: articles
+    label: 記事
+    folder: src/content/articles
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: yaml-frontmatter
+    fields:
+      - label: タイトル
+        name: title
+        widget: string
+
+      - label: 説明文
+        name: description
+        widget: text
+
+      - label: 公開日
+        name: publishedAt
+        widget: string
+        pattern:
+          - '^\d{4}-\d{2}-\d{2}$'
+          - 'YYYY-MM-DD形式で入力してください'
+
+      - label: 更新日
+        name: updatedAt
+        widget: string
+        required: false
+        pattern:
+          - '^\d{4}-\d{2}-\d{2}$'
+          - 'YYYY-MM-DD形式で入力してください'
+
+      - label: カテゴリ
+        name: category
+        widget: select
+        options:
+          - label: モデルコース
+            value: model-course
+          - label: エリアガイド
+            value: area-guide
+          - label: グルメ
+            value: food
+          - label: アクティビティ
+            value: activity
+          - label: Tips
+            value: tips
+          - label: 季節
+            value: seasonal
+
+      - label: エリア
+        name: area
+        widget: select
+        required: false
+        options:
+          - label: 那覇
+            value: naha
+          - label: 北谷
+            value: chatan
+          - label: 読谷
+            value: yomitan
+          - label: 恩納
+            value: onna
+          - label: 名護
+            value: nago
+          - label: 本部
+            value: motobu
+          - label: 南部
+            value: south
+          - label: 離島
+            value: island
+          - label: 複数エリア
+            value: multiple
+
+      - label: サムネイル画像
+        name: thumbnail
+        widget: image
+
+      - label: サムネイル画像の説明
+        name: thumbnailAlt
+        widget: string
+
+      - label: 注目記事
+        name: featured
+        widget: boolean
+        default: false
+
+      - label: 下書き
+        name: draft
+        widget: boolean
+        default: false
+
+      - label: タグ
+        name: tags
+        widget: list
+        required: false
+        field:
+          label: タグ
+          name: tag
+          widget: string
+
+      - label: 本文
+        name: body
+        widget: markdown
