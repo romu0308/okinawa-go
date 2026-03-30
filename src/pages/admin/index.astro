@@ -1,0 +1,109 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import PVChart from '../../components/admin/PVChart';
+import { getArticles } from '../../lib/articles';
+
+let articles: any[] = [];
+try {
+  articles = getArticles();
+} catch { articles = []; }
+
+const totalArticles = articles.length;
+const recentArticles = articles.slice(0, 5);
+---
+
+<AdminLayout title="ダッシュボード">
+  <!-- Summary cards -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="bg-white rounded-lg border border-gray-200 p-5">
+      <p class="text-xs text-gray-500 mb-1">記事数</p>
+      <p class="text-2xl font-bold text-gray-900">{totalArticles}</p>
+    </div>
+    <div class="bg-white rounded-lg border border-gray-200 p-5">
+      <p class="text-xs text-gray-500 mb-1">PV合計</p>
+      <p class="text-2xl font-bold text-gray-900">12,450</p>
+    </div>
+    <div class="bg-white rounded-lg border border-gray-200 p-5">
+      <p class="text-xs text-gray-500 mb-1">LINE登録数</p>
+      <p class="text-2xl font-bold text-gray-900">328</p>
+    </div>
+    <div class="bg-white rounded-lg border border-gray-200 p-5">
+      <p class="text-xs text-gray-500 mb-1">アフィ成約数</p>
+      <p class="text-2xl font-bold text-gray-900">45</p>
+    </div>
+  </div>
+
+  <!-- PV Chart -->
+  <div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+    <h2 class="text-sm font-medium text-gray-700 mb-4">PV推移（過去7日間）</h2>
+    <PVChart client:load />
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Recent articles -->
+    <div class="bg-white rounded-lg border border-gray-200 p-5">
+      <h2 class="text-sm font-medium text-gray-700 mb-4">最近の記事</h2>
+      {recentArticles.length === 0 ? (
+        <p class="text-sm text-gray-400">記事がまだありません</p>
+      ) : (
+        <ul class="space-y-3">
+          {recentArticles.map((a: any) => (
+            <li class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+              <div>
+                <a href={`/admin/articles/edit/${a.slug}`} class="text-sm text-gray-800 hover:text-blue-600 transition-colors">
+                  {a.title}
+                </a>
+                <p class="text-xs text-gray-400 mt-0.5">{a.publishedAt || a.publishDate || '下書き'}</p>
+              </div>
+              <span class:list={[
+                'text-xs px-2 py-0.5 rounded',
+                a.status === 'published' ? 'bg-green-50 text-green-700' : 'bg-yellow-50 text-yellow-700',
+              ]}>
+                {a.status === 'published' ? '公開' : '下書き'}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+
+    <!-- Quick actions -->
+    <div class="bg-white rounded-lg border border-gray-200 p-5">
+      <h2 class="text-sm font-medium text-gray-700 mb-4">クイックアクション</h2>
+      <div class="space-y-3">
+        <a
+          href="/admin/articles/new"
+          class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+        >
+          <span class="text-lg">📝</span>
+          <div>
+            <p class="text-sm font-medium text-gray-800">新規記事</p>
+            <p class="text-xs text-gray-400">新しい記事を作成</p>
+          </div>
+        </a>
+        <a
+          href="/admin/companies"
+          class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+        >
+          <span class="text-lg">🏢</span>
+          <div>
+            <p class="text-sm font-medium text-gray-800">企業追加</p>
+            <p class="text-xs text-gray-400">ホワイト企業を登録</p>
+          </div>
+        </a>
+        <a
+          href="/admin/affiliates"
+          class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+        >
+          <span class="text-lg">🔗</span>
+          <div>
+            <p class="text-sm font-medium text-gray-800">リンク追加</p>
+            <p class="text-xs text-gray-400">アフィリエイトリンクを追加</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</AdminLayout>

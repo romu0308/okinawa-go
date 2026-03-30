@@ -1,0 +1,102 @@
+---
+export const prerender = true;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+
+const products = [
+  {
+    title: '転職戦略シート',
+    price: '無料',
+    priceNote: 'LINE登録で入手',
+    description: '自分の市場価値・強み・最適な転職タイミングを整理できるワークシート。記入するだけで、戦略的な転職活動の全体像が見えてきます。',
+    cta: { label: 'LINEで無料入手', href: '/line/' },
+    free: true,
+  },
+  {
+    title: '職務経歴書テンプレート集',
+    price: '無料',
+    priceNote: 'LINE登録で入手',
+    description: '業種別・職種別に最適化された職務経歴書テンプレート。書き方のポイント解説付きで、書類選考通過率を大幅にアップ。',
+    cta: { label: 'LINEで無料入手', href: '/line/' },
+    free: true,
+  },
+  {
+    title: '年収交渉マスターガイド',
+    price: '¥2,980',
+    priceNote: '税込',
+    description: '面接時の希望年収の伝え方から、内定後の交渉術まで。実際に使えるフレーズ集と、交渉を成功させるための心理テクニックを網羅。',
+    cta: { label: '詳細を見る', href: '#' },
+    free: false,
+  },
+  {
+    title: '30代キャリア設計ワークブック',
+    price: '¥3,980',
+    priceNote: '税込',
+    description: '自己分析から5年後のキャリアビジョン策定、具体的な行動計画まで。30代特有のキャリアの悩みに特化したワークブック。',
+    cta: { label: '詳細を見る', href: '#' },
+    free: false,
+  },
+];
+---
+
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title="キャリア孔明の武器庫"
+    description="転職戦略シート、職務経歴書テンプレート、年収交渉ガイドなど。キャリアアップに必要なツールを揃えています。"
+  />
+
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[780px] mx-auto">
+    <span class="label-text block mb-3 reveal">Products</span>
+    <h1 class="text-[24px] md:text-[32px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
+      キャリア孔明の武器庫
+    </h1>
+    <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#666] mb-12 reveal">
+      転職を成功に導くためのツール・テンプレート・ガイドを揃えました。
+    </p>
+
+    <div class="space-y-6">
+      {products.map((product) => (
+        <div class="border border-[var(--border)] rounded-lg p-6 md:p-8 reveal">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <h2 class="text-[17px] md:text-[19px] font-medium text-[var(--text)]">{product.title}</h2>
+            <div class="text-right shrink-0">
+              <span class:list={[
+                "text-[18px] font-medium",
+                product.free ? "text-green-600" : "text-[var(--text)]"
+              ]}>
+                {product.price}
+              </span>
+              <span class="block text-[11px] text-[#aaa]">{product.priceNote}</span>
+            </div>
+          </div>
+          <p class="text-[14px] leading-[1.8] text-[#666] mb-5">{product.description}</p>
+          <a
+            href={product.cta.href}
+            class:list={[
+              "inline-block px-6 py-2.5 rounded-full text-[13px] font-medium no-underline transition-all duration-300",
+              product.free
+                ? "bg-[#06C755] text-white hover:bg-[#05b04c]"
+                : "border border-[var(--text)] text-[var(--text)] hover:bg-[var(--text)] hover:text-white"
+            ]}
+          >
+            {product.cta.label}
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="mt-16 text-center reveal">
+      <p class="text-[14px] md:text-[16px] text-[#666] mb-6">
+        まずは無料ツールから試してみませんか？
+      </p>
+      <a
+        href="/line/"
+        class="inline-flex items-center justify-center gap-2 bg-[#06C755] hover:bg-[#05b04c] text-white font-medium text-[14px] px-8 py-3 rounded-full no-underline transition-all duration-300"
+      >
+        LINE友達追加で無料入手
+      </a>
+    </div>
+  </section>
+</BaseLayout>

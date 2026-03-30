@@ -1,0 +1,30 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../../../layouts/AdminLayout.astro';
+import ArticleEditor from '../../../../components/admin/ArticleEditor';
+import { getArticleBySlug } from '../../../../lib/articles';
+
+const { slug } = Astro.params;
+
+const article = slug ? getArticleBySlug(slug) : undefined;
+const initialData = article ? {
+  title: article.title || '',
+  category: article.category || '',
+  tags: Array.isArray(article.tags) ? article.tags.join(', ') : (article.tags || ''),
+  thumbnail: article.thumbnail || '',
+  content: article.content || '',
+  metaDescription: article.seo?.metaDescription || '',
+  ogpTitle: article.seo?.ogpTitle || '',
+  ogpImage: article.seo?.ogpImage || '',
+  affiliateLinks: article.affiliateLinks || [],
+  publishDate: article.publishedAt ? article.publishedAt.split('T')[0] : '',
+  status: article.status || 'draft',
+  series: article.series || '',
+  slug: article.slug || '',
+} : undefined;
+---
+
+<AdminLayout title="記事編集">
+  <ArticleEditor client:load slug={slug} initialData={initialData} />
+</AdminLayout>

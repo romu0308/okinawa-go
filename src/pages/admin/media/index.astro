@@ -1,0 +1,8 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import MediaManager from '../../../components/admin/MediaManager';
+---
+<AdminLayout title="メディア管理">
+  <MediaManager client:load />
+</AdminLayout>

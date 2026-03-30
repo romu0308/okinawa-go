@@ -1,0 +1,8 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import ArticleEditor from '../../../components/admin/ArticleEditor';
+---
+<AdminLayout title="新規記事">
+  <ArticleEditor client:load />
+</AdminLayout>

@@ -1,0 +1,27 @@
+---
+export const prerender = true;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+import BlackCheck from '../../components/tools/BlackCheck';
+---
+
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title="ブラック度チェック"
+    description="今の職場、本当に大丈夫？10の質問であなたの職場のブラック度を診断します。"
+  />
+
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[680px] mx-auto">
+    <a href="/tools" class="label-text no-underline hover:opacity-60 transition-opacity duration-300 block mb-3 reveal">
+      &larr; Tools
+    </a>
+    <h1 class="text-[24px] md:text-[32px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
+      ブラック度チェック
+    </h1>
+    <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#666] mb-10 reveal">
+      10の質問に答えるだけで、あなたの職場のブラック度がわかります。
+    </p>
+    <BlackCheck client:load />
+  </section>
+</BaseLayout>

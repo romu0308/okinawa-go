@@ -1,0 +1,125 @@
+---
+export const prerender = true;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+---
+
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title="裏キャリア孔明コミュニティ"
+    description="表では言えないキャリアの本音トーク。月2回のオンライン相談会、転職成功者の体験談、非公開の企業評価情報。"
+  />
+
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[680px] mx-auto">
+    <span class="label-text block mb-3 reveal">Community</span>
+    <h1 class="text-[24px] md:text-[32px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
+      裏キャリア孔明
+    </h1>
+    <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#666] mb-10 reveal">
+      表では言えないキャリアの本音トーク。<br />
+      転職のリアル、企業の裏事情、年収交渉の実例など、ここでしか聞けない話を共有しています。
+    </p>
+
+    <!-- Member counter -->
+    <div class="inline-flex items-center gap-2 bg-[var(--bg-alt)] rounded-full px-5 py-2 mb-12 reveal">
+      <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
+      <span class="text-[13px] text-[#666]">現在 <span class="font-medium text-[var(--text)]">456人</span> が参加中</span>
+    </div>
+
+    <!-- Benefits -->
+    <div class="mb-12">
+      <span class="label-text block mb-6 reveal">Benefits</span>
+      <div class="space-y-4">
+        <div class="flex items-start gap-4 p-5 border border-[var(--border)] rounded-lg reveal">
+          <div class="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-[15px] font-medium text-[var(--text)] mb-1">月2回のオンラインキャリア相談会</h3>
+            <p class="text-[13px] leading-[1.7] text-[#888] !mb-0">キャリア孔明に直接相談できるZoomセッション</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 p-5 border border-[var(--border)] rounded-lg reveal">
+          <div class="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-[15px] font-medium text-[var(--text)] mb-1">転職成功者のリアル体験談</h3>
+            <p class="text-[13px] leading-[1.7] text-[#888] !mb-0">年収アップ・脱ブラックを実現したメンバーの生の声</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 p-5 border border-[var(--border)] rounded-lg reveal">
+          <div class="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-[15px] font-medium text-[var(--text)] mb-1">非公開の企業評価情報</h3>
+            <p class="text-[13px] leading-[1.7] text-[#888] !mb-0">口コミサイトには載らない、内部からのリアルな評価</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 p-5 border border-[var(--border)] rounded-lg reveal">
+          <div class="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-[15px] font-medium text-[var(--text)] mb-1">メンバー限定の求人情報</h3>
+            <p class="text-[13px] leading-[1.7] text-[#888] !mb-0">厳選されたホワイト企業の求人を優先的に共有</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center mb-16 reveal">
+      <a
+        href="https://discord.gg/career-koumei"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center gap-3 bg-[#5865F2] hover:bg-[#4752C4] text-white font-medium text-[15px] px-8 py-3.5 rounded-full no-underline transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200"
+      >
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+        </svg>
+        Discordコミュニティに参加
+      </a>
+      <p class="text-[12px] text-[#aaa] mt-3">無料で参加できます</p>
+    </div>
+
+    <!-- Testimonials -->
+    <div>
+      <span class="label-text block mb-6 reveal">Voice</span>
+      <div class="space-y-6">
+        <div class="p-5 bg-[var(--bg-alt)] rounded-lg reveal">
+          <p class="text-[14px] leading-[1.8] text-[#555] !mb-3">
+            「孔明さんのキャリア相談会で、自分では気づけなかった強みを発見できました。おかげで面接の自己PRが劇的に変わりました。」
+          </p>
+          <p class="text-[12px] text-[#aaa] !mb-0">28歳 / エンジニア / 参加歴6ヶ月</p>
+        </div>
+        <div class="p-5 bg-[var(--bg-alt)] rounded-lg reveal">
+          <p class="text-[14px] leading-[1.8] text-[#555] !mb-3">
+            「企業の内部情報が本当に助かります。転職サイトだけでは分からない、実際の残業時間や社風を事前に知れるのは大きい。」
+          </p>
+          <p class="text-[12px] text-[#aaa] !mb-0">32歳 / マーケター / 参加歴1年</p>
+        </div>
+        <div class="p-5 bg-[var(--bg-alt)] rounded-lg reveal">
+          <p class="text-[14px] leading-[1.8] text-[#555] !mb-3">
+            「同じ悩みを持つ仲間がいるのが心強い。一人で転職活動してた時より、精神的にもずっと楽になりました。」
+          </p>
+          <p class="text-[12px] text-[#aaa] !mb-0">35歳 / 事務職 / 参加歴3ヶ月</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

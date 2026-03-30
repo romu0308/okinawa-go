@@ -1,0 +1,22 @@
+{
+  "tests": [
+    {
+      "id": "cta-color",
+      "name": "CTAボタン色テスト",
+      "active": true,
+      "variants": [
+        {"id": "A", "label": "赤", "value": "#dc2626"},
+        {"id": "B", "label": "オレンジ", "value": "#ea580c"}
+      ]
+    },
+    {
+      "id": "cta-text",
+      "name": "CTAテキストテスト",
+      "active": true,
+      "variants": [
+        {"id": "A", "label": "無料診断", "value": "無料で市場価値を診断する"},
+        {"id": "B", "label": "年収チェック", "value": "あなたの適正年収をチェック"}
+      ]
+    }
+  ]
+}

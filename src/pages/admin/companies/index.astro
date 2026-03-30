@@ -1,0 +1,8 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import CompanyManager from '../../../components/admin/CompanyManager';
+---
+<AdminLayout title="ホワイト企業管理">
+  <CompanyManager client:load />
+</AdminLayout>

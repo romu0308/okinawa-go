@@ -1,0 +1,17 @@
+{
+  "siteName": "キャリア孔明",
+  "siteDescription": "戦略的キャリアアップで、人生の主導権を取り戻せ。",
+  "lineUrl": "https://line.me/R/ti/p/@career-koumei",
+  "ga4Id": "G-XXXXXXXXXX",
+  "ogpDefaultImage": "/images/ogp-default.jpg",
+  "categories": [
+    {"id": "black-escape", "name": "ブラック企業脱出", "order": 1},
+    {"id": "job-change", "name": "転職サイト比較", "order": 2},
+    {"id": "salary", "name": "年収戦略", "order": 3},
+    {"id": "freelance", "name": "フリーランス独立", "order": 4},
+    {"id": "resume", "name": "書類・面接", "order": 5},
+    {"id": "career", "name": "キャリア戦略", "order": 6},
+    {"id": "white-company", "name": "ホワイト企業", "order": 7}
+  ],
+  "defaultCtaTemplate": "＼ 無料で市場価値を診断 ／\n**あなたの年収、適正ですか？**\n今すぐミイダスで5分診断 →"
+}

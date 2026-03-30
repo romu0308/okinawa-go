@@ -1,0 +1,8 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import AffiliateManager from '../../../components/admin/AffiliateManager';
+---
+<AdminLayout title="アフィリエイト管理">
+  <AffiliateManager client:load />
+</AdminLayout>

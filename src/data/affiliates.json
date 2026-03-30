@@ -1,0 +1,137 @@
+[
+  {
+    "id": "aff-1",
+    "serviceName": "リクルートエージェント",
+    "url": "https://example.com/recruit-agent",
+    "reward": 5000,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-2",
+    "serviceName": "doda",
+    "url": "https://example.com/doda",
+    "reward": 4500,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-3",
+    "serviceName": "ビズリーチ",
+    "url": "https://example.com/bizreach",
+    "reward": 6000,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-4",
+    "serviceName": "マイナビ転職",
+    "url": "https://example.com/mynavi",
+    "reward": 4000,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-5",
+    "serviceName": "ミイダス",
+    "url": "https://example.com/miidas",
+    "reward": 3500,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-6",
+    "serviceName": "パソナキャリア",
+    "url": "https://example.com/pasona",
+    "reward": 4500,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-7",
+    "serviceName": "JACリクルートメント",
+    "url": "https://example.com/jac",
+    "reward": 5500,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-8",
+    "serviceName": "type転職エージェント",
+    "url": "https://example.com/type-agent",
+    "reward": 4000,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-9",
+    "serviceName": "ワークポート",
+    "url": "https://example.com/workport",
+    "reward": 3500,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-10",
+    "serviceName": "レバテックキャリア",
+    "url": "https://example.com/levtech",
+    "reward": 5000,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-11",
+    "serviceName": "退職代行EXIT",
+    "url": "https://example.com/exit",
+    "reward": 8000,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-12",
+    "serviceName": "退職代行Jobs",
+    "url": "https://example.com/jobs-taishoku",
+    "reward": 7000,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-13",
+    "serviceName": "TechAcademy",
+    "url": "https://example.com/techacademy",
+    "reward": 10000,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-14",
+    "serviceName": "DMM WEBCAMP",
+    "url": "https://example.com/dmm-webcamp",
+    "reward": 12000,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  },
+  {
+    "id": "aff-15",
+    "serviceName": "アサイン",
+    "url": "https://example.com/assign",
+    "reward": 5000,
+    "clicks": 0,
+    "conversions": 0,
+    "clickLog": []
+  }
+]

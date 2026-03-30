@@ -1,0 +1,299 @@
+---
+export const prerender = false;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import ReadingProgress from '../../components/article/ReadingProgress';
+import ShareButtons from '../../components/article/ShareButtons';
+import AuthorProfile from '../../components/article/AuthorProfile';
+import NewsletterSignup from '../../components/article/NewsletterSignup';
+import ScrollToTop from '../../components/ScrollToTop';
+
+const { slug } = Astro.params;
+const articlesPath = path.join(process.cwd(), 'src/data/articles.json');
+const seriesPath = path.join(process.cwd(), 'src/data/series.json');
+let articles: any[] = [];
+let seriesData: any[] = [];
+try {
+  articles = JSON.parse(fs.readFileSync(articlesPath, 'utf-8'));
+  seriesData = JSON.parse(fs.readFileSync(seriesPath, 'utf-8'));
+} catch {}
+
+const article = articles.find((a: any) => a.slug === slug);
+if (!article) return Astro.redirect('/career/');
+
+const categories: Record<string, string> = {
+  'black-escape': 'ブラック企業脱出',
+  'job-change': '転職サイト比較',
+  'salary': '年収戦略',
+  'freelance': 'フリーランス独立',
+  'resume': '書類・面接',
+  'career': 'キャリア戦略',
+  'white-company': 'ホワイト企業',
+};
+
+const categoryName = categories[article.category] || article.category;
+const readingTime = Math.max(1, Math.ceil(article.content.length / 600));
+
+// Related articles
+const related = articles.filter((a: any) => a.slug !== slug && a.category === article.category && a.status === 'published').slice(0, 3);
+
+// Prev/Next
+const published = articles.filter((a: any) => a.status === 'published').sort((a: any, b: any) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
+const idx = published.findIndex((a: any) => a.slug === slug);
+const prevArticle = idx > 0 ? published[idx - 1] : null;
+const nextArticle = idx < published.length - 1 ? published[idx + 1] : null;
+
+// Series
+const series = article.series ? seriesData.find((s: any) => s.id === article.series) : null;
+const seriesArticles = series ? series.articleSlugs.map((s: string) => articles.find((a: any) => a.slug === s)).filter(Boolean) : [];
+
+// Simple markdown to HTML
+function renderMarkdown(md: string): string {
+  return md
+    .split('\n\n')
+    .map(block => {
+      block = block.trim();
+      if (!block) return '';
+      if (block.startsWith('### ')) {
+        const text = block.slice(4);
+        const id = text.replace(/\s+/g, '-');
+        return `<h3 id="${id}">${text}</h3>`;
+      }
+      if (block.startsWith('## ')) {
+        const text = block.slice(3);
+        const id = text.replace(/\s+/g, '-');
+        return `<h2 id="${id}">${text}</h2>`;
+      }
+      if (block.startsWith('---')) return '<hr>';
+      // Process inline markdown
+      block = block.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      block = block.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+      if (block.startsWith('- ')) {
+        const items = block.split('\n').map(l => `<li>${l.replace(/^- /, '')}</li>`).join('');
+        return `<ul>${items}</ul>`;
+      }
+      return `<p>${block.replace(/\n/g, '<br>')}</p>`;
+    })
+    .join('\n');
+}
+
+const htmlContent = renderMarkdown(article.content);
+
+// Extract headings for TOC
+const headings = [...article.content.matchAll(/^(#{2,3})\s+(.+)$/gm)].map(m => ({
+  level: m[1].length,
+  text: m[2],
+  id: m[2].replace(/\s+/g, '-'),
+}));
+
+// Extract FAQ (H2 = Q, next paragraph = A)
+const faqItems: {q: string, a: string}[] = [];
+const blocks = article.content.split('\n\n');
+for (let i = 0; i < blocks.length - 1; i++) {
+  if (blocks[i].startsWith('## ')) {
+    const q = blocks[i].slice(3).trim();
+    const a = blocks[i+1]?.replace(/^[#\-\*].*$/gm, '').trim();
+    if (q && a && !a.startsWith('#')) faqItems.push({ q, a });
+  }
+}
+
+const pageUrl = `https://okinawa-go.jp/career/${slug}/`;
+---
+<BaseLayout>
+  <Fragment slot="head">
+    <title>{article.seo?.ogpTitle || article.title} | キャリア孔明</title>
+    <meta name="description" content={article.seo?.metaDescription || article.description} />
+    <link rel="canonical" href={pageUrl} />
+    <meta property="og:title" content={article.seo?.ogpTitle || article.title} />
+    <meta property="og:description" content={article.description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content={article.seo?.ogpImage || `/api/og/${slug}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Article JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": article.title,
+      "description": article.description,
+      "datePublished": article.publishedAt,
+      "author": { "@type": "Person", "name": "キャリア孔明" },
+      "publisher": { "@type": "Organization", "name": "キャリア孔明" },
+      "mainEntityOfPage": pageUrl,
+    })} />
+
+    <!-- Breadcrumb JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "トップ", "item": "https://okinawa-go.jp/" },
+        { "@type": "ListItem", "position": 2, "name": categoryName, "item": `https://okinawa-go.jp/career/?cat=${article.category}` },
+        { "@type": "ListItem", "position": 3, "name": article.title },
+      ]
+    })} />
+
+    {faqItems.length > 0 && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqItems.slice(0, 5).map(f => ({
+          "@type": "Question",
+          "name": f.q,
+          "acceptedAnswer": { "@type": "Answer", "text": f.a }
+        }))
+      })} />
+    )}
+  </Fragment>
+
+  <ReadingProgress client:load />
+
+  <article class="max-w-[1200px] mx-auto px-5 md:px-10 py-10">
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-400 mb-8 flex items-center gap-2">
+      <a href="/" class="hover:text-gray-600">トップ</a>
+      <span>&rsaquo;</span>
+      <a href="/career/" class="hover:text-gray-600">キャリア記事</a>
+      <span>&rsaquo;</span>
+      <a href={`/career/?cat=${article.category}`} class="hover:text-gray-600">{categoryName}</a>
+    </nav>
+
+    <div class="flex gap-12">
+      <!-- Main content -->
+      <div class="flex-1 max-w-[680px]">
+        <!-- Meta -->
+        <span class="label-text">{categoryName}</span>
+        <h1 class="text-2xl md:text-3xl font-medium mt-2 mb-4 leading-tight">{article.title}</h1>
+        <div class="flex items-center gap-4 text-xs text-gray-400 mb-8">
+          <time>{article.publishedAt}</time>
+          <span>&middot;</span>
+          <span>この記事は{readingTime}分で読めます</span>
+        </div>
+
+        {article.tags && article.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mb-8">
+            {article.tags.map((tag: string) => (
+              <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1 rounded-full">{tag}</span>
+            ))}
+          </div>
+        )}
+
+        <!-- Series nav -->
+        {series && (
+          <div class="bg-gray-50 rounded-lg p-5 mb-8">
+            <h3 class="text-sm font-medium mb-3">{series.name}</h3>
+            <ol class="space-y-2">
+              {seriesArticles.map((sa: any, i: number) => (
+                <li class="text-sm">
+                  <span class="text-gray-400 mr-2">{i + 1}.</span>
+                  {sa.slug === slug ? (
+                    <span class="font-medium text-black">{sa.title}（この記事）</span>
+                  ) : (
+                    <a href={`/career/${sa.slug}/`} class="text-gray-600 hover:text-black">{sa.title}</a>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        <!-- Content -->
+        <div class="prose" set:html={htmlContent} />
+
+        <!-- Share -->
+        <div class="mt-12 mb-8">
+          <ShareButtons client:load title={article.title} url={pageUrl} />
+        </div>
+
+        <!-- Author -->
+        <AuthorProfile client:load />
+
+        <!-- Newsletter -->
+        <div class="mt-10">
+          <NewsletterSignup client:load />
+        </div>
+
+        <!-- Related -->
+        {related.length > 0 && (
+          <div class="mt-16">
+            <h2 class="text-lg font-medium mb-6">関連記事</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {related.map((r: any) => (
+                <a href={`/career/${r.slug}/`} class="group block no-underline">
+                  <div class="aspect-[16/10] bg-gray-100 rounded-lg overflow-hidden mb-2">
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">
+                      No Image
+                    </div>
+                  </div>
+                  <h3 class="text-sm font-medium group-hover:opacity-60 transition-opacity">{r.title}</h3>
+                  <time class="meta-text">{r.publishedAt}</time>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Prev/Next -->
+        <div class="flex justify-between mt-12 pt-8 border-t border-gray-100">
+          {prevArticle ? (
+            <a href={`/career/${prevArticle.slug}/`} class="text-sm text-gray-500 hover:text-black no-underline">
+              &larr; {prevArticle.title}
+            </a>
+          ) : <div />}
+          {nextArticle ? (
+            <a href={`/career/${nextArticle.slug}/`} class="text-sm text-gray-500 hover:text-black no-underline text-right">
+              {nextArticle.title} &rarr;
+            </a>
+          ) : <div />}
+        </div>
+      </div>
+
+      <!-- Sidebar (desktop) -->
+      <aside class="hidden lg:block w-[280px] shrink-0">
+        <div class="sticky top-20 space-y-8">
+          <!-- TOC -->
+          {headings.length > 0 && (
+            <div class="bg-gray-50 rounded-lg p-5">
+              <h3 class="text-sm font-medium mb-3">目次</h3>
+              <ul class="space-y-2">
+                {headings.map(h => (
+                  <li class={h.level === 3 ? 'ml-4' : ''}>
+                    <a href={`#${h.id}`} class="text-xs text-gray-500 hover:text-black no-underline block py-0.5">
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <!-- Categories -->
+          <div>
+            <h3 class="text-sm font-medium mb-3">カテゴリ</h3>
+            <ul class="space-y-2">
+              {Object.entries(categories).map(([id, name]) => (
+                <li>
+                  <a href={`/career/?cat=${id}`} class="text-xs text-gray-500 hover:text-black no-underline">{name}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- LINE CTA -->
+          <div class="bg-green-50 rounded-lg p-5 text-center">
+            <p class="text-sm font-medium mb-2">LINE友達追加で</p>
+            <p class="text-xs text-gray-600 mb-4">転職戦略シートを無料プレゼント</p>
+            <a href="https://line.me/R/ti/p/@career-koumei" target="_blank" rel="noopener"
+              class="block bg-green-500 text-white text-sm py-2.5 rounded-lg font-medium hover:bg-green-600 transition-colors no-underline">
+              LINE友達追加
+            </a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  <ScrollToTop client:load />
+</BaseLayout>

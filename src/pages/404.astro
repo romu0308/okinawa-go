@@ -6,23 +6,80 @@ import SEOHead from '../components/SEOHead.astro';
 <BaseLayout>
   <SEOHead
     slot="head"
-    title="404 Not Found"
-    description="ページが見つかりませんでした。"
+    title="404 - ページが見つかりません"
+    description="お探しのページは見つかりませんでした。キャリア孔明のトップページから再度お探しください。"
   />
 
-  <section class="px-5 md:px-10 pt-24 md:pt-32 pb-24 md:pb-32 max-w-[680px] mx-auto">
-    <span class="label-text block mb-3 reveal">404</span>
-    <h1 class="text-[28px] md:text-[40px] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--text)] mb-6 reveal">
-      ページが見つかりません
+  <section class="px-5 md:px-10 pt-24 md:pt-32 pb-24 md:pb-32 max-w-[680px] mx-auto text-center">
+    <span class="block text-[80px] md:text-[120px] font-bold text-[var(--text)] opacity-10 leading-none mb-4 reveal">
+      404
+    </span>
+
+    <h1 class="text-[24px] md:text-[36px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
+      おっと、ここは戦場の外だ。
     </h1>
-    <p class="text-[14px] leading-[1.8] text-[var(--text-secondary)] mb-10 reveal">
-      お探しのページは存在しないか、移動した可能性があります。
+
+    <p class="text-[14px] md:text-[16px] leading-[1.8] text-[var(--text-secondary)] mb-4 reveal">
+      軍師・孔明でも、このページは見つけられなかった。<br />
+      どうやら、この道は地図にないようです。
     </p>
-    <a
-      href="/"
-      class="inline-flex items-center gap-3 font-['Inter'] text-[10px] tracking-[0.08em] text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-colors duration-300 reveal"
-    >
-      ← Back
-    </a>
+
+    <p class="text-[13px] leading-[1.8] text-[var(--text-secondary)] mb-10 reveal">
+      URLが正しいか確認するか、以下のリンクから戻ってください。
+    </p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 reveal">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-[#dc2626] text-white text-[13px] font-medium rounded-lg hover:bg-[#b91c1c] transition-colors no-underline"
+      >
+        トップページへ戻る
+      </a>
+      <a
+        href="/articles"
+        class="inline-flex items-center gap-2 px-6 py-3 border border-[var(--border)] text-[var(--text-secondary)] text-[13px] font-medium rounded-lg hover:border-[var(--text)] hover:text-[var(--text)] transition-colors no-underline"
+      >
+        記事一覧を見る
+      </a>
+      <a
+        href="/tools"
+        class="inline-flex items-center gap-2 px-6 py-3 border border-[var(--border)] text-[var(--text-secondary)] text-[13px] font-medium rounded-lg hover:border-[var(--text)] hover:text-[var(--text)] transition-colors no-underline"
+      >
+        診断ツール
+      </a>
+    </div>
+
+    <div class="text-left max-w-[400px] mx-auto reveal">
+      <p class="text-[11px] tracking-[0.08em] text-[var(--text-secondary)] uppercase mb-4 font-['Inter']">
+        Popular Articles
+      </p>
+      <ul class="space-y-3">
+        <li>
+          <a href="/articles" class="text-[13px] text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors no-underline leading-[1.6]">
+            最新の記事を見る →
+          </a>
+        </li>
+        <li>
+          <a href="/plan" class="text-[13px] text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors no-underline leading-[1.6]">
+            キャリアプランを考える →
+          </a>
+        </li>
+        <li>
+          <a href="/community" class="text-[13px] text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors no-underline leading-[1.6]">
+            コミュニティに参加する →
+          </a>
+        </li>
+        <li>
+          <a href="/about" class="text-[13px] text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors no-underline leading-[1.6]">
+            キャリア孔明について →
+          </a>
+        </li>
+        <li>
+          <a href="/contact" class="text-[13px] text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors no-underline leading-[1.6]">
+            お問い合わせ →
+          </a>
+        </li>
+      </ul>
+    </div>
   </section>
 </BaseLayout>

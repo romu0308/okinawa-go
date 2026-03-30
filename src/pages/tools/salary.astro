@@ -1,0 +1,27 @@
+---
+export const prerender = true;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+import SalarySimulator from '../../components/tools/SalarySimulator';
+---
+
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title="年収シミュレーション"
+    description="あなたのスキルと経験から適正年収を算出。転職市場での年収レンジを無料で診断できます。"
+  />
+
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[680px] mx-auto">
+    <a href="/tools" class="label-text no-underline hover:opacity-60 transition-opacity duration-300 block mb-3 reveal">
+      &larr; Tools
+    </a>
+    <h1 class="text-[24px] md:text-[32px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
+      年収シミュレーション
+    </h1>
+    <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#666] mb-10 reveal">
+      あなたのスキルと経験から、適正年収レンジを算出します。
+    </p>
+    <SalarySimulator client:load />
+  </section>
+</BaseLayout>

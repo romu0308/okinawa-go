@@ -1,0 +1,144 @@
+---
+export const prerender = true;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+---
+
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title="LINE友達追加"
+    description="LINE友達追加で、転職戦略シートを無料プレゼント。キャリア孔明があなたの転職を戦略的にサポートします。"
+  />
+
+  <!-- Hero -->
+  <section class="px-5 md:px-10 pt-20 md:pt-28 pb-16 md:pb-20 max-w-[680px] mx-auto text-center">
+    <span class="label-text block mb-4 reveal">LINE Registration</span>
+    <h1 class="text-[24px] md:text-[36px] font-medium leading-[1.35] tracking-[-0.02em] text-[var(--text)] mb-6 reveal">
+      LINE友達追加で、<br />転職戦略シートを<br />無料プレゼント
+    </h1>
+    <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#666] mb-10 reveal">
+      キャリア孔明が厳選した転職ツールを、LINE登録するだけで全て無料でお届けします。
+    </p>
+
+    <!-- Registration counter -->
+    <div class="inline-flex items-center gap-2 bg-[var(--bg-alt)] rounded-full px-5 py-2 mb-10 reveal">
+      <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+      <span class="text-[13px] text-[#666]">現在 <span class="font-medium text-[var(--text)]">2,847人</span> が登録中</span>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="px-5 md:px-10 pb-16 md:pb-20 max-w-[680px] mx-auto">
+    <span class="label-text block mb-6 reveal">Benefits</span>
+    <div class="space-y-6">
+      <div class="flex items-start gap-4 p-5 border border-[var(--border)] rounded-lg reveal">
+        <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[15px] font-medium text-[var(--text)] mb-1">転職戦略シート</h3>
+          <p class="text-[13px] leading-[1.7] text-[#888] !mb-0">あなたの市場価値と最適な転職タイミングを分析</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-4 p-5 border border-[var(--border)] rounded-lg reveal">
+        <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[15px] font-medium text-[var(--text)] mb-1">ブラック企業チェックリスト</h3>
+          <p class="text-[13px] leading-[1.7] text-[#888] !mb-0">入社前に見抜く20のポイント</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-4 p-5 border border-[var(--border)] rounded-lg reveal">
+        <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[15px] font-medium text-[var(--text)] mb-1">年収交渉テンプレート</h3>
+          <p class="text-[13px] leading-[1.7] text-[#888] !mb-0">面接・内定後に使える実践フレーズ集</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-4 p-5 border border-[var(--border)] rounded-lg reveal">
+        <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[15px] font-medium text-[var(--text)] mb-1">非公開求人情報</h3>
+          <p class="text-[13px] leading-[1.7] text-[#888] !mb-0">LINE限定で厳選ホワイト企業を紹介</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="px-5 md:px-10 pb-16 md:pb-20 max-w-[680px] mx-auto text-center reveal">
+    <a
+      href="https://line.me/R/ti/p/@career-koumei"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center justify-center gap-3 bg-[#06C755] hover:bg-[#05b04c] text-white font-medium text-[16px] px-10 py-4 rounded-full no-underline transition-all duration-300 hover:shadow-lg hover:shadow-green-200"
+    >
+      <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+      </svg>
+      LINE友達追加（無料）
+    </a>
+    <p class="text-[12px] text-[#aaa] mt-3">30秒で完了 / いつでもブロック可能</p>
+  </section>
+
+  <!-- Preview -->
+  <section class="px-5 md:px-10 pb-16 md:pb-20 max-w-[680px] mx-auto">
+    <span class="label-text block mb-6 reveal">Preview</span>
+    <div class="grid grid-cols-2 gap-3 reveal">
+      <div class="aspect-[3/4] bg-[var(--bg-alt)] rounded-lg flex items-center justify-center">
+        <span class="text-[12px] text-[#ccc]">転職戦略シート</span>
+      </div>
+      <div class="aspect-[3/4] bg-[var(--bg-alt)] rounded-lg flex items-center justify-center">
+        <span class="text-[12px] text-[#ccc]">チェックリスト</span>
+      </div>
+      <div class="aspect-[3/4] bg-[var(--bg-alt)] rounded-lg flex items-center justify-center">
+        <span class="text-[12px] text-[#ccc]">年収交渉テンプレ</span>
+      </div>
+      <div class="aspect-[3/4] bg-[var(--bg-alt)] rounded-lg flex items-center justify-center">
+        <span class="text-[12px] text-[#ccc]">非公開求人サンプル</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="px-5 md:px-10 pb-20 md:pb-28 max-w-[680px] mx-auto">
+    <span class="label-text block mb-6 reveal">Voice</span>
+    <div class="space-y-6">
+      <div class="p-5 bg-[var(--bg-alt)] rounded-lg reveal">
+        <p class="text-[14px] leading-[1.8] text-[#555] mb-3 !mb-3">
+          「転職戦略シートのおかげで、自分の市場価値を客観的に把握できました。結果、年収が120万円アップ！」
+        </p>
+        <p class="text-[12px] text-[#aaa] !mb-0">30代男性 / IT業界 / 年収480万→600万</p>
+      </div>
+      <div class="p-5 bg-[var(--bg-alt)] rounded-lg reveal">
+        <p class="text-[14px] leading-[1.8] text-[#555] mb-3 !mb-3">
+          「ブラック企業チェックリストで今の職場がヤバいと気づき、転職を決意。今はホワイト企業で定時退社の毎日です。」
+        </p>
+        <p class="text-[12px] text-[#aaa] !mb-0">20代女性 / 営業職 / 残業80h→10h</p>
+      </div>
+      <div class="p-5 bg-[var(--bg-alt)] rounded-lg reveal">
+        <p class="text-[14px] leading-[1.8] text-[#555] mb-3 !mb-3">
+          「年収交渉テンプレートを使って内定後に交渉したら、提示額から50万円上がりました。使わない理由がない。」
+        </p>
+        <p class="text-[12px] text-[#aaa] !mb-0">30代男性 / マーケティング / 年収550万→700万</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

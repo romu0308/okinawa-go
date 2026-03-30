@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+import ContactForm from '../../components/ContactForm';
+---
+<BaseLayout>
+  <SEOHead slot="head" title="お問い合わせ | キャリア孔明" description="キャリア孔明へのお問い合わせ" />
+  <div class="max-w-[680px] mx-auto px-5 md:px-10 py-20">
+    <h1 class="text-2xl font-medium mb-4 text-center">お問い合わせ</h1>
+    <p class="text-center text-gray-500 text-sm mb-12">ご質問・取材依頼・広告掲載のご相談はこちらから</p>
+    <ContactForm client:load />
+  </div>
+</BaseLayout>

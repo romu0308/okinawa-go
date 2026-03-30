@@ -1,0 +1,190 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getArticles } from '../../../lib/articles';
+import { getSettings } from '../../../lib/settings';
+
+let articles: any[] = [];
+let settings: any = { categories: [] };
+try { articles = getArticles(); } catch {}
+try { settings = getSettings(); } catch {}
+---
+
+<AdminLayout title="記事管理">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <h1 class="text-lg font-bold text-gray-900">記事管理</h1>
+    <a
+      href="/admin/articles/new"
+      class="inline-flex items-center gap-2 px-4 py-2 bg-[#2563eb] text-white text-sm font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
+    >
+      <span>+</span> 新規記事
+    </a>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white rounded-lg border border-gray-200 p-4 mb-4">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="記事を検索..."
+        class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:border-blue-500"
+      />
+      <select
+        id="category-filter"
+        class="px-3 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:border-blue-500"
+      >
+        <option value="">すべてのカテゴリ</option>
+        {settings.categories.map((cat: any) => (
+          <option value={cat.id}>{cat.name}</option>
+        ))}
+      </select>
+      <select
+        id="sort-select"
+        class="px-3 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:border-blue-500"
+      >
+        <option value="date-desc">日付（新しい順）</option>
+        <option value="date-asc">日付（古い順）</option>
+        <option value="title">タイトル順</option>
+        <option value="pv-desc">PV（多い順）</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Bulk actions -->
+  <div id="bulk-actions" class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 hidden">
+    <div class="flex items-center gap-3">
+      <span class="text-sm text-blue-700"><span id="selected-count">0</span>件選択中</span>
+      <button onclick="bulkAction('published')" class="text-xs px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700">公開</button>
+      <button onclick="bulkAction('draft')" class="text-xs px-3 py-1.5 bg-yellow-500 text-white rounded hover:bg-yellow-600">下書き</button>
+      <button onclick="bulkAction('delete')" class="text-xs px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-700">削除</button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded-lg border border-gray-200 overflow-x-auto">
+    <table class="w-full text-sm" id="articles-table">
+      <thead>
+        <tr class="border-b border-gray-200">
+          <th class="text-left p-3 w-8">
+            <input type="checkbox" id="select-all" onchange="toggleSelectAll()" class="rounded" />
+          </th>
+          <th class="text-left p-3 font-medium text-gray-600">タイトル</th>
+          <th class="text-left p-3 font-medium text-gray-600 hidden md:table-cell">カテゴリ</th>
+          <th class="text-left p-3 font-medium text-gray-600 hidden sm:table-cell">日付</th>
+          <th class="text-left p-3 font-medium text-gray-600">ステータス</th>
+          <th class="text-left p-3 font-medium text-gray-600 hidden lg:table-cell">PV</th>
+          <th class="text-left p-3 font-medium text-gray-600 w-16">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {articles.length === 0 ? (
+          <tr>
+            <td colspan="7" class="p-8 text-center text-gray-400">
+              記事がまだありません。「新規記事」ボタンから作成してください。
+            </td>
+          </tr>
+        ) : (
+          articles.map((article: any) => (
+            <tr class="border-b border-gray-100 hover:bg-gray-50 article-row"
+                data-title={article.title || ''}
+                data-category={article.category || ''}
+                data-date={article.publishedAt || article.publishDate || ''}
+                data-status={article.status || 'draft'}
+                data-pv={article.pv || 0}
+                data-slug={article.slug || ''}
+            >
+              <td class="p-3">
+                <input type="checkbox" class="article-checkbox rounded" value={article.slug} onchange="updateBulkActions()" />
+              </td>
+              <td class="p-3">
+                <a href={`/admin/articles/edit/${article.slug}`} class="text-gray-800 hover:text-blue-600 font-medium">
+                  {article.title}
+                </a>
+              </td>
+              <td class="p-3 text-gray-500 hidden md:table-cell">{article.category || '-'}</td>
+              <td class="p-3 text-gray-500 hidden sm:table-cell">{article.publishedAt || article.publishDate || '-'}</td>
+              <td class="p-3">
+                <span class:list={[
+                  'text-xs px-2 py-0.5 rounded',
+                  article.status === 'published' ? 'bg-green-50 text-green-700' : 'bg-yellow-50 text-yellow-700',
+                ]}>
+                  {article.status === 'published' ? '公開' : '下書き'}
+                </span>
+              </td>
+              <td class="p-3 text-gray-500 hidden lg:table-cell">{article.pv || 0}</td>
+              <td class="p-3">
+                <a href={`/admin/articles/edit/${article.slug}`} class="text-blue-600 hover:text-blue-800 text-xs">編集</a>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </div>
+
+  <script is:inline>
+    // Search filter
+    document.getElementById('search-input')?.addEventListener('input', filterArticles);
+    document.getElementById('category-filter')?.addEventListener('change', filterArticles);
+    document.getElementById('sort-select')?.addEventListener('change', filterArticles);
+
+    function filterArticles() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const category = document.getElementById('category-filter').value;
+      const rows = document.querySelectorAll('.article-row');
+
+      rows.forEach(row => {
+        const title = (row.dataset.title || '').toLowerCase();
+        const cat = row.dataset.category || '';
+        const matchSearch = !query || title.includes(query);
+        const matchCategory = !category || cat === category;
+        row.style.display = matchSearch && matchCategory ? '' : 'none';
+      });
+    }
+
+    function toggleSelectAll() {
+      const checked = document.getElementById('select-all').checked;
+      document.querySelectorAll('.article-checkbox').forEach(cb => { cb.checked = checked; });
+      updateBulkActions();
+    }
+
+    function updateBulkActions() {
+      const checked = document.querySelectorAll('.article-checkbox:checked');
+      const bulkActions = document.getElementById('bulk-actions');
+      const countEl = document.getElementById('selected-count');
+      if (checked.length > 0) {
+        bulkActions.classList.remove('hidden');
+        countEl.textContent = checked.length;
+      } else {
+        bulkActions.classList.add('hidden');
+      }
+    }
+
+    async function bulkAction(action) {
+      const slugs = Array.from(document.querySelectorAll('.article-checkbox:checked')).map(cb => cb.value);
+      if (slugs.length === 0) return;
+      if (action === 'delete' && !confirm(`${slugs.length}件の記事を削除しますか？`)) return;
+
+      if (action === 'delete') {
+        for (const slug of slugs) {
+          await fetch('/api/admin/articles', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug }),
+          });
+        }
+      } else {
+        for (const slug of slugs) {
+          await fetch('/api/admin/articles', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug, status: action }),
+          });
+        }
+      }
+      window.location.reload();
+    }
+  </script>
+</AdminLayout>

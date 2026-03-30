@@ -1,0 +1,22 @@
+---
+export const prerender = true;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+import SearchPage from '../../components/SearchPage';
+---
+
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title="検索"
+    description="キャリア孔明の記事を検索。転職、年収アップ、ブラック企業対策などのキャリア情報を探せます。"
+  />
+
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[780px] mx-auto">
+    <span class="label-text block mb-3 reveal">Search</span>
+    <h1 class="text-[24px] md:text-[32px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-10 reveal">
+      記事を検索
+    </h1>
+    <SearchPage client:load />
+  </section>
+</BaseLayout>
