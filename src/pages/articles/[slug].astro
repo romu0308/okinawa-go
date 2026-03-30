@@ -32,6 +32,9 @@ const formatDate = (dateStr: string) => {
 
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
+// Calculate reading time (Japanese: ~600 chars/min)
+const readingTime = Math.max(1, Math.ceil((article.body?.length || 1000) / 600));
+
 const allArticles = await getCollection('articles', ({ data }) => !data.draft);
 const relatedArticles = allArticles
   .filter((a) => a.id !== article.id)
@@ -71,6 +74,9 @@ const relatedArticles = allArticles
         </span>
         <span class="font-['Inter'] text-[9px] tracking-[0.12em] text-[var(--text-muted)]">
           {formatDate(article.data.publishedAt)}
+        </span>
+        <span class="font-['Inter'] text-[9px] tracking-[0.12em] text-[var(--text-muted)]">
+          {readingTime} min read
         </span>
       </div>
 
@@ -120,6 +126,44 @@ const relatedArticles = allArticles
         <Content />
       </div>
 
+      <!-- Share -->
+      <div class="mt-12 mb-8 pt-8 border-t" style="border-color: var(--border);">
+        <p class="label-text mb-4">Share</p>
+        <div class="flex items-center gap-6">
+          <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.data.title)}&url=${encodeURIComponent(`https://okinawa-go.jp/articles/${article.id}/`)}&hashtags=沖縄旅行,OKINAWAGO`}
+             target="_blank" rel="noopener"
+             class="text-[12px] text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-colors">
+            X (Twitter)
+          </a>
+          <a href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://okinawa-go.jp/articles/${article.id}/`)}`}
+             target="_blank" rel="noopener"
+             class="text-[12px] text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-colors">
+            LINE
+          </a>
+          <button id="copy-link"
+             class="text-[12px] text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors bg-transparent border-none cursor-pointer">
+            Copy Link
+          </button>
+        </div>
+      </div>
+
+      <!-- Author -->
+      <div class="mt-8 mb-12 p-6 rounded-lg" style="background: var(--bg-alt);">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-full bg-[var(--text)] flex items-center justify-center text-white text-[14px] font-medium shrink-0">K</div>
+          <div>
+            <p class="text-[14px] font-medium mb-1">KOUMEI</p>
+            <p class="text-[12px] text-[var(--text-secondary)] leading-[1.7]">
+              沖縄在住5年。妻は沖縄出身。関西人。ガイドブックに載らない沖縄の楽しみ方を発信中。
+            </p>
+            <a href="https://twitter.com/KOUMEI_GO" target="_blank" rel="noopener"
+              class="inline-block mt-2 text-[11px] text-[var(--text-tertiary)] no-underline hover:text-[var(--text)] transition-colors">
+              @KOUMEI_GO
+            </a>
+          </div>
+        </div>
+      </div>
+
       <!-- CTA Box -->
       <CTABox />
     </div>
@@ -149,3 +193,11 @@ const relatedArticles = allArticles
     </section>
   )}
 </BaseLayout>
+
+<script>
+  document.getElementById('copy-link')?.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(window.location.href);
+    const btn = document.getElementById('copy-link');
+    if (btn) { btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy Link', 2000); }
+  });
+</script>

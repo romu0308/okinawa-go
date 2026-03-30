@@ -1,28 +1,26 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SEOHead from '../components/SEOHead.astro';
+import TripPlanner from '../components/TripPlanner';
 ---
 
 <BaseLayout>
   <SEOHead
     slot="head"
-    title="AI Trip Planner"
-    description="沖縄在住者AIが、あなたの旅をプランニング。Coming Soon."
+    title="AI Trip Planner | OKINAWA!GO!!"
+    description="沖縄在住者AIが、あなたの旅をプランニング。条件を入力するだけで、地元民目線のオリジナル旅行プランを作成。"
   />
 
-  <section class="px-5 md:px-10 pt-24 md:pt-32 pb-24 md:pb-32 max-w-[680px] mx-auto">
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-24 md:pb-32 max-w-[680px] mx-auto">
     <span class="label-text block mb-3 reveal">AI Trip Planner</span>
-    <h1 class="text-[28px] md:text-[40px] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--text)] mb-6 reveal">
-      Coming Soon
+    <h1 class="text-[28px] md:text-[36px] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
+      沖縄在住者AIが、<br class="md:hidden" />旅をプランニング。
     </h1>
-    <p class="text-[14px] leading-[1.8] text-[var(--text-secondary)] mb-10 reveal max-w-[400px]">
-      沖縄在住者の知識を学習したAIが、あなただけのオリジナル旅行プランを作成します。
+    <p class="text-[14px] leading-[1.8] text-[var(--text-secondary)] mb-12 reveal max-w-[480px]">
+      あなたの旅行スタイルに合わせて、地元民目線のオリジナルプランを作成します。
     </p>
-    <a
-      href="/"
-      class="inline-flex items-center gap-3 font-['Inter'] text-[10px] tracking-[0.08em] text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-colors duration-300 reveal"
-    >
-      ← Back
-    </a>
+    <div class="reveal">
+      <TripPlanner client:load />
+    </div>
   </section>
 </BaseLayout>

@@ -8,6 +8,7 @@ const { darkMode = false } = Astro.props;
 const navLinks = [
   { href: '/articles/', label: 'Work' },
   { href: '/shindan/', label: 'Shindan' },
+  { href: '/plan/', label: 'Plan' },
   { href: '/about/', label: 'About' },
 ];
 ---
@@ -60,14 +61,14 @@ const navLinks = [
   </div>
 
   <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-[100] bg-[var(--bg)]">
+  <div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-[100] bg-[#080e14]">
     <div class="px-5 py-[14px] flex items-center justify-between">
-      <a href="/" class="text-[var(--text)] no-underline">
+      <a href="/" class="text-white no-underline">
         <span class="font-['Inter'] text-[11px] font-medium tracking-[0.18em] uppercase">OKINAWA!GO!!</span>
       </a>
       <button
         id="menu-close"
-        class="flex items-center justify-center w-8 h-8 bg-transparent border-none cursor-pointer"
+        class="flex items-center justify-center w-8 h-8 bg-transparent border-none cursor-pointer text-white"
         aria-label="メニューを閉じる"
       >
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -79,7 +80,7 @@ const navLinks = [
       {navLinks.map((link) => (
         <a
           href={link.href}
-          class="font-['Inter'] text-[24px] font-medium tracking-[0.04em] uppercase text-[var(--text)] no-underline"
+          class="font-['Inter'] text-[24px] font-medium tracking-[0.04em] uppercase text-white no-underline"
         >
           {link.label}
         </a>
