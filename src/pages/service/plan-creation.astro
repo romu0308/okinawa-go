@@ -1,0 +1,282 @@
+---
+export const prerender = true;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+
+const steps = [
+  { num: '01', title: 'ヒアリング', desc: 'フォームで旅行の日程・人数・予算・興味をお聞きします' },
+  { num: '02', title: 'プラン作成', desc: '在住者が最適なプランを作成（通常2〜3営業日）' },
+  { num: '03', title: 'PDF納品', desc: '完成したプランをPDFでお届けします' },
+  { num: '04', title: '質問対応', desc: '納品後の質問にもお答えします（プランにより対応期間が異なります）' },
+];
+
+const plans = [
+  {
+    name: 'ライトプラン',
+    price: '3,000',
+    duration: '2泊3日',
+    features: [
+      { label: 'モデルコース作成', included: true },
+      { label: 'おすすめスポット選定', included: true },
+      { label: 'グルメリスト', included: false },
+      { label: '予約代行サポート', included: false },
+      { label: 'チャット質問対応', included: false },
+      { label: '質問対応期間', value: '納品後3日間' },
+    ],
+  },
+  {
+    name: 'スタンダードプラン',
+    price: '5,000',
+    duration: '3泊4日 + グルメリスト',
+    popular: true,
+    features: [
+      { label: 'モデルコース作成', included: true },
+      { label: 'おすすめスポット選定', included: true },
+      { label: 'グルメリスト', included: true },
+      { label: '予約代行サポート', included: false },
+      { label: 'チャット質問対応', included: false },
+      { label: '質問対応期間', value: '納品後7日間' },
+    ],
+  },
+  {
+    name: 'プレミアムプラン',
+    price: '10,000',
+    duration: '4泊以上 + 毎日チャット対応',
+    features: [
+      { label: 'モデルコース作成', included: true },
+      { label: 'おすすめスポット選定', included: true },
+      { label: 'グルメリスト', included: true },
+      { label: '予約代行サポート', included: true },
+      { label: 'チャット質問対応', included: true },
+      { label: '質問対応期間', value: '旅行終了まで' },
+    ],
+  },
+];
+---
+
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title="沖縄旅行プラン作成サービス"
+    description="沖縄在住のプロがあなた専用の旅行プランを作成。ヒアリングからPDF納品、質問対応まで。"
+  />
+
+  <!-- Hero -->
+  <section class="px-5 md:px-10 pt-20 md:pt-28 pb-16 md:pb-20 max-w-[780px] mx-auto text-center">
+    <span class="label-text block mb-4 reveal">Service</span>
+    <h1 class="text-[24px] md:text-[34px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
+      あなた専用の沖縄旅行プラン、<br class="hidden md:block" />プロが作ります
+    </h1>
+    <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#666] mb-8 reveal">
+      日程・人数・予算・興味に合わせて、沖縄在住者が<br class="hidden md:block" />
+      あなただけの旅行プランをオーダーメイドで作成します。
+    </p>
+    <a
+      href="#apply"
+      class="inline-block px-8 py-3 rounded-full text-[14px] font-medium text-white no-underline transition-all duration-300 hover:opacity-90 reveal"
+      style="background: #d97706;"
+    >
+      プラン作成を申し込む
+    </a>
+  </section>
+
+  <!-- How it works -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-10 text-center reveal">
+      ご利用の流れ
+    </h2>
+    <div class="space-y-6">
+      {steps.map((step) => (
+        <div class="flex items-start gap-5 reveal">
+          <span class="font-['Inter'] text-[24px] font-medium text-[#d97706] shrink-0 w-10">{step.num}</span>
+          <div>
+            <h3 class="text-[16px] font-medium text-[var(--text)] mb-1">{step.title}</h3>
+            <p class="text-[14px] leading-[1.8] text-[#666]">{step.desc}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[900px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-10 text-center reveal">
+      料金プラン
+    </h2>
+    <div class="grid md:grid-cols-3 gap-5">
+      {plans.map((plan) => (
+        <div class:list={[
+          "border rounded-lg p-6 reveal relative",
+          plan.popular ? "border-[#d97706]" : "border-[var(--border)]"
+        ]}>
+          {plan.popular && (
+            <span class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 text-[11px] font-medium text-white rounded-full" style="background: #d97706;">
+              人気
+            </span>
+          )}
+          <h3 class="text-[16px] font-medium text-[var(--text)] mb-1">{plan.name}</h3>
+          <p class="text-[12px] text-[#999] mb-4">{plan.duration}</p>
+          <p class="text-[24px] font-medium text-[var(--text)] mb-6">
+            {plan.price}<span class="text-[13px] text-[#999]">円（税込）</span>
+          </p>
+          <ul class="space-y-2.5">
+            {plan.features.map((f) => (
+              <li class="flex items-start gap-2 text-[13px]">
+                {'included' in f ? (
+                  <>
+                    <span class:list={["shrink-0 mt-0.5", f.included ? "text-[#d97706]" : "text-[#ddd]"]}>
+                      {f.included ? '\u2713' : '\u2014'}
+                    </span>
+                    <span class={f.included ? "text-[#555]" : "text-[#ccc]"}>{f.label}</span>
+                  </>
+                ) : (
+                  <>
+                    <span class="text-[#d97706] shrink-0 mt-0.5">&#10003;</span>
+                    <span class="text-[#555]">{f.label}: <strong>{f.value}</strong></span>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+          <a
+            href="#apply"
+            class:list={[
+              "block text-center mt-6 px-4 py-2.5 rounded-full text-[13px] font-medium no-underline transition-all duration-300",
+              plan.popular
+                ? "text-white hover:opacity-90"
+                : "border border-[var(--text)] text-[var(--text)] hover:bg-[var(--text)] hover:text-white"
+            ]}
+            style={plan.popular ? "background: #d97706;" : ""}
+          >
+            このプランで申し込む
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-10 text-center reveal">
+      ご利用者の声
+    </h2>
+    <div class="space-y-6">
+      {[
+        { text: '子連れでの沖縄旅行が不安だったのですが、休憩ポイントまで考えてくれたプランのおかげで、家族全員が大満足でした。', who: '30代女性 / ファミリー旅行' },
+        { text: '自分では絶対に見つけられなかった穴場スポットを教えてもらえました。地元の人に案内してもらっている感覚で楽しかったです。', who: '20代男性 / カップル旅行' },
+        { text: 'プレミアムプランで申し込みましたが、旅行中のチャット対応が本当に心強かったです。天気が悪い日のプランBもすぐ提案してくれました。', who: '40代男性 / ソロ旅行' },
+      ].map((t) => (
+        <div class="border border-[var(--border)] rounded-lg p-6 reveal">
+          <p class="text-[14px] leading-[1.8] text-[#555] mb-3">"{t.text}"</p>
+          <p class="text-[12px] text-[#999]">{t.who}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Application Form -->
+  <section id="apply" class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-10 text-center reveal">
+      プラン作成を申し込む
+    </h2>
+    <form id="plan-form" class="space-y-5 reveal">
+      <div>
+        <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">お名前 <span class="text-[#e74c3c]">*</span></label>
+        <input type="text" name="name" required class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#d97706] transition-colors" />
+      </div>
+      <div>
+        <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">メールアドレス <span class="text-[#e74c3c]">*</span></label>
+        <input type="email" name="email" required class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#d97706] transition-colors" />
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">旅行日数 <span class="text-[#e74c3c]">*</span></label>
+          <select name="days" required class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#d97706] transition-colors bg-white">
+            <option value="">選択してください</option>
+            <option value="2泊3日">2泊3日</option>
+            <option value="3泊4日">3泊4日</option>
+            <option value="4泊5日">4泊5日</option>
+            <option value="5泊以上">5泊以上</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">旅行人数 <span class="text-[#e74c3c]">*</span></label>
+          <input type="text" name="group" required placeholder="例: 大人2名、子供1名" class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#d97706] transition-colors" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">予算（お一人あたり）</label>
+          <select name="budget" class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#d97706] transition-colors bg-white">
+            <option value="">選択してください</option>
+            <option value="〜5万円">〜5万円</option>
+            <option value="5〜10万円">5〜10万円</option>
+            <option value="10〜15万円">10〜15万円</option>
+            <option value="15万円以上">15万円以上</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">旅行時期 <span class="text-[#e74c3c]">*</span></label>
+          <input type="text" name="period" required placeholder="例: 2026年4月中旬" class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#d97706] transition-colors" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">興味・やりたいこと</label>
+        <div class="flex flex-wrap gap-2">
+          {['ビーチ', 'シュノーケリング', 'ダイビング', '沖縄そば', 'カフェ巡り', '絶景スポット', '歴史・文化', 'ショッピング', 'ドライブ', 'のんびり'].map((interest) => (
+            <label class="flex items-center gap-1.5 px-3 py-1.5 border border-[var(--border)] rounded-full text-[13px] text-[#555] cursor-pointer hover:border-[#d97706] transition-colors">
+              <input type="checkbox" name="interests" value={interest} class="accent-[#d97706]" />
+              {interest}
+            </label>
+          ))}
+        </div>
+      </div>
+      <div>
+        <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">備考・ご要望</label>
+        <textarea name="notes" rows="4" placeholder="アレルギー、避けたいこと、特別なリクエストなど" class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#d97706] transition-colors resize-none"></textarea>
+      </div>
+      <button
+        type="submit"
+        class="w-full py-3 rounded-full text-[14px] font-medium text-white no-underline transition-all duration-300 hover:opacity-90 cursor-pointer border-0"
+        style="background: #d97706;"
+      >
+        送信する
+      </button>
+      <p id="form-message" class="text-[13px] text-center hidden"></p>
+    </form>
+  </section>
+
+  <script is:inline>
+    document.getElementById('plan-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const msg = document.getElementById('form-message');
+      const formData = new FormData(form);
+      const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        days: formData.get('days'),
+        group: formData.get('group'),
+        budget: formData.get('budget'),
+        period: formData.get('period'),
+        interests: formData.getAll('interests'),
+        notes: formData.get('notes'),
+      };
+      try {
+        const res = await fetch('/api/plan-request', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        if (res.ok) {
+          msg.textContent = '送信が完了しました。3営業日以内にご連絡いたします。';
+          msg.className = 'text-[13px] text-center text-green-600';
+          msg.classList.remove('hidden');
+          form.reset();
+        } else {
+          throw new Error();
+        }
+      } catch {
+        msg.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
+        msg.className = 'text-[13px] text-center text-[#e74c3c]';
+        msg.classList.remove('hidden');
+      }
+    });
+  </script>
+</BaseLayout>

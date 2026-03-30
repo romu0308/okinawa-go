@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+
+const stampSpots = [
+  { slug: 'hamaya-soba', name: '浜屋そば', area: '北谷' },
+  { slug: 'kishimoto-shokudo', name: '岸本食堂', area: '本部' },
+  { slug: 'araha-beach', name: 'アラハビーチ', area: '北谷' },
+  { slug: 'shurijo', name: '首里城公園', area: '那覇' },
+  { slug: 'cafe-kurukuma', name: 'カフェくるくま', area: '南城' },
+  { slug: 'blue-cave', name: '青の洞窟', area: '恩納村' },
+  { slug: 'transit-cafe', name: 'Transit Cafe', area: '北谷' },
+  { slug: 'sefa-utaki', name: '斎場御嶽', area: '南城' },
+  { slug: 'sesoko-beach', name: '瀬底ビーチ', area: '本部' },
+  { slug: 'tsuboya-street', name: '壺屋やちむん通り', area: '那覇' },
+];
+---
+<BaseLayout>
+  <SEOHead slot="head" title="スタンプラリー | OKINAWA!GO!!" description="沖縄の人気スポット10箇所を巡ってスタンプを集めよう。" />
+
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[680px] mx-auto">
+    <span class="label-text block mb-3 reveal">Stamp Rally</span>
+    <h1 class="text-[28px] md:text-[36px] font-medium leading-[1.2] mb-4 reveal">沖縄スタンプラリー</h1>
+    <p class="text-[14px] text-[var(--text-secondary)] leading-[1.8] mb-4 reveal">10スポットを巡ってスタンプを集めよう。コンプリートで「裏・沖縄ガイド」PDFプレゼント！</p>
+
+    <div class="mb-8 reveal">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-[14px] font-medium" id="stamp-count">0</span>
+        <span class="text-[14px] text-[var(--text-secondary)]">/ 10 スタンプ</span>
+      </div>
+      <div class="w-full h-2 rounded-full" style="background: var(--border);">
+        <div id="stamp-progress" class="h-full rounded-full bg-[var(--text)] transition-all duration-500" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="space-y-3 reveal" id="stamp-list">
+      {stampSpots.map((spot, i) => (
+        <div class="flex items-center justify-between p-4 rounded-lg" style="border: 0.5px solid var(--border);" data-stamp-slug={spot.slug}>
+          <div class="flex items-center gap-3">
+            <span class="stamp-icon w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-medium" style="border: 1px solid var(--border); color: var(--text-tertiary);">{i + 1}</span>
+            <div>
+              <p class="text-[14px] font-medium">{spot.name}</p>
+              <p class="text-[11px] text-[var(--text-tertiary)]">{spot.area}</p>
+            </div>
+          </div>
+          <button class="stamp-btn px-4 py-2 rounded text-[12px] font-medium transition-colors cursor-pointer" style="background: var(--bg-alt); border: 0.5px solid var(--border);" data-slug={spot.slug}>
+            訪問済み
+          </button>
+        </div>
+      ))}
+    </div>
+
+    <!-- Complete section -->
+    <div id="stamp-complete" class="hidden mt-8 p-6 rounded-lg text-center" style="background: #fef9e7; border: 0.5px solid #fde68a;">
+      <p class="text-[18px] font-medium mb-2">🎉 コンプリート！</p>
+      <p class="text-[13px] text-[var(--text-secondary)] mb-4">「裏・沖縄ガイド」PDFをダウンロードできます</p>
+      <a href="#download-secret-guide" class="inline-flex px-6 py-3 rounded text-white text-[13px] font-medium no-underline" style="background: var(--text);">ダウンロード</a>
+    </div>
+
+    <!-- Share -->
+    <div class="mt-8 reveal">
+      <a id="stamp-share" href="#" target="_blank" rel="noopener"
+        class="inline-flex items-center gap-2 text-[12px] text-[var(--text-secondary)] no-underline hover:text-[var(--text)]">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        結果をシェア
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const stamps = JSON.parse(localStorage.getItem('okinawa-stamps') || '{}');
+
+  function updateUI() {
+    const count = Object.keys(stamps).filter(k => stamps[k]).length;
+    document.getElementById('stamp-count')!.textContent = String(count);
+    document.getElementById('stamp-progress')!.style.width = `${(count / 10) * 100}%`;
+
+    document.querySelectorAll('[data-stamp-slug]').forEach(el => {
+      const slug = el.getAttribute('data-stamp-slug')!;
+      const btn = el.querySelector('.stamp-btn') as HTMLButtonElement;
+      const icon = el.querySelector('.stamp-icon') as HTMLElement;
+      if (stamps[slug]) {
+        btn.textContent = '✓';
+        btn.style.background = '#000';
+        btn.style.color = '#fff';
+        btn.style.border = 'none';
+        icon.style.background = '#000';
+        icon.style.color = '#fff';
+        icon.style.border = 'none';
+      }
+    });
+
+    if (count >= 10) {
+      document.getElementById('stamp-complete')!.classList.remove('hidden');
+    }
+
+    const shareBtn = document.getElementById('stamp-share') as HTMLAnchorElement;
+    shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(`OKINAWA!GO!!のスタンプラリー、${count}個集めた！ #沖縄旅行 #OKINAWAGO`)}&url=${encodeURIComponent('https://okinawa-go.jp/stamp/')}`;
+  }
+
+  document.querySelectorAll('.stamp-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const slug = (btn as HTMLElement).dataset.slug!;
+      stamps[slug] = !stamps[slug];
+      localStorage.setItem('okinawa-stamps', JSON.stringify(stamps));
+      updateUI();
+    });
+  });
+
+  updateUI();
+</script>

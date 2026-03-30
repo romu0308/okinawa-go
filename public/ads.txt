@@ -1,0 +1,2 @@
+# AdSense placeholder - replace with actual publisher ID
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

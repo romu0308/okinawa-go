@@ -5,36 +5,28 @@ import SEOHead from '../../components/SEOHead.astro';
 
 const products = [
   {
-    title: '転職戦略シート',
-    price: '無料',
-    priceNote: 'LINE登録で入手',
-    description: '自分の市場価値・強み・最適な転職タイミングを整理できるワークシート。記入するだけで、戦略的な転職活動の全体像が見えてきます。',
-    cta: { label: 'LINEで無料入手', href: '/line/' },
-    free: true,
+    title: '沖縄旅行完全プランシート',
+    price: '980円',
+    description: '沖縄在住5年の地元民が完全監修。カップル・ファミリー・ソロの3パターン対応の旅行プランシート。モデルコース、時間配分、移動手段まですべて網羅。',
+    features: ['3パターン（カップル / ファミリー / ソロ）', 'エリア別モデルコース付き', '時間配分・移動手段まで網羅', '印刷してそのまま使えるPDF'],
+    href: '/products/plan-sheet/',
+    anchor: '#gumroad-plan-sheet',
   },
   {
-    title: '職務経歴書テンプレート集',
-    price: '無料',
-    priceNote: 'LINE登録で入手',
-    description: '業種別・職種別に最適化された職務経歴書テンプレート。書き方のポイント解説付きで、書類選考通過率を大幅にアップ。',
-    cta: { label: 'LINEで無料入手', href: '/line/' },
-    free: true,
+    title: '沖縄グルメ完全マップ',
+    price: '500円',
+    description: '地元民が本当に通うお店だけを厳選。エリア別に50店舗をまとめた沖縄グルメの完全ガイド。Googleマップ連携で迷わずたどり着けます。',
+    features: ['エリア別おすすめ50選', 'ジャンル別（沖縄そば / 海鮮 / カフェ等）', 'Googleマップ連携リンク付き', '観光客が知らない穴場店も収録'],
+    href: '/products/gourmet-map/',
+    anchor: '#gumroad-gourmet-map',
   },
   {
-    title: '年収交渉マスターガイド',
-    price: '¥2,980',
-    priceNote: '税込',
-    description: '面接時の希望年収の伝え方から、内定後の交渉術まで。実際に使えるフレーズ集と、交渉を成功させるための心理テクニックを網羅。',
-    cta: { label: '詳細を見る', href: '#' },
-    free: false,
-  },
-  {
-    title: '30代キャリア設計ワークブック',
-    price: '¥3,980',
-    priceNote: '税込',
-    description: '自己分析から5年後のキャリアビジョン策定、具体的な行動計画まで。30代特有のキャリアの悩みに特化したワークブック。',
-    cta: { label: '詳細を見る', href: '#' },
-    free: false,
+    title: '沖縄移住リアルガイド',
+    price: '1,980円',
+    description: '沖縄に移住して5年。リアルな生活費、仕事事情、住むエリアの選び方、移住前にやるべきことをすべてまとめた電子書籍。',
+    features: ['リアルな生活費の内訳', '仕事・転職事情の実態', 'おすすめ居住エリア比較', '移住前チェックリスト付き', '失敗しないための注意点'],
+    href: '/products/migration-guide/',
+    anchor: '#gumroad-migration-guide',
   },
 ];
 ---
@@ -42,61 +34,57 @@ const products = [
 <BaseLayout>
   <SEOHead
     slot="head"
-    title="キャリア孔明の武器庫"
-    description="転職戦略シート、職務経歴書テンプレート、年収交渉ガイドなど。キャリアアップに必要なツールを揃えています。"
+    title="デジタルプロダクト"
+    description="沖縄在住者が作った旅行プランシート、グルメマップ、移住ガイドなど。沖縄旅行・移住に役立つデジタルコンテンツ。"
   />
 
   <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[780px] mx-auto">
     <span class="label-text block mb-3 reveal">Products</span>
     <h1 class="text-[24px] md:text-[32px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
-      キャリア孔明の武器庫
+      デジタルプロダクト
     </h1>
     <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#666] mb-12 reveal">
-      転職を成功に導くためのツール・テンプレート・ガイドを揃えました。
+      沖縄在住者だからこそ作れる、リアルで実用的なコンテンツを揃えました。
     </p>
 
-    <div class="space-y-6">
+    <div class="space-y-8">
       {products.map((product) => (
         <div class="border border-[var(--border)] rounded-lg p-6 md:p-8 reveal">
-          <div class="flex items-start justify-between gap-4 mb-4">
+          <div class="flex items-start justify-between gap-4 mb-3">
             <h2 class="text-[17px] md:text-[19px] font-medium text-[var(--text)]">{product.title}</h2>
             <div class="text-right shrink-0">
-              <span class:list={[
-                "text-[18px] font-medium",
-                product.free ? "text-green-600" : "text-[var(--text)]"
-              ]}>
-                {product.price}
-              </span>
-              <span class="block text-[11px] text-[#aaa]">{product.priceNote}</span>
+              <span class="text-[18px] font-medium text-[var(--text)]">{product.price}</span>
+              <span class="block text-[11px] text-[#aaa]">税込</span>
             </div>
           </div>
-          <p class="text-[14px] leading-[1.8] text-[#666] mb-5">{product.description}</p>
-          <a
-            href={product.cta.href}
-            class:list={[
-              "inline-block px-6 py-2.5 rounded-full text-[13px] font-medium no-underline transition-all duration-300",
-              product.free
-                ? "bg-[#06C755] text-white hover:bg-[#05b04c]"
-                : "border border-[var(--text)] text-[var(--text)] hover:bg-[var(--text)] hover:text-white"
-            ]}
-          >
-            {product.cta.label}
-          </a>
+          <p class="text-[14px] leading-[1.8] text-[#666] mb-4">{product.description}</p>
+
+          <ul class="mb-6 space-y-1.5">
+            {product.features.map((f) => (
+              <li class="text-[13px] text-[#555] flex items-start gap-2">
+                <span class="text-[#d97706] mt-0.5 shrink-0">&#10003;</span>
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="flex items-center gap-3">
+            <a
+              href={product.href}
+              class="inline-block px-6 py-2.5 rounded-full text-[13px] font-medium no-underline transition-all duration-300 bg-[var(--text)] text-white hover:opacity-80"
+            >
+              詳細を見る
+            </a>
+            <a
+              href={product.anchor}
+              class="inline-block px-6 py-2.5 rounded-full text-[13px] font-medium no-underline transition-all duration-300 text-white hover:opacity-90"
+              style="background: #d97706;"
+            >
+              購入する
+            </a>
+          </div>
         </div>
       ))}
-    </div>
-
-    <!-- Bottom CTA -->
-    <div class="mt-16 text-center reveal">
-      <p class="text-[14px] md:text-[16px] text-[#666] mb-6">
-        まずは無料ツールから試してみませんか？
-      </p>
-      <a
-        href="/line/"
-        class="inline-flex items-center justify-center gap-2 bg-[#06C755] hover:bg-[#05b04c] text-white font-medium text-[14px] px-8 py-3 rounded-full no-underline transition-all duration-300"
-      >
-        LINE友達追加で無料入手
-      </a>
     </div>
   </section>
 </BaseLayout>

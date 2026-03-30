@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import SEOHead from '../../components/SEOHead.astro';
 import CTABox from '../../components/CTABox.astro';
 import AffiliateBox from '../../components/AffiliateBox.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import AffiliateSidebar from '../../components/AffiliateSidebar.astro';
 import ArticleCardGrid from '../../components/ArticleCardGrid.astro';
 import { getCollection, render } from 'astro:content';
 
@@ -61,6 +63,22 @@ const relatedArticles = allArticles
   .filter((a) => a.data.category === article.data.category || a.data.area === article.data.area)
   .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime())
   .slice(0, 3);
+
+// Determine affiliate boxes by category
+const category = article.data.category;
+const affiliateTypes: ('hotel' | 'activity' | 'car' | 'flight' | 'wifi' | 'card')[] = (() => {
+  switch (category) {
+    case 'model-course': return ['hotel', 'car', 'activity'];
+    case 'area-guide': return ['hotel', 'activity'];
+    case 'food': return ['hotel'];
+    case 'activity': return ['activity'];
+    case 'tips': return ['car'];
+    case 'seasonal': return ['hotel', 'flight'];
+    default: return ['hotel'];
+  }
+})();
+
+const areaLabel = article.data.area ? areaLabels[article.data.area] : undefined;
 ---
 
 <BaseLayout>
@@ -120,75 +138,94 @@ const relatedArticles = allArticles
       )}
     </div>
 
-    <!-- Content area -->
-    <div class="px-5 md:px-10 max-w-[680px] mx-auto pb-16 md:pb-24">
-      <!-- Table of Contents -->
-      {toc.length > 0 && (
-        <nav class="mb-12 pl-5 reveal" style="border-left: 1px solid var(--border);">
-          <p class="label-text mb-4">Contents</p>
-          <ul class="space-y-2">
-            {toc.map((heading) => (
-              <li class:list={[heading.depth === 3 && 'pl-4']}>
-                <a
-                  href={`#${heading.slug}`}
-                  class="text-[13px] leading-[1.7] text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-colors duration-300"
-                >
-                  {heading.text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
+    <!-- Ad slot after eyecatch -->
+    <div class="px-5 md:px-10 max-w-[680px] mx-auto">
+      <AdSlot position="top" />
+    </div>
 
-      <!-- Article Body -->
-      <div class="prose max-w-none reveal">
-        <Content />
-      </div>
+    <!-- Content area with sidebar -->
+    <div class="flex gap-10 justify-center px-5 md:px-10">
+      <!-- Main content -->
+      <div class="max-w-[680px] w-full pb-16 md:pb-24">
+        <!-- Table of Contents -->
+        {toc.length > 0 && (
+          <nav class="mb-12 pl-5 reveal" style="border-left: 1px solid var(--border);">
+            <p class="label-text mb-4">Contents</p>
+            <ul class="space-y-2">
+              {toc.map((heading) => (
+                <li class:list={[heading.depth === 3 && 'pl-4']}>
+                  <a
+                    href={`#${heading.slug}`}
+                    class="text-[13px] leading-[1.7] text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-colors duration-300"
+                  >
+                    {heading.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
 
-      <!-- Share -->
-      <div class="mt-12 mb-8 pt-8 border-t" style="border-color: var(--border);">
-        <p class="label-text mb-4">Share</p>
-        <div class="flex items-center gap-6">
-          <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.data.title)}&url=${encodeURIComponent(`https://okinawa-go.jp/articles/${article.id}/`)}&hashtags=沖縄旅行,OKINAWAGO`}
-             target="_blank" rel="noopener"
-             class="text-[12px] text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-colors">
-            X (Twitter)
-          </a>
-          <a href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://okinawa-go.jp/articles/${article.id}/`)}`}
-             target="_blank" rel="noopener"
-             class="text-[12px] text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-colors">
-            LINE
-          </a>
-          <button id="copy-link"
-             class="text-[12px] text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors bg-transparent border-none cursor-pointer">
-            Copy Link
-          </button>
+        <!-- Ad slot after TOC -->
+        <AdSlot position="middle" />
+
+        <!-- Article Body -->
+        <div class="prose max-w-none reveal">
+          <Content />
         </div>
-      </div>
 
-      <!-- Author -->
-      <div class="mt-8 mb-12 p-6 rounded-lg" style="background: var(--bg-alt);">
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 rounded-full bg-[var(--text)] flex items-center justify-center text-white text-[14px] font-medium shrink-0">K</div>
-          <div>
-            <p class="text-[14px] font-medium mb-1">KOUMEI</p>
-            <p class="text-[12px] text-[var(--text-secondary)] leading-[1.7]">
-              沖縄在住5年。妻は沖縄出身。関西人。ガイドブックに載らない沖縄の楽しみ方を発信中。
-            </p>
-            <a href="https://twitter.com/KOUMEI_GO" target="_blank" rel="noopener"
-              class="inline-block mt-2 text-[11px] text-[var(--text-tertiary)] no-underline hover:text-[var(--text)] transition-colors">
-              @KOUMEI_GO
+        <!-- Share -->
+        <div class="mt-12 mb-8 pt-8 border-t" style="border-color: var(--border);">
+          <p class="label-text mb-4">Share</p>
+          <div class="flex items-center gap-6">
+            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.data.title)}&url=${encodeURIComponent(`https://okinawa-go.jp/articles/${article.id}/`)}&hashtags=沖縄旅行,OKINAWAGO`}
+               target="_blank" rel="noopener"
+               class="text-[12px] text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-colors">
+              X (Twitter)
             </a>
+            <a href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://okinawa-go.jp/articles/${article.id}/`)}`}
+               target="_blank" rel="noopener"
+               class="text-[12px] text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-colors">
+              LINE
+            </a>
+            <button id="copy-link"
+               class="text-[12px] text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors bg-transparent border-none cursor-pointer">
+              Copy Link
+            </button>
           </div>
         </div>
+
+        <!-- Author -->
+        <div class="mt-8 mb-12 p-6 rounded-lg" style="background: var(--bg-alt);">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-full bg-[var(--text)] flex items-center justify-center text-white text-[14px] font-medium shrink-0">K</div>
+            <div>
+              <p class="text-[14px] font-medium mb-1">KOUMEI</p>
+              <p class="text-[12px] text-[var(--text-secondary)] leading-[1.7]">
+                沖縄在住5年。妻は沖縄出身。関西人。ガイドブックに載らない沖縄の楽しみ方を発信中。
+              </p>
+              <a href="https://twitter.com/KOUMEI_GO" target="_blank" rel="noopener"
+                class="inline-block mt-2 text-[11px] text-[var(--text-tertiary)] no-underline hover:text-[var(--text)] transition-colors">
+                @KOUMEI_GO
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category-appropriate Affiliate Boxes -->
+        {affiliateTypes.map((aType) => (
+          <AffiliateBox type={aType} spotName={areaLabel} area={article.data.area} />
+        ))}
+
+        <!-- CTA Box -->
+        <CTABox />
+
+        <!-- Ad slot after CTA -->
+        <AdSlot position="bottom" />
       </div>
 
-      <!-- Booking Affiliate -->
-      <AffiliateBox type="hotel" spotName={article.data.area ? areaLabels[article.data.area] : undefined} />
-
-      <!-- CTA Box -->
-      <CTABox />
+      <!-- Sidebar for desktop -->
+      <AffiliateSidebar area={article.data.area} />
     </div>
   </article>
 

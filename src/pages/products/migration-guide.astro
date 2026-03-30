@@ -1,0 +1,153 @@
+---
+export const prerender = true;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+
+const chapters = [
+  '沖縄移住を決める前に知っておくべきこと',
+  'リアルな生活費の内訳（家賃・食費・光熱費・交通費）',
+  '沖縄の仕事事情と年収の現実',
+  'おすすめ居住エリア徹底比較（那覇 / 北谷 / 名護 / 南部）',
+  '移住前にやるべき準備チェックリスト',
+  '引っ越しの段取りと費用',
+  '車は必要？交通手段の選び方',
+  '沖縄の人間関係と文化の違い',
+  '移住後にぶつかる壁と乗り越え方',
+  '移住5年目のリアルな本音',
+];
+
+const faqs = [
+  { q: '沖縄に行ったことがなくても参考になりますか？', a: 'はい。むしろ初めての方にこそ読んでいただきたい内容です。ゼロからの移住準備をすべてカバーしています。' },
+  { q: '電子書籍の形式は？', a: 'PDF形式でお届けします。スマホ・タブレット・PCいずれでも快適にお読みいただけます。' },
+  { q: '内容の更新はありますか？', a: '大きな制度変更や情報の更新があった場合、購入者には無料でアップデート版をお届けします。' },
+  { q: '返金対応はしていますか？', a: 'デジタル商品の性質上、購入後の返金には対応しておりません。目次と概要をご確認の上、ご購入ください。' },
+];
+---
+
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title="沖縄移住リアルガイド"
+    description="沖縄に移住して5年。リアルな生活費、仕事事情、住むエリアの選び方をすべてまとめた電子書籍。"
+  />
+
+  <!-- Hero -->
+  <section class="px-5 md:px-10 pt-20 md:pt-28 pb-16 md:pb-20 max-w-[780px] mx-auto text-center">
+    <span class="label-text block mb-4 reveal">Digital Product</span>
+    <h1 class="text-[26px] md:text-[36px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
+      沖縄移住リアルガイド
+    </h1>
+    <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#666] mb-6 reveal">
+      5年住んでわかった、移住のリアル。<br />
+      ガイドブックには載っていない生活の実態をすべて公開。
+    </p>
+    <p class="text-[28px] font-medium text-[var(--text)] mb-8 reveal">1,980円<span class="text-[14px] text-[#999] ml-1">（税込）</span></p>
+    <a
+      href="#gumroad-migration-guide"
+      class="inline-block px-8 py-3 rounded-full text-[14px] font-medium text-white no-underline transition-all duration-300 hover:opacity-90 reveal"
+      style="background: #d97706;"
+    >
+      購入する
+    </a>
+  </section>
+
+  <!-- Problem -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-8 text-center reveal">
+      沖縄移住、こんな不安ありませんか？
+    </h2>
+    <ul class="space-y-4 reveal">
+      {[
+        '生活費はどのくらいかかるのか、リアルな数字がわからない',
+        '仕事が見つかるか不安。給料は下がる？',
+        'どのエリアに住むのがベストなのかわからない',
+        '車がないと生活できない？維持費はいくら？',
+        '移住して後悔した人の話も聞くけど、実際どうなの？',
+      ].map((item) => (
+        <li class="flex items-start gap-3 text-[14px] leading-[1.8] text-[#555]">
+          <span class="text-[#e74c3c] shrink-0 mt-0.5">&#10005;</span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Author -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-4 text-center reveal">
+      5年間の移住経験をすべて凝縮
+    </h2>
+    <p class="text-[14px] leading-[1.8] text-[#666] text-center mb-4 reveal">
+      東京から沖縄に移住して5年。<br />
+      移住前の準備から、実際の生活、仕事探し、人間関係まで。<br />
+      綺麗事だけではない、リアルな移住体験をまとめました。
+    </p>
+  </section>
+
+  <!-- TOC -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-8 text-center reveal">
+      目次
+    </h2>
+    <ol class="space-y-3 reveal">
+      {chapters.map((item, i) => (
+        <li class="flex items-start gap-3 text-[14px] leading-[1.8] text-[#555]">
+          <span class="font-['Inter'] text-[12px] text-[#aaa] shrink-0 mt-0.5 w-6 text-right">{String(i + 1).padStart(2, '0')}</span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- What you get -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-8 text-center reveal">
+      含まれるもの
+    </h2>
+    <ul class="space-y-3 reveal">
+      {[
+        '電子書籍本編（約80ページ）',
+        '生活費シミュレーションシート',
+        '移住前チェックリスト（印刷用PDF）',
+        'エリア比較表',
+        '移住スケジュールテンプレート',
+      ].map((item) => (
+        <li class="flex items-start gap-3 text-[14px] leading-[1.8] text-[#555]">
+          <span class="text-[#d97706] shrink-0 mt-0.5">&#10003;</span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- CTA -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto text-center" style="border-top: 0.5px solid var(--border);">
+    <p class="text-[28px] font-medium text-[var(--text)] mb-2 reveal">1,980円<span class="text-[14px] text-[#999] ml-1">（税込）</span></p>
+    <p class="text-[14px] text-[#666] mb-8 reveal">PDF形式 / 約80ページ / 即ダウンロード</p>
+    <a
+      href="#gumroad-migration-guide"
+      class="inline-block px-10 py-3.5 rounded-full text-[14px] font-medium text-white no-underline transition-all duration-300 hover:opacity-90 reveal"
+      style="background: #d97706;"
+    >
+      購入する
+    </a>
+  </section>
+
+  <!-- FAQ -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-10 text-center reveal">
+      よくある質問
+    </h2>
+    <div class="space-y-6">
+      {faqs.map((faq) => (
+        <div class="reveal">
+          <h3 class="text-[15px] font-medium text-[var(--text)] mb-2 flex items-start gap-2">
+            <span class="text-[#d97706] shrink-0">Q.</span>
+            <span>{faq.q}</span>
+          </h3>
+          <p class="text-[14px] leading-[1.8] text-[#666] pl-6">{faq.a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

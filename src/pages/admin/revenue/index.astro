@@ -1,0 +1,98 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const revenuePath = path.join(process.cwd(), 'src/data/revenue.json');
+let revenueData: any[] = [];
+try { revenueData = JSON.parse(fs.readFileSync(revenuePath, 'utf-8')); } catch {}
+
+const sources = ['affiliate', 'adsense', 'content', 'service', 'pr', 'other'];
+const sourceLabels: Record<string, string> = {
+  affiliate: 'アフィリエイト',
+  adsense: 'AdSense',
+  content: 'コンテンツ販売',
+  service: 'プラン作成',
+  pr: 'PR案件',
+  other: 'その他',
+};
+
+const totalRevenue = revenueData.reduce((sum: number, r: any) => sum + (r.amount || 0), 0);
+const currentMonth = new Date().toISOString().slice(0, 7);
+const monthlyGoal = 100000;
+const currentMonthRevenue = revenueData.filter((r: any) => r.month === currentMonth).reduce((sum: number, r: any) => sum + (r.amount || 0), 0);
+---
+<AdminLayout title="収益管理">
+  <!-- Summary cards -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px;">
+      <p style="font-size: 12px; color: #6b7280;">累計収益</p>
+      <p style="font-size: 24px; font-weight: 600;">&yen;{totalRevenue.toLocaleString()}</p>
+    </div>
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px;">
+      <p style="font-size: 12px; color: #6b7280;">今月の収益</p>
+      <p style="font-size: 24px; font-weight: 600;">&yen;{currentMonthRevenue.toLocaleString()}</p>
+    </div>
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px;">
+      <p style="font-size: 12px; color: #6b7280;">目標達成率</p>
+      <p style="font-size: 24px; font-weight: 600;">{Math.round((currentMonthRevenue / monthlyGoal) * 100)}%</p>
+    </div>
+  </div>
+
+  <!-- Revenue input form -->
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+    <h3 style="font-size: 14px; font-weight: 500; margin-bottom: 16px;">収益を記録</h3>
+    <form id="revenue-form" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: end;">
+      <div>
+        <label style="font-size: 11px; color: #6b7280; display: block; margin-bottom: 4px;">月</label>
+        <input type="month" name="month" value={currentMonth} style="border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 10px; font-size: 13px;" />
+      </div>
+      <div>
+        <label style="font-size: 11px; color: #6b7280; display: block; margin-bottom: 4px;">収益源</label>
+        <select name="source" style="border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 10px; font-size: 13px;">
+          {sources.map(s => <option value={s}>{sourceLabels[s]}</option>)}
+        </select>
+      </div>
+      <div>
+        <label style="font-size: 11px; color: #6b7280; display: block; margin-bottom: 4px;">金額</label>
+        <input type="number" name="amount" placeholder="10000" style="border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 10px; font-size: 13px; width: 120px;" />
+      </div>
+      <button type="submit" style="background: #2563eb; color: white; border: none; border-radius: 4px; padding: 8px 16px; font-size: 13px; cursor: pointer;">記録</button>
+    </form>
+  </div>
+
+  <!-- Revenue table -->
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+      <thead>
+        <tr style="border-bottom: 1px solid #e5e7eb; background: #f9fafb;">
+          <th style="text-align: left; padding: 10px 12px;">月</th>
+          <th style="text-align: left; padding: 10px 12px;">収益源</th>
+          <th style="text-align: right; padding: 10px 12px;">金額</th>
+        </tr>
+      </thead>
+      <tbody>
+        {revenueData.sort((a: any, b: any) => b.month.localeCompare(a.month)).map((r: any) => (
+          <tr style="border-bottom: 1px solid #f3f4f6;">
+            <td style="padding: 10px 12px;">{r.month}</td>
+            <td style="padding: 10px 12px;">{sourceLabels[r.source] || r.source}</td>
+            <td style="padding: 10px 12px; text-align: right;">&yen;{r.amount?.toLocaleString()}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    document.getElementById('revenue-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target as HTMLFormElement;
+      const formData = new FormData(form);
+      const data: Record<string, any> = {};
+      formData.forEach((value, key) => { data[key] = key === 'amount' ? Number(value) : value; });
+      await fetch('/api/revenue', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
+      window.location.reload();
+    });
+  </script>
+</AdminLayout>

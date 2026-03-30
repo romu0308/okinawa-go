@@ -1,0 +1,19 @@
+---
+const now = new Date();
+const month = now.getMonth() + 1; // 1-12
+
+let campaign = null;
+if (month >= 6 && month <= 9) {
+  campaign = { title: '🏖 2026夏、沖縄の正しい楽しみ方', url: '/campaign/summer2026/', color: '#0ea5e9' };
+} else if (month >= 12 || month <= 2) {
+  campaign = { title: '🎄 冬の沖縄、実は最高。', url: '/campaign/', color: '#dc2626' };
+} else if (month >= 3 && month <= 5) {
+  campaign = { title: '🌸 春の沖縄、ベストシーズン到来', url: '/campaign/', color: '#ec4899' };
+}
+---
+
+{campaign && (
+  <a href={campaign.url} class="block text-center py-2.5 text-white text-[12px] font-medium no-underline hover:opacity-90 transition-opacity" style={`background: ${campaign.color};`}>
+    {campaign.title} →
+  </a>
+)}

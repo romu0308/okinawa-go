@@ -1,0 +1,19 @@
+---
+interface Props {
+  area?: string;
+}
+const { area } = Astro.props;
+---
+<aside class="hidden lg:block w-[280px] shrink-0">
+  <div class="sticky top-20 space-y-6">
+    <div class="p-4 rounded-lg" style="background: var(--bg-alt); border: 0.5px solid var(--border);">
+      <p class="font-['Inter'] text-[9px] tracking-[0.15em] uppercase mb-4" style="color: var(--text-tertiary);">沖縄旅行を予約する</p>
+      <div class="space-y-2">
+        <a href="#affiliate-rakuten-hotel" target="_blank" rel="sponsored" class="block px-3 py-2.5 text-[12px] rounded bg-[#BF0000] text-white no-underline text-center font-medium hover:opacity-90 transition-opacity">宿泊予約（楽天トラベル）</a>
+        <a href="#affiliate-skyscanner" target="_blank" rel="sponsored" class="block px-3 py-2.5 text-[12px] rounded bg-[#0770e3] text-white no-underline text-center font-medium hover:opacity-90 transition-opacity">航空券を探す</a>
+        <a href="#affiliate-tabirai" target="_blank" rel="sponsored" class="block px-3 py-2.5 text-[12px] rounded bg-[#E53935] text-white no-underline text-center font-medium hover:opacity-90 transition-opacity">レンタカー比較</a>
+        <a href="#affiliate-asoview" target="_blank" rel="sponsored" class="block px-3 py-2.5 text-[12px] rounded bg-[#00A4E4] text-white no-underline text-center font-medium hover:opacity-90 transition-opacity">アクティビティ予約</a>
+      </div>
+    </div>
+  </div>
+</aside>

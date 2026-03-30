@@ -1,0 +1,11 @@
+---
+interface Props {
+  position?: 'top' | 'middle' | 'bottom';
+}
+const { position = 'middle' } = Astro.props;
+---
+<div class="ad-slot my-8 flex items-center justify-center rounded"
+  style="min-height: 100px; background: #fafafa; border: 1px dashed #ddd;"
+  data-ad-position={position}>
+  <p class="text-[11px] text-[#ccc] font-['Inter']">— AD —</p>
+</div>

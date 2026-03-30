@@ -1,31 +1,63 @@
 ---
 interface Props {
-  type: 'hotel' | 'activity' | 'car';
+  type: 'hotel' | 'activity' | 'car' | 'flight' | 'wifi' | 'card';
   spotName?: string;
   area?: string;
 }
 
 const { type, spotName, area } = Astro.props;
 
-const configs = {
+const configs: Record<string, { title: string; subtitle: string; links: { name: string; url: string; color: string }[] }> = {
   hotel: {
     title: '宿泊予約',
+    subtitle: area ? `${area}エリアのホテルを探す` : 'このエリアのホテルを探す',
     links: [
-      { name: '楽天トラベルで探す', url: '#rakuten-travel', color: '#BF0000' },
-      { name: 'じゃらんで探す', url: '#jalan', color: '#FF6600' },
-      { name: 'Booking.comで探す', url: '#booking', color: '#003580' },
+      { name: '楽天トラベル', url: `#affiliate-rakuten-${area || 'okinawa'}`, color: '#BF0000' },
+      { name: 'じゃらん', url: `#affiliate-jalan-${area || 'okinawa'}`, color: '#FF6600' },
+      { name: 'Booking.com', url: '#affiliate-booking', color: '#003580' },
+      { name: '一休.com', url: '#affiliate-ikyu', color: '#1a1a1a' },
     ],
   },
   activity: {
     title: 'アクティビティ予約',
+    subtitle: '沖縄のアクティビティを予約する',
     links: [
-      { name: 'アソビューで予約する', url: '#asoview', color: '#00A4E4' },
+      { name: 'アソビュー', url: '#affiliate-asoview', color: '#00A4E4' },
+      { name: 'VELTRA', url: '#affiliate-veltra', color: '#00875A' },
+      { name: 'Klook', url: '#affiliate-klook', color: '#FF5722' },
     ],
   },
   car: {
     title: 'レンタカー予約',
+    subtitle: '沖縄レンタカーを比較する',
     links: [
-      { name: 'レンタカー比較・予約', url: '#rentalcar', color: '#333' },
+      { name: 'たびらい', url: '#affiliate-tabirai', color: '#E53935' },
+      { name: 'スカイチケット', url: '#affiliate-skyticket-car', color: '#1565C0' },
+      { name: '楽天レンタカー', url: '#affiliate-rakuten-car', color: '#BF0000' },
+    ],
+  },
+  flight: {
+    title: '航空券検索',
+    subtitle: '沖縄行きの航空券を探す',
+    links: [
+      { name: 'スカイスキャナー', url: '#affiliate-skyscanner', color: '#0770e3' },
+      { name: 'エアトリ', url: '#affiliate-airtrip', color: '#FF6B00' },
+    ],
+  },
+  wifi: {
+    title: 'Wi-Fi / eSIM',
+    subtitle: '旅行中のネット環境を確保する',
+    links: [
+      { name: 'グローバルWiFi', url: '#affiliate-globalwifi', color: '#00897B' },
+      { name: 'イモトのWiFi', url: '#affiliate-imoto', color: '#FF8F00' },
+    ],
+  },
+  card: {
+    title: '旅行で得するクレカ',
+    subtitle: '旅行に強いカードを作る',
+    links: [
+      { name: '楽天カード', url: '#affiliate-rakuten-card', color: '#BF0000' },
+      { name: 'エポスカード', url: '#affiliate-epos', color: '#006837' },
     ],
   },
 };
@@ -34,23 +66,17 @@ const config = configs[type];
 ---
 
 <div class="my-8 p-5 rounded-lg" style="background: var(--bg-alt); border: 0.5px solid var(--border);">
-  <p class="font-['Inter'] text-[9px] tracking-[0.15em] uppercase mb-3" style="color: var(--text-tertiary);">
+  <p class="font-['Inter'] text-[9px] tracking-[0.15em] uppercase mb-1" style="color: var(--text-tertiary);">
     {config.title}
   </p>
-  {spotName && (
-    <p class="text-[13px] text-[var(--text-secondary)] mb-4">
-      {spotName}{area ? `（${area}）` : ''}周辺の{type === 'hotel' ? '宿泊施設' : type === 'activity' ? 'アクティビティ' : 'レンタカー'}を探す
-    </p>
-  )}
+  <p class="text-[13px] text-[var(--text-secondary)] mb-4">
+    {spotName ? `${spotName}${area ? `（${area}）` : ''}の` : ''}{config.subtitle}
+  </p>
   <div class="flex flex-wrap gap-2">
     {config.links.map((link) => (
-      <a
-        href={link.url}
-        target="_blank"
-        rel="noopener noreferrer sponsored"
+      <a href={link.url} target="_blank" rel="noopener noreferrer sponsored"
         class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded text-white text-[12px] font-medium no-underline transition-opacity hover:opacity-80"
-        style={`background: ${link.color};`}
-      >
+        style={`background: ${link.color};`}>
         {link.name}
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 1h6v6M9 1L1 9" stroke="currentColor" stroke-width="1"/></svg>
       </a>

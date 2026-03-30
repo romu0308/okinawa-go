@@ -1,0 +1,24 @@
+---
+interface Props {
+  type: 'plan' | 'gourmet' | 'migration';
+}
+const { type } = Astro.props;
+
+const products = {
+  plan: { title: '沖縄旅行完全プランシート', price: '980円', url: '/products/plan-sheet/', description: '在住者が作った3パターンの完全プラン' },
+  gourmet: { title: '沖縄グルメ完全マップ', price: '500円', url: '/products/gourmet-map/', description: 'エリア別おすすめ飲食店50選' },
+  migration: { title: '沖縄移住リアルガイド', price: '1,980円', url: '/products/migration-guide/', description: '5年住んでわかったリアルな移住情報' },
+};
+
+const product = products[type];
+---
+<div class="my-8 p-5 rounded-lg flex items-start gap-4" style="background: #fef9e7; border: 0.5px solid #fde68a;">
+  <div class="flex-1">
+    <p class="font-['Inter'] text-[9px] tracking-[0.12em] uppercase mb-1" style="color: #92400e;">Digital Product</p>
+    <p class="text-[15px] font-medium text-[var(--text)] mb-1">{product.title}</p>
+    <p class="text-[12px] text-[var(--text-secondary)] mb-3">{product.description}</p>
+    <a href={product.url} class="inline-flex items-center gap-1 px-4 py-2 rounded text-[12px] font-medium text-white no-underline" style="background: #d97706;">
+      {product.price}で購入 →
+    </a>
+  </div>
+</div>

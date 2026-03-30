@@ -1,0 +1,140 @@
+---
+export const prerender = true;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+
+const areas = [
+  { name: '那覇エリア', count: 15, highlights: '国際通り周辺、牧志公設市場、首里' },
+  { name: '北谷・中部エリア', count: 12, highlights: 'アメリカンビレッジ、北谷、宜野湾、沖縄市' },
+  { name: '恩納・北部エリア', count: 10, highlights: '恩納村、名護、本部、今帰仁' },
+  { name: '南部エリア', count: 8, highlights: '豊見城、糸満、南城、知念' },
+  { name: 'その他・離島', count: 5, highlights: '読谷、うるま、離島の名店' },
+];
+
+const genres = [
+  '沖縄そば（定番 / 穴場）',
+  '海鮮・魚料理',
+  'ステーキ・焼肉',
+  'カフェ・スイーツ',
+  'タコス・アメリカンフード',
+  '居酒屋・地元の食堂',
+];
+
+const faqs = [
+  { q: 'マップはどうやって使いますか？', a: 'PDF内のリンクをタップするとGoogleマップが開きます。ナビとしてそのままお使いいただけます。' },
+  { q: '情報は更新されますか？', a: '閉店や新店の情報は定期的に更新しています。購入者には無料でアップデート版をお届けします。' },
+  { q: '予算の目安は載っていますか？', a: 'はい。各店舗にランチ・ディナーの平均予算を記載しています。' },
+];
+---
+
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title="沖縄グルメ完全マップ"
+    description="沖縄在住者が本当に通うお店だけを厳選。エリア別50店舗のグルメガイド。Googleマップ連携付き。"
+  />
+
+  <!-- Hero -->
+  <section class="px-5 md:px-10 pt-20 md:pt-28 pb-16 md:pb-20 max-w-[780px] mx-auto text-center">
+    <span class="label-text block mb-4 reveal">Digital Product</span>
+    <h1 class="text-[26px] md:text-[36px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
+      沖縄グルメ完全マップ
+    </h1>
+    <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#666] mb-6 reveal">
+      地元民が本当に通うお店だけを厳選。<br />
+      エリア別50店舗、Googleマップ連携付き。
+    </p>
+    <p class="text-[28px] font-medium text-[var(--text)] mb-8 reveal">500円<span class="text-[14px] text-[#999] ml-1">（税込）</span></p>
+    <a
+      href="#gumroad-gourmet-map"
+      class="inline-block px-8 py-3 rounded-full text-[14px] font-medium text-white no-underline transition-all duration-300 hover:opacity-90 reveal"
+      style="background: #d97706;"
+    >
+      購入する
+    </a>
+  </section>
+
+  <!-- Problem -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-8 text-center reveal">
+      沖縄のグルメ選び、こんな経験ありませんか？
+    </h2>
+    <ul class="space-y-4 reveal">
+      {[
+        '食べログの点数だけで選んだら、観光客向けのお店だった',
+        '地元の人が行くお店が全然わからない',
+        '沖縄そばの店が多すぎて、どこが本当においしいかわからない',
+        '場所がわかりにくくて、たどり着けなかった',
+        'せっかくの旅行なのに、食事で失敗したくない',
+      ].map((item) => (
+        <li class="flex items-start gap-3 text-[14px] leading-[1.8] text-[#555]">
+          <span class="text-[#e74c3c] shrink-0 mt-0.5">&#10005;</span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Area breakdown -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-10 text-center reveal">
+      エリア別収録店舗
+    </h2>
+    <div class="space-y-4">
+      {areas.map((area) => (
+        <div class="border border-[var(--border)] rounded-lg p-5 flex items-center justify-between reveal">
+          <div>
+            <h3 class="text-[15px] font-medium text-[var(--text)] mb-1">{area.name}</h3>
+            <p class="text-[12px] text-[#999]">{area.highlights}</p>
+          </div>
+          <span class="text-[18px] font-medium text-[#d97706] shrink-0">{area.count}店</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Genres -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-8 text-center reveal">
+      収録ジャンル
+    </h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 reveal">
+      {genres.map((g) => (
+        <div class="border border-[var(--border)] rounded-lg p-4 text-center">
+          <p class="text-[14px] text-[#555]">{g}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto text-center" style="border-top: 0.5px solid var(--border);">
+    <p class="text-[28px] font-medium text-[var(--text)] mb-2 reveal">500円<span class="text-[14px] text-[#999] ml-1">（税込）</span></p>
+    <p class="text-[14px] text-[#666] mb-8 reveal">PDF形式 / Googleマップ連携 / 即ダウンロード</p>
+    <a
+      href="#gumroad-gourmet-map"
+      class="inline-block px-10 py-3.5 rounded-full text-[14px] font-medium text-white no-underline transition-all duration-300 hover:opacity-90 reveal"
+      style="background: #d97706;"
+    >
+      購入する
+    </a>
+  </section>
+
+  <!-- FAQ -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-10 text-center reveal">
+      よくある質問
+    </h2>
+    <div class="space-y-6">
+      {faqs.map((faq) => (
+        <div class="reveal">
+          <h3 class="text-[15px] font-medium text-[var(--text)] mb-2 flex items-start gap-2">
+            <span class="text-[#d97706] shrink-0">Q.</span>
+            <span>{faq.q}</span>
+          </h3>
+          <p class="text-[14px] leading-[1.8] text-[#666] pl-6">{faq.a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

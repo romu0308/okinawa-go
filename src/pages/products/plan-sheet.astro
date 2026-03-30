@@ -1,0 +1,152 @@
+---
+export const prerender = true;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+
+const features = [
+  { pattern: 'カップルプラン', desc: 'ロマンチックなビーチ、おしゃれカフェ、サンセットディナーなど二人の時間を最大限楽しめるコース' },
+  { pattern: 'ファミリープラン', desc: '子連れでも安心のスポット、ランチ場所、休憩ポイントまで。年齢別のアレンジ方法も解説' },
+  { pattern: 'ソロプラン', desc: '一人旅ならではの自由度を活かした、ディープな沖縄体験コース。地元民しか知らない穴場も' },
+];
+
+const toc = [
+  '沖縄旅行の基本情報（ベストシーズン・服装・持ち物）',
+  'エリア別の特徴と選び方',
+  'カップル向け2泊3日モデルコース',
+  'ファミリー向け2泊3日モデルコース',
+  'ソロ旅向け2泊3日モデルコース',
+  '時間帯別おすすめアクティビティ',
+  '移動手段ガイド（レンタカー / バス / モノレール）',
+  '予算別プランニングシート',
+  '天候別プランB一覧',
+  '地元民おすすめの穴場リスト',
+];
+
+const faqs = [
+  { q: '購入後、どのように届きますか？', a: '決済完了後、すぐにPDFファイルをダウンロードできます。メールにもダウンロードリンクが届きます。' },
+  { q: 'スマホでも見れますか？', a: 'はい。PDF形式なのでスマホ・タブレット・PCすべてで閲覧可能です。印刷してお使いいただくこともできます。' },
+  { q: '3泊4日以上にも対応していますか？', a: 'ベースは2泊3日ですが、延泊時のアレンジ方法も収録しています。追加日程のおすすめスポットも紹介しています。' },
+  { q: '返金はできますか？', a: 'デジタル商品の性質上、購入後の返金には対応しておりません。ご了承ください。' },
+];
+---
+
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title="沖縄旅行完全プランシート"
+    description="沖縄在住5年の地元民が完全監修。カップル・ファミリー・ソロの3パターン対応の沖縄旅行プランシート。"
+  />
+
+  <!-- Hero -->
+  <section class="px-5 md:px-10 pt-20 md:pt-28 pb-16 md:pb-20 max-w-[780px] mx-auto text-center">
+    <span class="label-text block mb-4 reveal">Digital Product</span>
+    <h1 class="text-[26px] md:text-[36px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
+      沖縄旅行完全プランシート
+    </h1>
+    <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#666] mb-6 reveal">
+      在住5年の地元民が完全監修。<br />
+      これ1つで沖縄旅行の計画がすべて完了します。
+    </p>
+    <p class="text-[28px] font-medium text-[var(--text)] mb-8 reveal">980円<span class="text-[14px] text-[#999] ml-1">（税込）</span></p>
+    <a
+      href="#gumroad-plan-sheet"
+      class="inline-block px-8 py-3 rounded-full text-[14px] font-medium text-white no-underline transition-all duration-300 hover:opacity-90 reveal"
+      style="background: #d97706;"
+    >
+      購入する
+    </a>
+  </section>
+
+  <!-- Problem -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-8 text-center reveal">
+      沖縄旅行の計画、こんな悩みありませんか？
+    </h2>
+    <ul class="space-y-4 reveal">
+      {[
+        '観光スポットが多すぎて、どこに行けばいいかわからない',
+        'ネットの情報が古くて、今でもやっているか不安',
+        '効率のいい回り方がわからず、移動だけで時間が消える',
+        '子連れ / カップル / 一人旅で最適なプランが違うのに、一般的な情報しかない',
+        '地元の人が本当におすすめするお店や場所が知りたい',
+      ].map((item) => (
+        <li class="flex items-start gap-3 text-[14px] leading-[1.8] text-[#555]">
+          <span class="text-[#e74c3c] shrink-0 mt-0.5">&#10005;</span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Solution -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-4 text-center reveal">
+      在住5年の地元民が完全監修
+    </h2>
+    <p class="text-[14px] leading-[1.8] text-[#666] text-center mb-10 reveal">
+      沖縄に住んで5年。毎週のように島中を回り、何百ものスポットを訪れてきた筆者が、<br class="hidden md:block" />
+      本当に満足できる旅行プランをパターン別にまとめました。
+    </p>
+  </section>
+
+  <!-- TOC -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-8 text-center reveal">
+      中身プレビュー
+    </h2>
+    <ol class="space-y-3 reveal">
+      {toc.map((item, i) => (
+        <li class="flex items-start gap-3 text-[14px] leading-[1.8] text-[#555]">
+          <span class="font-['Inter'] text-[12px] text-[#aaa] shrink-0 mt-0.5 w-6 text-right">{String(i + 1).padStart(2, '0')}</span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- 3 Patterns -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-10 text-center reveal">
+      含まれる3パターン
+    </h2>
+    <div class="space-y-6">
+      {features.map((f) => (
+        <div class="border border-[var(--border)] rounded-lg p-6 reveal">
+          <h3 class="text-[16px] font-medium text-[var(--text)] mb-2">{f.pattern}</h3>
+          <p class="text-[14px] leading-[1.8] text-[#666]">{f.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto text-center" style="border-top: 0.5px solid var(--border);">
+    <p class="text-[28px] font-medium text-[var(--text)] mb-2 reveal">980円<span class="text-[14px] text-[#999] ml-1">（税込）</span></p>
+    <p class="text-[14px] text-[#666] mb-8 reveal">PDF形式 / 即ダウンロード</p>
+    <a
+      href="#gumroad-plan-sheet"
+      class="inline-block px-10 py-3.5 rounded-full text-[14px] font-medium text-white no-underline transition-all duration-300 hover:opacity-90 reveal"
+      style="background: #d97706;"
+    >
+      購入する
+    </a>
+  </section>
+
+  <!-- FAQ -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-10 text-center reveal">
+      よくある質問
+    </h2>
+    <div class="space-y-6">
+      {faqs.map((faq) => (
+        <div class="reveal">
+          <h3 class="text-[15px] font-medium text-[var(--text)] mb-2 flex items-start gap-2">
+            <span class="text-[#d97706] shrink-0">Q.</span>
+            <span>{faq.q}</span>
+          </h3>
+          <p class="text-[14px] leading-[1.8] text-[#666] pl-6">{faq.a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

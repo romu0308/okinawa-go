@@ -1,0 +1,188 @@
+---
+export const prerender = true;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+
+const services = [
+  {
+    label: 'A',
+    title: 'PR記事掲載',
+    price: '30,000円〜/記事',
+    description: '貴社の施設・サービスを、在住者目線のオリジナル記事として制作・掲載。SEO最適化済みで、検索からの継続的な集客が見込めます。取材・撮影・執筆をワンストップで対応。',
+  },
+  {
+    label: 'B',
+    title: 'スポットDB優先掲載',
+    price: '10,000円/月',
+    description: 'スポットデータベースでの上位表示・詳細情報の充実掲載。写真の追加、営業時間・メニュー情報の優先更新にも対応します。',
+  },
+  {
+    label: 'C',
+    title: 'バナー広告枠',
+    price: '15,000円/月',
+    description: '記事ページやトップページへのバナー広告掲載。沖縄旅行を計画中のユーザーにダイレクトにリーチできます。',
+  },
+  {
+    label: 'D',
+    title: 'SNS運用代行',
+    price: '50,000円〜/月',
+    description: 'Instagram・X（Twitter）の運用を代行。投稿制作・ハッシュタグ戦略・分析レポートまで。沖縄の観光業界に特化したノウハウで運用します。',
+  },
+  {
+    label: 'E',
+    title: 'インフルエンサー投稿',
+    price: '要相談',
+    description: '沖縄に特化したインフルエンサーネットワークを活用した情報発信。フォロワー属性・投稿内容をご要望に合わせてマッチングします。',
+  },
+];
+
+const stats = [
+  { label: '掲載記事数', value: '30+', note: '記事' },
+  { label: '月間PV', value: 'Coming', note: 'soon' },
+  { label: 'SNSフォロワー', value: 'Coming', note: 'soon' },
+];
+---
+
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title="事業者様向けサービス"
+    description="沖縄の事業者様向け広告・PR記事掲載・SNS運用代行サービス。OKINAWA!GO!!で効果的なプロモーションを。"
+  />
+
+  <!-- Hero -->
+  <section class="px-5 md:px-10 pt-20 md:pt-28 pb-16 md:pb-20 max-w-[780px] mx-auto text-center">
+    <span class="label-text block mb-4 reveal">For Business</span>
+    <h1 class="text-[24px] md:text-[34px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">
+      沖縄の事業者様へ
+    </h1>
+    <p class="text-[14px] md:text-[16px] leading-[1.8] text-[#666] mb-8 reveal">
+      OKINAWA!GO!!は、沖縄旅行を計画中のユーザーに向けた情報メディアです。<br class="hidden md:block" />
+      貴社のサービス・施設のプロモーションをお手伝いします。
+    </p>
+    <a
+      href="#contact"
+      class="inline-block px-8 py-3 rounded-full text-[14px] font-medium text-white no-underline transition-all duration-300 hover:opacity-90 reveal"
+      style="background: var(--text);"
+    >
+      お問い合わせ
+    </a>
+  </section>
+
+  <!-- Stats -->
+  <section class="px-5 md:px-10 py-12 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <div class="grid grid-cols-3 gap-4">
+      {stats.map((stat) => (
+        <div class="text-center reveal">
+          <p class="text-[28px] md:text-[36px] font-medium text-[var(--text)]">{stat.value}</p>
+          <p class="text-[11px] text-[#999]">{stat.note}</p>
+          <p class="text-[12px] text-[#666] mt-1">{stat.label}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-10 text-center reveal">
+      サービス一覧
+    </h2>
+    <div class="space-y-6">
+      {services.map((service) => (
+        <div class="border border-[var(--border)] rounded-lg p-6 reveal">
+          <div class="flex items-start justify-between gap-4 mb-3">
+            <div class="flex items-center gap-3">
+              <span class="font-['Inter'] text-[12px] text-[#999] shrink-0">{service.label}.</span>
+              <h3 class="text-[16px] font-medium text-[var(--text)]">{service.title}</h3>
+            </div>
+            <span class="text-[14px] font-medium text-[#d97706] shrink-0 whitespace-nowrap">{service.price}</span>
+          </div>
+          <p class="text-[14px] leading-[1.8] text-[#666] pl-7">{service.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Contact Form -->
+  <section id="contact" class="px-5 md:px-10 py-16 md:py-20 max-w-[780px] mx-auto" style="border-top: 0.5px solid var(--border);">
+    <h2 class="text-[20px] md:text-[24px] font-medium text-[var(--text)] mb-10 text-center reveal">
+      お問い合わせ
+    </h2>
+    <form id="business-form" class="space-y-5 reveal">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">会社名 <span class="text-[#e74c3c]">*</span></label>
+          <input type="text" name="company" required class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#333] transition-colors" />
+        </div>
+        <div>
+          <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">担当者名 <span class="text-[#e74c3c]">*</span></label>
+          <input type="text" name="name" required class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#333] transition-colors" />
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">メールアドレス <span class="text-[#e74c3c]">*</span></label>
+          <input type="email" name="email" required class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#333] transition-colors" />
+        </div>
+        <div>
+          <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">電話番号</label>
+          <input type="tel" name="phone" class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#333] transition-colors" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">ご興味のあるサービス <span class="text-[#e74c3c]">*</span></label>
+        <div class="flex flex-wrap gap-2">
+          {['PR記事掲載', 'スポットDB優先掲載', 'バナー広告枠', 'SNS運用代行', 'インフルエンサー投稿', 'その他'].map((s) => (
+            <label class="flex items-center gap-1.5 px-3 py-1.5 border border-[var(--border)] rounded-full text-[13px] text-[#555] cursor-pointer hover:border-[#333] transition-colors">
+              <input type="checkbox" name="service_interest" value={s} class="accent-[#333]" />
+              {s}
+            </label>
+          ))}
+        </div>
+      </div>
+      <div>
+        <label class="block text-[13px] font-medium text-[var(--text)] mb-1.5">お問い合わせ内容 <span class="text-[#e74c3c]">*</span></label>
+        <textarea name="message" required rows="5" placeholder="ご検討中のプロモーション内容、ご予算、時期などをお聞かせください。" class="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-[14px] outline-none focus:border-[#333] transition-colors resize-none"></textarea>
+      </div>
+      <button
+        type="submit"
+        class="w-full py-3 rounded-full text-[14px] font-medium text-white no-underline transition-all duration-300 hover:opacity-90 cursor-pointer border-0 bg-[var(--text)]"
+      >
+        送信する
+      </button>
+      <p id="biz-form-message" class="text-[13px] text-center hidden"></p>
+    </form>
+  </section>
+
+  <script is:inline>
+    document.getElementById('business-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const msg = document.getElementById('biz-form-message');
+      const formData = new FormData(form);
+      const data = {
+        company: formData.get('company'),
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        service_interest: formData.getAll('service_interest'),
+        message: formData.get('message'),
+      };
+      try {
+        const res = await fetch('/api/business/inquiry', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        if (res.ok) {
+          msg.textContent = '送信が完了しました。2営業日以内にご連絡いたします。';
+          msg.className = 'text-[13px] text-center text-green-600';
+          msg.classList.remove('hidden');
+          form.reset();
+        } else {
+          throw new Error();
+        }
+      } catch {
+        msg.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
+        msg.className = 'text-[13px] text-center text-[#e74c3c]';
+        msg.classList.remove('hidden');
+      }
+    });
+  </script>
+</BaseLayout>
