@@ -1,0 +1,32 @@
+---
+interface Spot {
+  name: string;
+  lat: number;
+  lng: number;
+}
+interface Props {
+  spots: Spot[];
+  title?: string;
+}
+const { spots, title } = Astro.props;
+---
+
+<div class="my-8 rounded-lg overflow-hidden" style="border: 0.5px solid var(--border);">
+  {title && <p class="label-text px-4 pt-4 mb-2">{title}</p>}
+  <div class="px-4 pb-4">
+    <div class="space-y-2">
+      {spots.map((spot, i) => (
+        <div class="flex items-center gap-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[var(--text)] text-white text-[10px] font-medium shrink-0">{i + 1}</span>
+          <span class="text-[13px]">{spot.name}</span>
+          {i < spots.length - 1 && <span class="text-[var(--text-muted)] text-[11px]">→</span>}
+        </div>
+      ))}
+    </div>
+    <a href={`https://www.google.com/maps/dir/${spots.map(s => `${s.lat},${s.lng}`).join('/')}`}
+      target="_blank" rel="noopener"
+      class="inline-flex items-center gap-1 mt-4 text-[12px] text-[var(--text-secondary)] no-underline hover:text-[var(--text)]">
+      Google Mapsで開く →
+    </a>
+  </div>
+</div>

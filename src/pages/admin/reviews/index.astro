@@ -1,0 +1,68 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+
+// Reviews would typically come from a database/API
+// Placeholder for now
+const reviews: any[] = [];
+---
+<AdminLayout title="レビュー管理">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="font-size: 18px; font-weight: 500;">レビュー管理</h2>
+  </div>
+
+  <!-- Filter tabs -->
+  <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+    <button class="review-tab active" data-status="pending"
+      style="padding: 6px 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 12px; background: #1f2937; color: white; cursor: pointer;">
+      未承認
+    </button>
+    <button class="review-tab" data-status="approved"
+      style="padding: 6px 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 12px; background: white; cursor: pointer;">
+      承認済み
+    </button>
+    <button class="review-tab" data-status="rejected"
+      style="padding: 6px 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 12px; background: white; cursor: pointer;">
+      却下
+    </button>
+  </div>
+
+  {reviews.length === 0 ? (
+    <div class="bg-white rounded-lg border border-gray-200 p-10 text-center">
+      <p class="text-sm text-gray-400">レビューはまだありません</p>
+    </div>
+  ) : (
+    <div class="space-y-4">
+      {reviews.map((review: any) => (
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+              <p class="text-sm font-medium text-gray-800">{review.spotName}</p>
+              <p class="text-xs text-gray-400 mt-1">{review.author} - {review.date}</p>
+              <p class="text-sm text-gray-600 mt-2">{review.comment}</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="text-xs px-3 py-1.5 rounded bg-green-50 text-green-700 hover:bg-green-100">承認</button>
+              <button class="text-xs px-3 py-1.5 rounded bg-red-50 text-red-700 hover:bg-red-100">削除</button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+
+  <script is:inline>
+    document.querySelectorAll('.review-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.review-tab').forEach(b => {
+          b.classList.remove('active');
+          b.style.background = 'white';
+          b.style.color = 'inherit';
+        });
+        btn.classList.add('active');
+        btn.style.background = '#1f2937';
+        btn.style.color = 'white';
+      });
+    });
+  </script>
+</AdminLayout>

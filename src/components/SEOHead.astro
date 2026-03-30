@@ -47,6 +47,26 @@ const canonical = canonicalURL.startsWith('http') ? canonicalURL : new URL(canon
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImageURL} />
 
+{ogType === 'website' && !isArticle && (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    'name': 'OKINAWA!GO!!',
+    'url': 'https://okinawa-go.jp',
+    'description': '住んでるからこそわかる沖縄がある。沖縄在住者による旅行ガイド。',
+    'publisher': {
+      '@type': 'Organization',
+      'name': 'OKINAWA!GO!!',
+      'url': 'https://okinawa-go.jp',
+    },
+    'potentialAction': {
+      '@type': 'SearchAction',
+      'target': 'https://okinawa-go.jp/search?q={search_term_string}',
+      'query-input': 'required name=search_term_string',
+    },
+  })} />
+)}
+
 {isArticle && publishedAt && (
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
@@ -70,5 +90,17 @@ const canonical = canonicalURL.startsWith('http') ? canonicalURL : new URL(canon
       '@type': 'WebPage',
       '@id': canonical,
     },
+  })} />
+)}
+
+{isArticle && (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      { '@type': 'ListItem', 'position': 1, 'name': 'ホーム', 'item': 'https://okinawa-go.jp/' },
+      { '@type': 'ListItem', 'position': 2, 'name': '記事', 'item': 'https://okinawa-go.jp/articles/' },
+      { '@type': 'ListItem', 'position': 3, 'name': title },
+    ],
   })} />
 )}

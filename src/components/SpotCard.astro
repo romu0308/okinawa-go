@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+
+const allSpots = await getCollection('spots');
+const spot = allSpots.find((s) => s.id === slug);
+
+if (!spot) {
+  throw new Error(`Spot not found: ${slug}`);
+}
+
+const categoryLabels: Record<string, string> = {
+  restaurant: 'Restaurant',
+  cafe: 'Cafe',
+  beach: 'Beach',
+  activity: 'Activity',
+  hotel: 'Hotel',
+  shopping: 'Shopping',
+  cultural: 'Cultural',
+};
+
+const areaLabels: Record<string, string> = {
+  naha: '那覇',
+  chatan: '北谷',
+  yomitan: '読谷',
+  onna: '恩納',
+  nago: '名護',
+  motobu: '本部',
+  south: '南部',
+  island: '離島',
+};
+---
+
+<a href={`/spots/${spot.id}/`} class="group block no-underline">
+  <div class="flex gap-4 p-4 rounded-lg transition-colors duration-300" style="background: var(--bg-alt); border: 0.5px solid var(--border);">
+    <div class="relative shrink-0 overflow-hidden rounded-[4px]" style="width: 100px; height: 100px;">
+      <img
+        src={spot.data.image}
+        alt={spot.data.name}
+        class="w-full h-full object-cover transition-transform duration-600 group-hover:scale-[1.05]"
+        loading="lazy"
+      />
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="font-['Inter'] text-[9px] tracking-[0.15em] uppercase text-[var(--text-tertiary)]">
+          {categoryLabels[spot.data.category]}
+        </span>
+        <span class="text-[9px] text-[var(--text-muted)]">|</span>
+        <span class="text-[10px] text-[var(--text-tertiary)]">
+          {areaLabels[spot.data.area]}
+        </span>
+      </div>
+      <h3 class="text-[15px] font-medium leading-[1.4] text-[var(--text)] mb-1 transition-opacity duration-300 group-hover:opacity-60 truncate">
+        {spot.data.name}
+      </h3>
+      <p class="text-[11px] leading-[1.6] text-[var(--text-secondary)] line-clamp-2">
+        {spot.data.description}
+      </p>
+      {spot.data.budget && (
+        <span class="inline-block mt-1.5 text-[10px] text-[var(--text-tertiary)]">
+          {spot.data.budget}
+        </span>
+      )}
+    </div>
+  </div>
+</a>

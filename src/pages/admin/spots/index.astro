@@ -1,0 +1,72 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getCollection } from 'astro:content';
+
+const spots = await getCollection('spots');
+const categories = ['restaurant', 'cafe', 'beach', 'activity', 'hotel', 'shopping', 'cultural'];
+---
+<AdminLayout title="スポット管理">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="font-size: 18px; font-weight: 500;">スポット一覧（{spots.length}件）</h2>
+  </div>
+
+  <!-- Filter -->
+  <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+    <button class="spot-filter active" data-category="all"
+      style="padding: 6px 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 12px; background: white; cursor: pointer;">
+      すべて
+    </button>
+    {categories.map(cat => (
+      <button class="spot-filter" data-category={cat}
+        style="padding: 6px 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 12px; background: white; cursor: pointer;">
+        {cat}
+      </button>
+    ))}
+  </div>
+
+  <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+    <thead>
+      <tr style="border-bottom: 1px solid #e5e7eb;">
+        <th style="text-align: left; padding: 8px;">名前</th>
+        <th style="text-align: left; padding: 8px;">カテゴリ</th>
+        <th style="text-align: left; padding: 8px;">エリア</th>
+        <th style="text-align: left; padding: 8px;">予算</th>
+      </tr>
+    </thead>
+    <tbody>
+      {spots.map(spot => (
+        <tr style="border-bottom: 1px solid #f3f4f6;" data-spot-category={spot.data.category}>
+          <td style="padding: 8px; font-weight: 500;">{spot.data.name}</td>
+          <td style="padding: 8px;">{spot.data.category}</td>
+          <td style="padding: 8px;">{spot.data.area}</td>
+          <td style="padding: 8px;">{spot.data.budget || '-'}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <script is:inline>
+    document.querySelectorAll('.spot-filter').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.spot-filter').forEach(b => {
+          b.classList.remove('active');
+          b.style.background = 'white';
+          b.style.color = 'inherit';
+        });
+        btn.classList.add('active');
+        btn.style.background = '#1f2937';
+        btn.style.color = 'white';
+
+        const cat = btn.dataset.category;
+        document.querySelectorAll('[data-spot-category]').forEach(row => {
+          if (cat === 'all' || row.dataset.spotCategory === cat) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</AdminLayout>

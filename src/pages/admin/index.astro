@@ -4,14 +4,29 @@ export const prerender = false;
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import PVChart from '../../components/admin/PVChart';
 import { getArticles } from '../../lib/articles';
+import { getCollection } from 'astro:content';
 
 let articles: any[] = [];
 try {
   articles = getArticles();
 } catch { articles = []; }
 
+let spots: any[] = [];
+try {
+  spots = await getCollection('spots');
+} catch { spots = []; }
+
 const totalArticles = articles.length;
+const totalSpots = spots.length;
 const recentArticles = articles.slice(0, 5);
+const draftArticles = articles.filter((a: any) => a.status !== 'published');
+
+// Category breakdown
+const categoryMap: Record<string, number> = {};
+articles.forEach((a: any) => {
+  const cat = a.category || '未分類';
+  categoryMap[cat] = (categoryMap[cat] || 0) + 1;
+});
 ---
 
 <AdminLayout title="ダッシュボード">
@@ -26,12 +41,12 @@ const recentArticles = articles.slice(0, 5);
       <p class="text-2xl font-bold text-gray-900">12,450</p>
     </div>
     <div class="bg-white rounded-lg border border-gray-200 p-5">
-      <p class="text-xs text-gray-500 mb-1">LINE登録数</p>
-      <p class="text-2xl font-bold text-gray-900">328</p>
+      <p class="text-xs text-gray-500 mb-1">スポット数</p>
+      <p class="text-2xl font-bold text-gray-900">{totalSpots}</p>
     </div>
     <div class="bg-white rounded-lg border border-gray-200 p-5">
-      <p class="text-xs text-gray-500 mb-1">アフィ成約数</p>
-      <p class="text-2xl font-bold text-gray-900">45</p>
+      <p class="text-xs text-gray-500 mb-1">LINE登録数</p>
+      <p class="text-2xl font-bold text-gray-900">328</p>
     </div>
   </div>
 
@@ -84,26 +99,73 @@ const recentArticles = articles.slice(0, 5);
           </div>
         </a>
         <a
-          href="/admin/companies"
+          href="/admin/spots"
           class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
         >
-          <span class="text-lg">🏢</span>
+          <span class="text-lg">📍</span>
           <div>
-            <p class="text-sm font-medium text-gray-800">企業追加</p>
-            <p class="text-xs text-gray-400">ホワイト企業を登録</p>
+            <p class="text-sm font-medium text-gray-800">スポット管理</p>
+            <p class="text-xs text-gray-400">スポットを確認・管理</p>
           </div>
         </a>
         <a
-          href="/admin/affiliates"
+          href="/admin/reviews"
           class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
         >
-          <span class="text-lg">🔗</span>
+          <span class="text-lg">⭐</span>
           <div>
-            <p class="text-sm font-medium text-gray-800">リンク追加</p>
-            <p class="text-xs text-gray-400">アフィリエイトリンクを追加</p>
+            <p class="text-sm font-medium text-gray-800">レビュー管理</p>
+            <p class="text-xs text-gray-400">レビューを承認・管理</p>
+          </div>
+        </a>
+        <a
+          href="/admin/newsletters"
+          class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+        >
+          <span class="text-lg">📧</span>
+          <div>
+            <p class="text-sm font-medium text-gray-800">ニュースレター</p>
+            <p class="text-xs text-gray-400">登録者を管理</p>
           </div>
         </a>
       </div>
+    </div>
+  </div>
+
+  <!-- Category breakdown & Draft articles -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+    <div class="bg-white rounded-lg border border-gray-200 p-5">
+      <h2 class="text-sm font-medium text-gray-700 mb-4">カテゴリ別記事数</h2>
+      {Object.keys(categoryMap).length === 0 ? (
+        <p class="text-sm text-gray-400">データなし</p>
+      ) : (
+        <ul class="space-y-2">
+          {Object.entries(categoryMap).map(([cat, count]) => (
+            <li class="flex items-center justify-between py-1.5">
+              <span class="text-sm text-gray-600">{cat}</span>
+              <span class="text-sm font-medium text-gray-800">{count}件</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+
+    <div class="bg-white rounded-lg border border-gray-200 p-5">
+      <h2 class="text-sm font-medium text-gray-700 mb-4">下書き記事</h2>
+      {draftArticles.length === 0 ? (
+        <p class="text-sm text-gray-400">下書きはありません</p>
+      ) : (
+        <ul class="space-y-3">
+          {draftArticles.map((a: any) => (
+            <li class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+              <a href={`/admin/articles/edit/${a.slug}`} class="text-sm text-gray-800 hover:text-blue-600 transition-colors">
+                {a.title}
+              </a>
+              <span class="text-xs px-2 py-0.5 rounded bg-yellow-50 text-yellow-700">下書き</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   </div>
 </AdminLayout>

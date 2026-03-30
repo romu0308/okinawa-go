@@ -18,4 +18,25 @@ const articles = defineCollection({
   }),
 });
 
-export const collections = { articles };
+const spots = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/spots' }),
+  schema: z.object({
+    name: z.string(),
+    description: z.string(),
+    category: z.enum(['restaurant', 'cafe', 'beach', 'activity', 'hotel', 'shopping', 'cultural']),
+    area: z.enum(['naha', 'chatan', 'yomitan', 'onna', 'nago', 'motobu', 'south', 'island']),
+    address: z.string(),
+    phone: z.string().optional(),
+    hours: z.string().optional(),
+    closed: z.string().optional(),
+    budget: z.string().optional(),
+    parking: z.string().optional(),
+    mapUrl: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    image: z.string(),
+    recommended: z.boolean().default(false),
+    affiliateType: z.enum(['hotel', 'activity', 'car', 'none']).default('none'),
+  }),
+});
+
+export const collections = { articles, spots };

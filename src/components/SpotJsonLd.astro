@@ -1,0 +1,30 @@
+---
+interface Props {
+  name: string;
+  address: string;
+  phone?: string;
+  hours?: string;
+  image?: string;
+  rating?: number;
+  reviewCount?: number;
+}
+const { name, address, phone, hours, image, rating, reviewCount } = Astro.props;
+
+const schema: any = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": name,
+  "address": { "@type": "PostalAddress", "addressRegion": "沖縄県", "streetAddress": address },
+};
+if (phone) schema.telephone = phone;
+if (hours) schema.openingHours = hours;
+if (image) schema.image = image;
+if (rating && reviewCount) {
+  schema.aggregateRating = {
+    "@type": "AggregateRating",
+    "ratingValue": rating,
+    "reviewCount": reviewCount,
+  };
+}
+---
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

@@ -1,0 +1,32 @@
+---
+export const prerender = false;
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SEOHead from '../../../components/SEOHead.astro';
+import { getPlan } from '../../../lib/supabase';
+
+const { key } = Astro.params;
+const plan = await getPlan(key!);
+if (!plan) return Astro.redirect('/plan/');
+
+function renderPlan(text: string): string {
+  return text.replace(/^## (.*$)/gm, '<h2>$1</h2>')
+    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+    .replace(/^- (.*$)/gm, '<li>$1</li>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n\n/g, '<br><br>');
+}
+---
+<BaseLayout>
+  <SEOHead slot="head" title={`${plan.title} | OKINAWA!GO!!`} description="AIプランナーで生成した沖縄旅行プラン" />
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[680px] mx-auto">
+    <span class="label-text block mb-3">Saved Plan</span>
+    <h1 class="text-[28px] md:text-[36px] font-medium leading-[1.2] mb-8">{plan.title}</h1>
+    <div class="prose" set:html={renderPlan(plan.spots_json)} />
+    <div class="flex gap-4 mt-8">
+      <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(plan.title + ' | OKINAWA!GO!!')}&url=${encodeURIComponent('https://okinawa-go.jp/plan/saved/' + key)}`}
+        target="_blank" class="text-[12px] text-[var(--text-secondary)] no-underline hover:text-[var(--text)]">Xでシェア</a>
+      <button onclick="navigator.clipboard.writeText(window.location.href).then(() => this.textContent='Copied!')"
+        class="text-[12px] text-[var(--text-secondary)] hover:text-[var(--text)] bg-transparent border-none cursor-pointer">URLをコピー</button>
+    </div>
+  </section>
+</BaseLayout>

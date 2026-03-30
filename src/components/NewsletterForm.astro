@@ -1,0 +1,62 @@
+---
+---
+<div class="newsletter-form-wrapper">
+  <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+    <input
+      type="email"
+      name="email"
+      placeholder="メールアドレスを入力"
+      required
+      class="w-full sm:w-auto flex-1 px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] text-[14px] outline-none focus:border-[var(--accent)]"
+    />
+    <button
+      type="submit"
+      class="px-5 py-2.5 rounded-lg bg-[var(--accent)] text-white text-[14px] font-medium border-none cursor-pointer hover:opacity-90 transition-opacity whitespace-nowrap"
+    >
+      登録する
+    </button>
+  </form>
+  <p id="newsletter-message" class="text-[13px] mt-2 hidden"></p>
+</div>
+
+<script>
+  const form = document.getElementById('newsletter-form') as HTMLFormElement;
+  const message = document.getElementById('newsletter-message') as HTMLParagraphElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const email = formData.get('email') as string;
+
+    message.classList.remove('hidden');
+    message.textContent = '送信中...';
+    message.style.color = 'var(--text-secondary)';
+
+    try {
+      const res = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        message.textContent = '登録ありがとうございます！';
+        message.style.color = 'var(--accent)';
+        form.reset();
+      } else if (data.error === 'already_subscribed') {
+        message.textContent = 'このメールアドレスは既に登録されています。';
+        message.style.color = 'var(--text-secondary)';
+      } else if (data.error === 'invalid_email') {
+        message.textContent = '有効なメールアドレスを入力してください。';
+        message.style.color = '#e53e3e';
+      } else {
+        message.textContent = 'エラーが発生しました。もう一度お試しください。';
+        message.style.color = '#e53e3e';
+      }
+    } catch {
+      message.textContent = '通信エラーが発生しました。';
+      message.style.color = '#e53e3e';
+    }
+  });
+</script>

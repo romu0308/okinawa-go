@@ -1,0 +1,86 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+
+// Newsletter subscribers would typically come from a database/API
+// Placeholder for now
+const subscribers: any[] = [];
+const totalSubscribers = subscribers.length;
+---
+<AdminLayout title="ニュースレター管理">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="font-size: 18px; font-weight: 500;">ニュースレター登録者（{totalSubscribers}件）</h2>
+    <button id="export-csv"
+      style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 12px; background: white; cursor: pointer;">
+      CSVエクスポート
+    </button>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+    <div class="bg-white rounded-lg border border-gray-200 p-5">
+      <p class="text-xs text-gray-500 mb-1">総登録者数</p>
+      <p class="text-2xl font-bold text-gray-900">{totalSubscribers}</p>
+    </div>
+    <div class="bg-white rounded-lg border border-gray-200 p-5">
+      <p class="text-xs text-gray-500 mb-1">今月の新規登録</p>
+      <p class="text-2xl font-bold text-gray-900">0</p>
+    </div>
+    <div class="bg-white rounded-lg border border-gray-200 p-5">
+      <p class="text-xs text-gray-500 mb-1">解約率</p>
+      <p class="text-2xl font-bold text-gray-900">0%</p>
+    </div>
+  </div>
+
+  {subscribers.length === 0 ? (
+    <div class="bg-white rounded-lg border border-gray-200 p-10 text-center">
+      <p class="text-sm text-gray-400">登録者はまだいません</p>
+    </div>
+  ) : (
+    <table style="width: 100%; border-collapse: collapse; font-size: 13px; background: white; border-radius: 8px; overflow: hidden;" class="border border-gray-200">
+      <thead>
+        <tr style="border-bottom: 1px solid #e5e7eb;">
+          <th style="text-align: left; padding: 8px 12px;">メールアドレス</th>
+          <th style="text-align: left; padding: 8px 12px;">登録日</th>
+          <th style="text-align: left; padding: 8px 12px;">ステータス</th>
+        </tr>
+      </thead>
+      <tbody>
+        {subscribers.map((sub: any) => (
+          <tr style="border-bottom: 1px solid #f3f4f6;">
+            <td style="padding: 8px 12px;">{sub.email}</td>
+            <td style="padding: 8px 12px;">{sub.subscribedAt}</td>
+            <td style="padding: 8px 12px;">
+              <span class:list={[
+                'text-xs px-2 py-0.5 rounded',
+                sub.active ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-500',
+              ]}>
+                {sub.active ? 'アクティブ' : '解約済み'}
+              </span>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+
+  <script is:inline>
+    document.getElementById('export-csv')?.addEventListener('click', () => {
+      const rows = document.querySelectorAll('table tbody tr');
+      if (rows.length === 0) {
+        alert('エクスポートするデータがありません');
+        return;
+      }
+      let csv = 'メールアドレス,登録日,ステータス\n';
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        csv += Array.from(cells).map(c => c.textContent?.trim()).join(',') + '\n';
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'newsletter_subscribers.csv';
+      link.click();
+    });
+  </script>
+</AdminLayout>

@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const sortedArticles = allArticles.sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime());
+const latestArticles = sortedArticles.slice(0, 5);
+---
+<BaseLayout>
+  <SEOHead slot="head" title="OKINAWA!GO!! - Local's Guide to Okinawa" description="Discover the real Okinawa through the eyes of a local resident. Beyond tourist guides." ogType="website" />
+  <link rel="alternate" hreflang="ja" href="https://okinawa-go.jp/" slot="head" />
+  <link rel="alternate" hreflang="en" href="https://okinawa-go.jp/en/" slot="head" />
+
+  <section class="px-5 md:px-10 pt-24 md:pt-32 pb-16 md:pb-24 max-w-[680px] mx-auto">
+    <h1 class="text-[32px] md:text-[48px] font-medium leading-[1.2] tracking-[-0.03em] text-[var(--text)] mb-6 reveal">
+      The Okinawa only<br/>locals know.
+    </h1>
+    <p class="text-[14px] leading-[1.8] text-[var(--text-secondary)] mb-12 reveal max-w-[480px]">
+      We've been living in Okinawa for 5 years. This is not a tourist guide — it's the real Okinawa, the one we experience every day.
+    </p>
+  </section>
+
+  <section class="px-5 md:px-10 pb-20 md:pb-28 max-w-[1200px] mx-auto">
+    <div class="flex items-end justify-between mb-10 reveal">
+      <div>
+        <span class="label-text block mb-3">Latest Articles</span>
+        <h2 class="text-[22px] md:text-[28px] font-medium">Recommended Reads</h2>
+      </div>
+    </div>
+    <div class="reveal">
+      {latestArticles.map((article, i) => (
+        <ArticleCard
+          slug={article.id}
+          title={article.data.title}
+          description={article.data.description}
+          publishedAt={article.data.publishedAt}
+          category={article.data.category}
+          thumbnail={article.data.thumbnail}
+          thumbnailAlt={article.data.thumbnailAlt}
+          number={i + 1}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
