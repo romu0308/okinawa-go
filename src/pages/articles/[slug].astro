@@ -4,7 +4,6 @@ import SEOHead from '../../components/SEOHead.astro';
 import CTABox from '../../components/CTABox.astro';
 import AffiliateBox from '../../components/AffiliateBox.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import AffiliateSidebar from '../../components/AffiliateSidebar.astro';
 import ArticleCardGrid from '../../components/ArticleCardGrid.astro';
 import { getCollection, render } from 'astro:content';
 
@@ -47,6 +46,15 @@ const categoryLabels: Record<string, string> = {
   'seasonal': 'Seasonal',
 };
 
+const categoryLabelsJa: Record<string, string> = {
+  'model-course': 'モデルコース',
+  'area-guide': 'エリアガイド',
+  'food': 'グルメ',
+  'activity': 'アクティビティ',
+  'tips': 'Tips',
+  'seasonal': '季節特集',
+};
+
 const formatDate = (dateStr: string) => {
   const d = new Date(dateStr);
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -63,6 +71,27 @@ const relatedArticles = allArticles
   .filter((a) => a.data.category === article.data.category || a.data.area === article.data.area)
   .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime())
   .slice(0, 3);
+
+// Next article (same category, next by date)
+const sameCategory = allArticles
+  .filter(a => a.data.category === article.data.category && a.id !== article.id)
+  .sort((a, b) => new Date(a.data.publishedAt).getTime() - new Date(b.data.publishedAt).getTime());
+const currentIndex = sameCategory.findIndex(a => new Date(a.data.publishedAt) > new Date(article.data.publishedAt));
+const nextArticle = currentIndex >= 0 ? sameCategory[currentIndex] : sameCategory[0];
+
+// Popular articles
+const popularArticles = allArticles
+  .filter(a => a.id !== article.id)
+  .filter(a => a.data.featured)
+  .slice(0, 5);
+
+if (popularArticles.length < 5) {
+  const remaining = allArticles
+    .filter(a => a.id !== article.id && !popularArticles.includes(a))
+    .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime())
+    .slice(0, 5 - popularArticles.length);
+  popularArticles.push(...remaining);
+}
 
 // Determine affiliate boxes by category
 const category = article.data.category;
@@ -101,7 +130,7 @@ const areaLabel = article.data.area ? areaLabels[article.data.area] : undefined;
         <ol class="flex items-center gap-2 font-['Inter'] text-[9px] tracking-[0.12em] uppercase text-[var(--text-tertiary)]">
           <li><a href="/" class="no-underline hover:text-[var(--text)] transition-colors duration-300">Home</a></li>
           <li>/</li>
-          <li><a href="/articles/" class="no-underline hover:text-[var(--text)] transition-colors duration-300">Articles</a></li>
+          <li><a href={`/articles/?category=${article.data.category}`} class="no-underline hover:text-[var(--text)] transition-colors duration-300">{categoryLabelsJa[article.data.category]}</a></li>
         </ol>
       </nav>
 
@@ -199,15 +228,25 @@ const areaLabel = article.data.area ? areaLabels[article.data.area] : undefined;
             <div>
               <p class="text-[14px] font-medium mb-1">KOUMEI</p>
               <p class="text-[12px] text-[var(--text-secondary)] leading-[1.7]">
-                沖縄在住5年。妻は沖縄出身。関西人。ガイドブックに載らない沖縄の楽しみ方を発信中。
+                沖縄在住5年。妻は沖縄出身。関西から移住。ガイドブックに載らない沖縄の楽しみ方を、在住者目線で発信中。
               </p>
-              <a href="https://twitter.com/KOUMEI_GO" target="_blank" rel="noopener"
+              <a href="https://x.com/KOUMEI_GO" target="_blank" rel="noopener"
                 class="inline-block mt-2 text-[11px] text-[var(--text-tertiary)] no-underline hover:text-[var(--text)] transition-colors">
                 @KOUMEI_GO
               </a>
             </div>
           </div>
         </div>
+
+        <!-- Next Article -->
+        {nextArticle && (
+          <div class="mb-8 py-5" style="border-top: 0.5px solid var(--border);">
+            <p class="font-['Inter'] text-[9px] tracking-[0.12em] uppercase mb-3" style="color: var(--text-tertiary);">Next Article</p>
+            <a href={`/articles/${nextArticle.id}/`} class="text-[14px] font-medium text-[var(--text)] no-underline hover:opacity-60 transition-opacity">
+              {nextArticle.data.title} →
+            </a>
+          </div>
+        )}
 
         <!-- Category-appropriate Affiliate Boxes -->
         {affiliateTypes.map((aType) => (
@@ -217,12 +256,45 @@ const areaLabel = article.data.area ? areaLabels[article.data.area] : undefined;
         <!-- CTA Box -->
         <CTABox />
 
+        <!-- Follow -->
+        <div class="my-6 text-center">
+          <a href="https://x.com/KOUMEI_GO" target="_blank" rel="noopener"
+            class="text-[12px] text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-colors">
+            → @KOUMEI_GO をフォロー
+          </a>
+        </div>
+
         <!-- Ad slot after CTA -->
         <AdSlot position="bottom" />
       </div>
 
       <!-- Sidebar for desktop -->
-      <AffiliateSidebar area={article.data.area} />
+      <aside class="hidden lg:block w-[280px] shrink-0">
+        <div class="sticky top-20 space-y-6">
+          <div class="p-4 rounded-lg" style="background: var(--bg-alt); border: 0.5px solid var(--border);">
+            <p class="font-['Inter'] text-[9px] tracking-[0.15em] uppercase mb-4" style="color: var(--text-tertiary);">沖縄旅行を予約する</p>
+            <div class="space-y-2">
+              <a href="#affiliate-rakuten-hotel" target="_blank" rel="sponsored" class="block px-3 py-2.5 text-[12px] rounded bg-[#BF0000] text-white no-underline text-center font-medium hover:opacity-90 transition-opacity">宿泊予約（楽天トラベル）</a>
+              <a href="#affiliate-skyscanner" target="_blank" rel="sponsored" class="block px-3 py-2.5 text-[12px] rounded bg-[#0770e3] text-white no-underline text-center font-medium hover:opacity-90 transition-opacity">航空券を探す</a>
+              <a href="#affiliate-tabirai" target="_blank" rel="sponsored" class="block px-3 py-2.5 text-[12px] rounded bg-[#E53935] text-white no-underline text-center font-medium hover:opacity-90 transition-opacity">レンタカー比較</a>
+              <a href="#affiliate-asoview" target="_blank" rel="sponsored" class="block px-3 py-2.5 text-[12px] rounded bg-[#00A4E4] text-white no-underline text-center font-medium hover:opacity-90 transition-opacity">アクティビティ予約</a>
+            </div>
+          </div>
+          <div>
+            <p class="font-['Inter'] text-[9px] tracking-[0.15em] uppercase mb-4" style="color: var(--text-tertiary);">Popular</p>
+            <div class="space-y-4">
+              {popularArticles.map((pop) => (
+                <a href={`/articles/${pop.id}/`} class="flex gap-3 no-underline group">
+                  <div class="w-16 h-12 rounded overflow-hidden shrink-0 bg-gray-100">
+                    {pop.data.thumbnail && <img src={pop.data.thumbnail} alt="" class="w-full h-full object-cover" loading="lazy" />}
+                  </div>
+                  <p class="text-[12px] leading-[1.5] text-[var(--text)] group-hover:opacity-60 transition-opacity">{pop.data.title}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
   </article>
 
@@ -231,7 +303,7 @@ const areaLabel = article.data.area ? areaLabels[article.data.area] : undefined;
     <section class="px-5 md:px-10 pb-20 md:pb-28 pt-16 max-w-[1200px] mx-auto border-t" style="border-color: var(--border); border-width: 0.5px;">
       <div class="reveal">
         <span class="label-text block mb-3">Related</span>
-        <h2 class="text-[22px] md:text-[28px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-10">関連記事</h2>
+        <h2 class="text-[22px] md:text-[28px] font-medium leading-[1.3] tracking-[-0.02em] text-[var(--text)] mb-10">あわせて読みたい</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-10 reveal">
         {relatedArticles.map((related, i) => (
@@ -249,6 +321,15 @@ const areaLabel = article.data.area ? areaLabels[article.data.area] : undefined;
       </div>
     </section>
   )}
+
+  <!-- Mobile floating CTA -->
+  <div id="floating-cta" class="fixed bottom-0 left-0 right-0 z-40 lg:hidden translate-y-full transition-transform duration-300" style="pointer-events: none;">
+    <div class="bg-white shadow-lg px-4 py-3 flex items-center gap-2 justify-center" style="border-top: 1px solid #eee; pointer-events: auto;">
+      <a href="#affiliate-rakuten-hotel" target="_blank" rel="sponsored" class="flex-1 text-center py-2.5 rounded text-white text-[11px] font-medium no-underline" style="background: #BF0000;">ホテルを探す</a>
+      <a href="#affiliate-tabirai" target="_blank" rel="sponsored" class="flex-1 text-center py-2.5 rounded text-white text-[11px] font-medium no-underline" style="background: #E53935;">レンタカー比較</a>
+      <button id="floating-close" class="w-8 h-8 flex items-center justify-center bg-transparent border-none cursor-pointer text-gray-400">✕</button>
+    </div>
+  </div>
 </BaseLayout>
 
 <script>
@@ -257,4 +338,100 @@ const areaLabel = article.data.area ? areaLabels[article.data.area] : undefined;
     const btn = document.getElementById('copy-link');
     if (btn) { btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy Link', 2000); }
   });
+
+  // Floating CTA
+  const floatingCta = document.getElementById('floating-cta');
+  const floatingClose = document.getElementById('floating-close');
+  let floatingShown = false;
+  const floatingDismissed = sessionStorage.getItem('floating-cta-dismissed');
+
+  if (!floatingDismissed) {
+    window.addEventListener('scroll', () => {
+      if (floatingShown) return;
+      const scrollPercent = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+      if (scrollPercent > 0.5) {
+        floatingShown = true;
+        floatingCta?.classList.remove('translate-y-full');
+      }
+    });
+  }
+
+  floatingClose?.addEventListener('click', () => {
+    floatingCta?.classList.add('translate-y-full');
+    sessionStorage.setItem('floating-cta-dismissed', 'true');
+  });
+</script>
+
+<script>
+  // Auto internal links
+  (function() {
+    const articleBody = document.querySelector('.prose');
+    if (!articleBody) return;
+
+    const currentSlug = window.location.pathname.replace(/^\/articles\//, '').replace(/\/$/, '');
+
+    const linkMap = [
+      { keywords: ['サンエー'], slug: 'okinawa-supermarket-guide', title: '沖縄のスーパー完全ガイド' },
+      { keywords: ['北谷', 'アメリカンビレッジ'], slug: 'chatan-local-guide', title: '北谷で過ごす1日' },
+      { keywords: ['美ら海水族館', '美ら海'], slug: 'okinawa-day2-north', title: '美ら海水族館だけで終わらせるな' },
+      { keywords: ['沖縄そば'], slug: 'local-okinawa-soba-5', title: '地元民が週3で通う沖縄そば屋' },
+      { keywords: ['レンタカー'], slug: 'okinawa-rental-car-tips', title: 'レンタカー、借りる前に知っておくべきこと' },
+      { keywords: ['雨', 'カタブイ'], slug: 'okinawa-rainy-day-guide', title: '雨の日の沖縄' },
+      { keywords: ['モデルコース', '1日目'], slug: 'okinawa-2nights-3days-model-course', title: '沖縄旅行、1日目の正解' },
+      { keywords: ['ステーキ'], slug: 'okinawa-steak-ranking', title: 'ステーキ、1000円台で食える' },
+      { keywords: ['居酒屋', '泡盛'], slug: 'okinawa-izakaya-guide', title: '居酒屋、観光客が知らない頼み方' },
+      { keywords: ['お土産'], slug: 'okinawa-souvenir-guide', title: '地元民が本当に贈るお土産' },
+      { keywords: ['台風'], slug: 'okinawa-typhoon-guide', title: '台風直撃した時の完全マニュアル' },
+      { keywords: ['ビーチ'], slug: 'okinawa-beach-ranking', title: 'ビーチランキング' },
+      { keywords: ['カフェ'], slug: 'okinawa-cafe-10', title: '地元民が本当に通うカフェ10選' },
+      { keywords: ['那覇', '国際通り'], slug: 'naha-local-guide', title: '地元民が教える裏那覇' },
+      { keywords: ['恩納村', '恩納'], slug: 'onna-resort-guide', title: '恩納村リゾート' },
+      { keywords: ['子連れ', 'ファミリー'], slug: 'okinawa-kids-guide', title: '子連れ沖縄' },
+      { keywords: ['サンセット', '夕日'], slug: 'okinawa-sunset-spots', title: 'サンセットベスト5' },
+      { keywords: ['シュノーケル', 'シュノーケリング'], slug: 'okinawa-snorkel-guide', title: 'シュノーケルベストスポット' },
+      { keywords: ['朝食', 'モーニング'], slug: 'okinawa-breakfast-guide', title: '朝食ガイド' },
+      { keywords: ['移住'], slug: 'okinawa-moving-reality', title: '移住のリアル' },
+    ];
+
+    const usedSlugs = new Set();
+
+    // Get all text nodes in the article body
+    const walker = document.createTreeWalker(articleBody, NodeFilter.SHOW_TEXT, null);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+    for (const node of textNodes) {
+      // Skip if inside a link, heading, or code block
+      const parent = node.parentElement;
+      if (!parent) continue;
+      if (parent.closest('a, h1, h2, h3, h4, code, pre, figcaption')) continue;
+
+      let text = node.textContent || '';
+      let replaced = false;
+
+      for (const entry of linkMap) {
+        if (entry.slug === currentSlug) continue; // Don't link to self
+        if (usedSlugs.has(entry.slug)) continue; // Only first occurrence
+
+        for (const keyword of entry.keywords) {
+          const idx = text.indexOf(keyword);
+          if (idx >= 0) {
+            // Create link
+            const before = text.substring(0, idx);
+            const match = text.substring(idx, idx + keyword.length);
+            const after = text.substring(idx + keyword.length);
+
+            const span = document.createElement('span');
+            span.innerHTML = `${before}<a href="/articles/${entry.slug}/" style="color:#333;border-bottom:1px solid #ccc;text-decoration:none;" title="${entry.title}">${match}</a>${after}`;
+
+            parent.replaceChild(span, node);
+            usedSlugs.add(entry.slug);
+            replaced = true;
+            break;
+          }
+        }
+        if (replaced) break;
+      }
+    }
+  })();
 </script>
