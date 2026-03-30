@@ -1,0 +1,59 @@
+---
+interface Props {
+  type: 'hotel' | 'activity' | 'car';
+  spotName?: string;
+  area?: string;
+}
+
+const { type, spotName, area } = Astro.props;
+
+const configs = {
+  hotel: {
+    title: '宿泊予約',
+    links: [
+      { name: '楽天トラベルで探す', url: '#rakuten-travel', color: '#BF0000' },
+      { name: 'じゃらんで探す', url: '#jalan', color: '#FF6600' },
+      { name: 'Booking.comで探す', url: '#booking', color: '#003580' },
+    ],
+  },
+  activity: {
+    title: 'アクティビティ予約',
+    links: [
+      { name: 'アソビューで予約する', url: '#asoview', color: '#00A4E4' },
+    ],
+  },
+  car: {
+    title: 'レンタカー予約',
+    links: [
+      { name: 'レンタカー比較・予約', url: '#rentalcar', color: '#333' },
+    ],
+  },
+};
+
+const config = configs[type];
+---
+
+<div class="my-8 p-5 rounded-lg" style="background: var(--bg-alt); border: 0.5px solid var(--border);">
+  <p class="font-['Inter'] text-[9px] tracking-[0.15em] uppercase mb-3" style="color: var(--text-tertiary);">
+    {config.title}
+  </p>
+  {spotName && (
+    <p class="text-[13px] text-[var(--text-secondary)] mb-4">
+      {spotName}{area ? `（${area}）` : ''}周辺の{type === 'hotel' ? '宿泊施設' : type === 'activity' ? 'アクティビティ' : 'レンタカー'}を探す
+    </p>
+  )}
+  <div class="flex flex-wrap gap-2">
+    {config.links.map((link) => (
+      <a
+        href={link.url}
+        target="_blank"
+        rel="noopener noreferrer sponsored"
+        class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded text-white text-[12px] font-medium no-underline transition-opacity hover:opacity-80"
+        style={`background: ${link.color};`}
+      >
+        {link.name}
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 1h6v6M9 1L1 9" stroke="currentColor" stroke-width="1"/></svg>
+      </a>
+    ))}
+  </div>
+</div>

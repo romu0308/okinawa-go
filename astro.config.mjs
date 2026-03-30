@@ -9,6 +9,10 @@ export default defineConfig({
   site: 'https://okinawa-go.jp',
   output: 'static',
   adapter: vercel(),
+  prefetch: {
+    prefetchAll: false,
+    defaultStrategy: 'hover',
+  },
   vite: {
     plugins: [tailwindcss()],
   },

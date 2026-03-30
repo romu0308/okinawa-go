@@ -7,6 +7,7 @@ const { darkMode = false } = Astro.props;
 
 const navLinks = [
   { href: '/articles/', label: 'Work' },
+  { href: '/area/', label: 'Area' },
   { href: '/shindan/', label: 'Shindan' },
   { href: '/plan/', label: 'Plan' },
   { href: '/about/', label: 'About' },
@@ -41,23 +42,37 @@ const navLinks = [
           {link.label}
         </a>
       ))}
+      <button id="search-toggle" class="bg-transparent border-none cursor-pointer p-1 transition-opacity hover:opacity-60" aria-label="検索">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class:list={[darkMode ? "text-white/50" : "text-[var(--text-secondary)]"]}>
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1"/>
+          <path d="M11 11L15 15" stroke="currentColor" stroke-width="1"/>
+        </svg>
+      </button>
     </nav>
 
-    <!-- Mobile hamburger -->
-    <button
-      id="menu-toggle"
-      class="md:hidden flex flex-col justify-center items-end w-8 h-8 gap-[6px] bg-transparent border-none cursor-pointer"
-      aria-label="メニューを開く"
-    >
-      <span class:list={[
-        "block h-[1.5px] transition-all duration-300",
-        darkMode ? "bg-white" : "bg-[var(--text)]"
-      ]} style="width: 20px"></span>
-      <span class:list={[
-        "block h-[1.5px] transition-all duration-300",
-        darkMode ? "bg-white" : "bg-[var(--text)]"
-      ]} style="width: 14px"></span>
-    </button>
+    <!-- Mobile: search + hamburger -->
+    <div class="flex md:hidden items-center gap-3">
+      <button id="search-toggle-mobile" class="bg-transparent border-none cursor-pointer p-1 transition-opacity hover:opacity-60" aria-label="検索">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class:list={[darkMode ? "text-white" : "text-[var(--text)]"]}>
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1"/>
+          <path d="M11 11L15 15" stroke="currentColor" stroke-width="1"/>
+        </svg>
+      </button>
+      <button
+        id="menu-toggle"
+        class="flex flex-col justify-center items-end w-8 h-8 gap-[6px] bg-transparent border-none cursor-pointer"
+        aria-label="メニューを開く"
+      >
+        <span class:list={[
+          "block h-[1.5px] transition-all duration-300",
+          darkMode ? "bg-white" : "bg-[var(--text)]"
+        ]} style="width: 20px"></span>
+        <span class:list={[
+          "block h-[1.5px] transition-all duration-300",
+          darkMode ? "bg-white" : "bg-[var(--text)]"
+        ]} style="width: 14px"></span>
+      </button>
+    </div>
   </div>
 
   <!-- Mobile menu -->
@@ -87,6 +102,22 @@ const navLinks = [
       ))}
     </nav>
   </div>
+
+  <!-- Search modal -->
+  <div id="search-modal" class="hidden fixed inset-0 z-[200] bg-[#080e14]">
+    <div class="px-5 md:px-10 pt-20 max-w-[680px] mx-auto">
+      <div class="flex items-center justify-between mb-10">
+        <span class="font-['Inter'] text-[9px] tracking-[0.25em] uppercase" style="color: rgba(255,255,255,0.25);">Search</span>
+        <button id="search-close" class="text-white/40 hover:text-white bg-transparent border-none cursor-pointer">
+          <svg width="14" height="14" viewBox="0 0 14 14"><path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1"/></svg>
+        </button>
+      </div>
+      <input id="search-input" type="text" placeholder="記事を検索..."
+        class="w-full bg-transparent border-none outline-none text-[24px] md:text-[32px] font-medium text-white placeholder-white/20 mb-8"
+        autocomplete="off" />
+      <div id="search-results" class="space-y-6"></div>
+    </div>
+  </div>
 </header>
 
 <script>
@@ -109,5 +140,69 @@ const navLinks = [
       menu?.classList.add('hidden');
       document.body.style.overflow = '';
     });
+  });
+</script>
+
+<script>
+  const searchToggle = document.getElementById('search-toggle');
+  const searchToggleMobile = document.getElementById('search-toggle-mobile');
+  const searchModal = document.getElementById('search-modal');
+  const searchClose = document.getElementById('search-close');
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const searchResults = document.getElementById('search-results');
+
+  let articles: any[] = [];
+
+  async function loadArticles() {
+    if (articles.length > 0) return;
+    try {
+      const res = await fetch('/api/search.json');
+      articles = await res.json();
+    } catch {}
+  }
+
+  async function openSearch() {
+    await loadArticles();
+    searchModal?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    searchInput?.focus();
+  }
+
+  searchToggle?.addEventListener('click', openSearch);
+  searchToggleMobile?.addEventListener('click', openSearch);
+
+  searchClose?.addEventListener('click', () => {
+    searchModal?.classList.add('hidden');
+    document.body.style.overflow = '';
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      searchModal?.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  });
+
+  searchInput?.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    if (!searchResults) return;
+
+    if (!query) {
+      searchResults.innerHTML = '';
+      return;
+    }
+
+    const matches = articles.filter(a =>
+      a.title.toLowerCase().includes(query) ||
+      a.description.toLowerCase().includes(query) ||
+      (a.tags || []).some((t: string) => t.toLowerCase().includes(query))
+    ).slice(0, 5);
+
+    searchResults.innerHTML = matches.map(a => `
+      <a href="/articles/${a.slug}/" class="block no-underline group">
+        <p class="text-[14px] text-white group-hover:opacity-60 transition-opacity">${a.title}</p>
+        <p class="text-[11px] mt-1" style="color: rgba(255,255,255,0.3);">${a.description}</p>
+      </a>
+    `).join('') || '<p style="color: rgba(255,255,255,0.3);" class="text-[13px]">記事が見つかりませんでした</p>';
   });
 </script>

@@ -63,9 +63,14 @@ import SEOHead from '../components/SEOHead.astro';
         <p class="text-[14px] text-white" id="result-area"></p>
       </div>
 
-      <div class="py-5 border-t mb-10" style="border-color: rgba(255,255,255,0.1); border-width: 0.5px;" id="result-article-section">
-        <span class="font-['Inter'] text-[9px] tracking-[0.12em] uppercase block mb-2" style="color: rgba(255,255,255,0.2);">Recommended Article</span>
-        <a id="result-article-link" href="/" class="text-[14px] text-white no-underline hover:opacity-60 transition-opacity duration-300"></a>
+      <div class="py-5 border-t mb-5" style="border-color: rgba(255,255,255,0.1); border-width: 0.5px;" id="result-articles-section">
+        <span class="font-['Inter'] text-[9px] tracking-[0.12em] uppercase block mb-3" style="color: rgba(255,255,255,0.2);">Recommended Articles</span>
+        <ul id="result-articles-list" class="space-y-2 list-none p-0 m-0"></ul>
+      </div>
+
+      <div class="py-5 border-t mb-10" style="border-color: rgba(255,255,255,0.1); border-width: 0.5px;" id="result-course-section">
+        <span class="font-['Inter'] text-[9px] tracking-[0.12em] uppercase block mb-3" style="color: rgba(255,255,255,0.2);">Model Course</span>
+        <div id="result-course" class="space-y-1"></div>
       </div>
 
       <!-- Actions -->
@@ -78,14 +83,14 @@ import SEOHead from '../components/SEOHead.astro';
           class="inline-flex items-center gap-2 font-['Inter'] text-[11px] tracking-[0.04em] text-white no-underline hover:opacity-60 transition-opacity duration-300"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          Share
+          結果をシェア
         </a>
         <button
           id="retry-btn"
           class="font-['Inter'] text-[11px] tracking-[0.04em] bg-transparent border-none cursor-pointer hover:opacity-60 transition-opacity duration-300"
           style="color: rgba(255,255,255,0.4);"
         >
-          Retry
+          もう一度診断する
         </button>
       </div>
     </div>
@@ -148,56 +153,92 @@ import SEOHead from '../components/SEOHead.astro';
 
   type TypeKey = 'beach' | 'active' | 'gourmet' | 'culture' | 'relax' | 'allin';
 
+  interface ArticleLink {
+    title: string;
+    url: string;
+  }
+
   interface ResultType {
     name: string;
     description: string;
     area: string;
-    articleTitle: string;
-    articleUrl: string;
+    articles: ArticleLink[];
+    course: string;
+    key: string;
   }
 
   const results: Record<TypeKey, ResultType> = {
     beach: {
-      name: 'ビーチリゾート\n満喫タイプ',
+      name: 'のんびりビーチ\n満喫タイプ',
       description: '海とリゾートを全力で楽しむあなた。透き通った海を眺めながら、のんびりとした島時間を過ごすのが最高の贅沢。恩納村〜北谷エリアのリゾートホテルを拠点に、ビーチホッピングを楽しんで。',
       area: '恩納村〜北谷エリア',
-      articleTitle: '北谷で過ごす1日。地元民が毎週通うルート',
-      articleUrl: '/articles/chatan-local-guide/',
+      articles: [
+        { title: '北谷で過ごす1日。地元民が毎週通うルート', url: '/articles/chatan-local-guide/' },
+        { title: '沖縄ビーチランキング、在住者が本気で選んだ10選', url: '/articles/okinawa-beach-ranking/' },
+        { title: '沖縄のサンセット、地元民が選ぶベスト5', url: '/articles/okinawa-sunset-spots/' },
+      ],
+      course: '1日目：北谷チェックイン→アラハビーチ→サンセット\n2日目：瀬底ビーチ→古宇利島→万座毛\n3日目：残波岬→読谷カフェ→空港',
+      key: 'beach-type',
     },
     active: {
       name: 'アクティブ\n冒険タイプ',
       description: 'シュノーケル、カヤック、トレッキング...動き回ってこそ旅！沖縄の大自然を体で感じたいあなたには、北部〜やんばるエリアがぴったり。手つかずの自然が待っています。',
       area: '北部〜やんばるエリア',
-      articleTitle: '沖縄2泊3日、地元民が本気で組んだモデルコース',
-      articleUrl: '/articles/okinawa-2nights-3days-model-course/',
+      articles: [
+        { title: 'インスタは全部嘘。沖縄旅行、1日目の正解。', url: '/articles/okinawa-2nights-3days-model-course/' },
+        { title: '沖縄2日目は北部へ。美ら海水族館だけで終わらせるな', url: '/articles/okinawa-day2-north/' },
+        { title: '恩納村リゾート、地元民はこう使う', url: '/articles/onna-resort-guide/' },
+      ],
+      course: '1日目：真栄田岬で青の洞窟→万座毛→名護\n2日目：美ら海水族館→備瀬→古宇利島\n3日目：やんばるトレッキング→空港',
+      key: 'active-type',
     },
     gourmet: {
-      name: 'グルメハンター\nタイプ',
+      name: 'グルメ探検\nタイプ',
       description: '沖縄そば、タコス、海ぶどう、島豆腐...食べ尽くす旅。地元民が通う名店を巡って、沖縄の食文化をとことん味わい尽くしましょう。那覇〜中部の食べ歩きルートがおすすめ。',
       area: '那覇〜中部エリア',
-      articleTitle: '地元民が週3で通う沖縄そば屋、5選',
-      articleUrl: '/articles/local-okinawa-soba-5/',
+      articles: [
+        { title: '地元民が週3で通う沖縄そば屋、5選', url: '/articles/local-okinawa-soba-5/' },
+        { title: '沖縄カフェ、地元民が本当に通う10選', url: '/articles/okinawa-cafe-10/' },
+        { title: '沖縄ステーキ、1000円台で食える地元民の行きつけ', url: '/articles/okinawa-steak-ranking/' },
+      ],
+      course: '1日目：公設市場→沖縄そば→栄町居酒屋\n2日目：港川カフェ→ステーキ→泡盛\n3日目：ポーたま→壺屋→空港',
+      key: 'gourmet-type',
     },
     culture: {
       name: '文化・歴史\n探訪タイプ',
       description: '首里城、斎場御嶽、やちむん通り...沖縄には琉球王国から続く深い歴史と独自の文化がある。それを肌で感じたいあなたは、南部エリアを中心にじっくり巡る旅を。',
       area: '南部エリア（那覇・南城市周辺）',
-      articleTitle: '沖縄2泊3日、地元民が本気で組んだモデルコース',
-      articleUrl: '/articles/okinawa-2nights-3days-model-course/',
+      articles: [
+        { title: '那覇は国際通りだけじゃない。地元民が教える裏那覇', url: '/articles/naha-local-guide/' },
+        { title: '沖縄最終日。空港までの3時間で南部を攻略する', url: '/articles/okinawa-day3-south-airport/' },
+        { title: '雨の日の沖縄、地元民はこう過ごす', url: '/articles/okinawa-rainy-day-guide/' },
+      ],
+      course: '1日目：首里城→壺屋やちむん通り→栄町\n2日目：斎場御嶽→知念岬→カフェくるくま\n3日目：読谷やちむんの里→残波岬→空港',
+      key: 'culture-type',
     },
     relax: {
-      name: 'のんびり\n癒しタイプ',
+      name: 'リゾート\n満喫タイプ',
       description: '何もしない贅沢。カフェ巡り、サンセット、波の音。頑張らない旅こそ、最高の旅。離島か北部の静かなエリアで、日常から完全に離れる時間を過ごして。',
       area: '離島 or 北部の静かなエリア',
-      articleTitle: '雨の日の沖縄、地元民はこう過ごす',
-      articleUrl: '/articles/okinawa-rainy-day-guide/',
+      articles: [
+        { title: '恩納村リゾート、地元民はこう使う', url: '/articles/onna-resort-guide/' },
+        { title: '沖縄カフェ、地元民が本当に通う10選', url: '/articles/okinawa-cafe-10/' },
+        { title: '雨の日の沖縄、地元民はこう過ごす', url: '/articles/okinawa-rainy-day-guide/' },
+      ],
+      course: '1日目：恩納村リゾートチェックイン→プール→スパ\n2日目：朝ヨガ→カフェ巡り→サンセット\n3日目：朝食ゆっくり→お土産→空港',
+      key: 'relax-type',
     },
     allin: {
-      name: '欲張り\n全部タイプ',
-      description: '海もグルメも文化も全部楽しみたい！限られた日数で沖縄を最大限に満喫するなら、効率よく回れるモデルコースを参考に。詰め込むからこそ見える沖縄がある。',
+      name: 'ローカル体験\nタイプ',
+      description: '地元民の日常に溶け込む旅がしたいあなた。観光地よりもスーパー、居酒屋、地元食堂。沖縄のリアルな暮らしを体験することで、ガイドブックには載らない沖縄が見えてくる。',
       area: '南部〜中部〜北部（全域）',
-      articleTitle: '沖縄2泊3日、地元民が本気で組んだモデルコース',
-      articleUrl: '/articles/okinawa-2nights-3days-model-course/',
+      articles: [
+        { title: 'インスタは全部嘘。沖縄旅行、1日目の正解。', url: '/articles/okinawa-2nights-3days-model-course/' },
+        { title: '沖縄の居酒屋、観光客が知らない頼み方', url: '/articles/okinawa-izakaya-guide/' },
+        { title: '沖縄のスーパー完全ガイド', url: '/articles/okinawa-supermarket-guide/' },
+      ],
+      course: '1日目：公設市場→牧志散歩→栄町せんべろ\n2日目：サンエーで買い物→北谷地元グルメ→ビーチ\n3日目：スーパーでお土産→地元食堂→空港',
+      key: 'allin-type',
     },
   };
 
@@ -218,7 +259,8 @@ import SEOHead from '../components/SEOHead.astro';
   const resultType = document.getElementById('result-type')!;
   const resultDescription = document.getElementById('result-description')!;
   const resultArea = document.getElementById('result-area')!;
-  const resultArticleLink = document.getElementById('result-article-link') as HTMLAnchorElement;
+  const resultArticlesList = document.getElementById('result-articles-list')!;
+  const resultCourse = document.getElementById('result-course')!;
   const shareXBtn = document.getElementById('share-x-btn') as HTMLAnchorElement;
 
   function renderQuestion(index: number) {
@@ -260,7 +302,8 @@ import SEOHead from '../components/SEOHead.astro';
         questionCard.style.opacity = '1';
       }, 300);
     } else {
-      showResult();
+      const typeKey = getResultType();
+      showResult(typeKey);
     }
   }
 
@@ -276,19 +319,46 @@ import SEOHead from '../components/SEOHead.astro';
     return maxKey;
   }
 
-  function showResult() {
+  function showResult(typeKey: TypeKey) {
+    introEl.classList.add('hidden');
     quizEl.classList.add('hidden');
 
-    const typeKey = getResultType();
     const result = results[typeKey];
+
+    // Update URL query param
+    const url = new URL(window.location.href);
+    url.searchParams.set('result', result.key);
+    window.history.replaceState({}, '', url.toString());
 
     const typeName = result.name.replace('\n', '');
     resultType.innerHTML = result.name.replace('\n', '<br />');
     resultDescription.textContent = result.description;
     resultArea.textContent = result.area;
-    resultArticleLink.textContent = result.articleTitle;
-    resultArticleLink.href = result.articleUrl;
 
+    // Render articles
+    resultArticlesList.innerHTML = '';
+    result.articles.forEach((article) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = article.url;
+      a.textContent = article.title;
+      a.className = 'text-[14px] text-white no-underline hover:opacity-60 transition-opacity duration-300 block py-1';
+      a.style.cssText = 'text-decoration: none; border-bottom: 0.5px solid rgba(255,255,255,0.08); padding-bottom: 8px;';
+      li.appendChild(a);
+      resultArticlesList.appendChild(li);
+    });
+
+    // Render model course
+    resultCourse.innerHTML = '';
+    result.course.split('\n').forEach((line) => {
+      const p = document.createElement('p');
+      p.className = 'text-[13px] leading-[1.7]';
+      p.style.color = 'rgba(255,255,255,0.5)';
+      p.textContent = line;
+      resultCourse.appendChild(p);
+    });
+
+    // Share button
     const shareText = encodeURIComponent(
       `私の沖縄旅行タイプは【${typeName}】でした！\nあなたも診断してみて→ https://okinawa-go.jp/shindan\n#沖縄旅行 #OKINAWAGO`
     );
@@ -309,11 +379,17 @@ import SEOHead from '../components/SEOHead.astro';
     for (const key of Object.keys(scores)) {
       scores[key as TypeKey] = 0;
     }
+
+    // Clear URL query param
+    const url = new URL(window.location.href);
+    url.searchParams.delete('result');
+    window.history.replaceState({}, '', url.toString());
+
     resultEl.classList.add('hidden');
     resultEl.style.opacity = '';
     resultEl.style.transition = '';
-    quizEl.classList.remove('hidden');
-    renderQuestion(0);
+    introEl.classList.remove('hidden');
+    quizEl.classList.add('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -324,4 +400,19 @@ import SEOHead from '../components/SEOHead.astro';
   });
 
   retryBtn.addEventListener('click', reset);
+
+  // Check for URL query param on page load
+  (function checkUrlParam() {
+    const params = new URLSearchParams(window.location.search);
+    const resultParam = params.get('result');
+    if (resultParam) {
+      // Find the matching type key
+      for (const [key, value] of Object.entries(results)) {
+        if (value.key === resultParam) {
+          showResult(key as TypeKey);
+          return;
+        }
+      }
+    }
+  })();
 </script>

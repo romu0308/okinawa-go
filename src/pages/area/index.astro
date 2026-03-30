@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+
+const areas = [
+  { id: 'naha', name: '那覇', description: '沖縄の玄関口。国際通り、牧志市場、首里城。' },
+  { id: 'chatan', name: '北谷', description: 'アメリカンカルチャーと地元カフェが共存する町。' },
+  { id: 'yomitan', name: '読谷', description: 'やちむんの里、残波岬。沖縄の伝統が息づくエリア。' },
+  { id: 'onna', name: '恩納村', description: 'リゾートと青の洞窟。沖縄の西海岸の中心。' },
+  { id: 'nago', name: '名護', description: '北部の拠点。オリオンビール工場、やんばるへの入口。' },
+  { id: 'motobu', name: '本部', description: '美ら海水族館、備瀬のフクギ並木、岸本食堂。' },
+  { id: 'south', name: '南部', description: '平和祈念公園、斎場御嶽、ニライカナイ橋。' },
+  { id: 'island', name: '離島', description: '慶良間、宮古、石垣。沖縄の原風景が残る島々。' },
+];
+---
+<BaseLayout>
+  <SEOHead slot="head" title="エリアガイド | OKINAWA!GO!!" description="沖縄の各エリアを在住者目線で完全ガイド。" />
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[1200px] mx-auto">
+    <span class="label-text block mb-3 reveal">Area Guide</span>
+    <h1 class="text-[28px] md:text-[36px] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--text)] mb-12 reveal">エリアガイド</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal">
+      {areas.map(area => (
+        <a href={`/area/${area.id}/`} class="block p-6 rounded-lg no-underline group transition-colors" style="border: 0.5px solid var(--border); background: var(--bg);">
+          <h2 class="text-[18px] font-medium text-[var(--text)] mb-2 group-hover:opacity-60 transition-opacity">{area.name}</h2>
+          <p class="text-[13px] text-[var(--text-secondary)] leading-[1.7]">{area.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

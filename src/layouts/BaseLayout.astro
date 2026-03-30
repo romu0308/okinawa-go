@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import LinePopup from '../components/LinePopup.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -53,6 +54,7 @@ const { class: className, darkMode = false } = Astro.props;
     <slot />
   </main>
   <Footer darkMode={darkMode} />
+  <LinePopup />
 
   <script>
     import Lenis from 'lenis';

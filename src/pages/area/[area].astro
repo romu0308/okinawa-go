@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOHead from '../../components/SEOHead.astro';
+import ArticleCardGrid from '../../components/ArticleCardGrid.astro';
+import { getCollection } from 'astro:content';
+
+const areaDescriptions: Record<string, { name: string; description: string }> = {
+  naha: { name: '那覇', description: '沖縄の玄関口。空港からゆいレールでアクセスでき、国際通り、牧志公設市場、首里城、壺屋やちむん通りなど見どころが集中。在住者にとっては飲み屋街の栄町が一番のおすすめ。' },
+  chatan: { name: '北谷', description: 'アメリカンビレッジが有名だけど、地元民にとっての北谷はそれだけじゃない。砂辺の海岸線、アラハビーチのサンセット、裏通りのカフェ。沖縄の中でも独特のカルチャーが息づく町。' },
+  yomitan: { name: '読谷', description: 'やちむん（焼き物）の里がある、沖縄の伝統文化の中心地。残波岬の絶景、ビーチ、地元の食堂。観光地化されすぎていない、沖縄らしさが残るエリア。' },
+  onna: { name: '恩納村', description: '西海岸のリゾートエリア。青の洞窟、万座毛、ホテルが並ぶ。でも在住者のおすすめは「おんなの駅」の100円天ぷらと、夕日がきれいな穴場ビーチ。' },
+  nago: { name: '名護', description: '北部の拠点都市。オリオンビール工場見学（無料）、名護城跡の桜、地元居酒屋。やんばるの大自然への入口でもある。' },
+  motobu: { name: '本部', description: '美ら海水族館がある町。でも在住者にとっては岸本食堂の沖縄そば、花人逢のピザ、備瀬のフクギ並木の方が大事。' },
+  south: { name: '南部', description: '平和祈念公園、斎場御嶽、ニライカナイ橋。沖縄の歴史と自然が凝縮されたエリア。カフェくるくまからの絶景は在住者も通う。' },
+  island: { name: '離島', description: '慶良間諸島（ケラマブルー）、宮古島（与那覇前浜ビーチ）、石垣島（川平湾）。沖縄本島とはまた違う、離島ならではの透明度の海が待っている。' },
+};
+
+const areaKeys = ['naha', 'chatan', 'yomitan', 'onna', 'nago', 'motobu', 'south', 'island'];
+
+export async function getStaticPaths() {
+  const areas = ['naha', 'chatan', 'yomitan', 'onna', 'nago', 'motobu', 'south', 'island'];
+  return areas.map(area => ({ params: { area } }));
+}
+
+const { area } = Astro.params;
+const areaInfo = areaDescriptions[area!] || { name: area, description: '' };
+
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const areaArticles = allArticles
+  .filter(a => a.data.area === area)
+  .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime());
+
+// Also include articles tagged with "multiple" that mention the area in tags
+const multiArticles = allArticles
+  .filter(a => a.data.area === 'multiple' && !areaArticles.includes(a))
+  .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime());
+---
+<BaseLayout>
+  <SEOHead slot="head" title={`${areaInfo.name}エリアガイド | OKINAWA!GO!!`} description={areaInfo.description} />
+  <section class="px-5 md:px-10 pt-16 md:pt-24 pb-20 md:pb-28 max-w-[1200px] mx-auto">
+    <nav class="mb-8 reveal">
+      <ol class="flex items-center gap-2 font-['Inter'] text-[9px] tracking-[0.12em] uppercase text-[var(--text-tertiary)]">
+        <li><a href="/" class="no-underline hover:text-[var(--text)]">Home</a></li>
+        <li>/</li>
+        <li><a href="/area/" class="no-underline hover:text-[var(--text)]">Area</a></li>
+        <li>/</li>
+        <li>{areaInfo.name}</li>
+      </ol>
+    </nav>
+
+    <span class="label-text block mb-3 reveal">Area Guide</span>
+    <h1 class="text-[28px] md:text-[36px] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--text)] mb-4 reveal">{areaInfo.name}</h1>
+    <p class="text-[14px] leading-[1.8] text-[var(--text-secondary)] mb-12 max-w-[600px] reveal">{areaInfo.description}</p>
+
+    {areaArticles.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-10 reveal">
+        {areaArticles.map((article, i) => (
+          <ArticleCardGrid
+            slug={article.id}
+            title={article.data.title}
+            description={article.data.description}
+            publishedAt={article.data.publishedAt}
+            category={article.data.category}
+            thumbnail={article.data.thumbnail}
+            thumbnailAlt={article.data.thumbnailAlt}
+            number={i + 1}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="text-[14px] text-[var(--text-secondary)] reveal">このエリアの記事はまだありません。</p>
+    )}
+
+    {multiArticles.length > 0 && (
+      <div class="mt-16">
+        <h2 class="text-[20px] font-medium mb-8 reveal">沖縄全域の記事</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-10 reveal">
+          {multiArticles.slice(0, 6).map((article, i) => (
+            <ArticleCardGrid
+              slug={article.id}
+              title={article.data.title}
+              description={article.data.description}
+              publishedAt={article.data.publishedAt}
+              category={article.data.category}
+              thumbnail={article.data.thumbnail}
+              thumbnailAlt={article.data.thumbnailAlt}
+              number={i + 1}
+            />
+          ))}
+        </div>
+      </div>
+    )}
+  </section>
+</BaseLayout>

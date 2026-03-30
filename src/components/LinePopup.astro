@@ -1,0 +1,42 @@
+<div id="line-popup" class="fixed bottom-0 left-0 right-0 z-50 translate-y-full transition-transform duration-500 ease-out" style="pointer-events: none;">
+  <div class="max-w-[480px] mx-auto px-4 pb-4" style="pointer-events: auto;">
+    <div class="bg-white rounded-xl shadow-2xl p-5 relative" style="border: 1px solid #e5e7eb;">
+      <button id="popup-close" class="absolute top-3 right-3 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer">
+        <svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <p class="text-[15px] font-medium text-[#111] mb-1">沖縄旅行プランシート</p>
+      <p class="text-[12px] text-[#666] mb-4">LINE登録で無料プレゼント中 🎁</p>
+      <a href="#line-add-friend" target="_blank" rel="noopener noreferrer"
+        class="flex items-center justify-center gap-2 w-full py-3 rounded-lg text-white text-[13px] font-medium no-underline" style="background: #06C755;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 5.73 2 10.25c0 4.07 3.29 7.47 7.74 8.13.3.06.71.19.82.43.09.22.06.56.03.78l-.13.79c-.04.23-.18.9.79.49s5.27-3.18 7.19-5.44C20.63 13.26 22 11.86 22 10.25 22 5.73 17.52 2 12 2z"/></svg>
+        友だち追加する
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const popup = document.getElementById('line-popup');
+  const closeBtn = document.getElementById('popup-close');
+  let shown = false;
+
+  // Check if dismissed in last 24 hours
+  const dismissed = localStorage.getItem('line-popup-dismissed');
+  const canShow = !dismissed || (Date.now() - parseInt(dismissed)) > 24 * 60 * 60 * 1000;
+
+  if (canShow) {
+    window.addEventListener('scroll', () => {
+      if (shown) return;
+      const scrollPercent = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+      if (scrollPercent > 0.5) {
+        shown = true;
+        popup?.classList.remove('translate-y-full');
+      }
+    });
+  }
+
+  closeBtn?.addEventListener('click', () => {
+    popup?.classList.add('translate-y-full');
+    localStorage.setItem('line-popup-dismissed', String(Date.now()));
+  });
+</script>

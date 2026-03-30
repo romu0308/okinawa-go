@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SEOHead from '../../components/SEOHead.astro';
 import CTABox from '../../components/CTABox.astro';
+import AffiliateBox from '../../components/AffiliateBox.astro';
 import ArticleCardGrid from '../../components/ArticleCardGrid.astro';
 import { getCollection, render } from 'astro:content';
 
@@ -15,6 +16,25 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props;
 const { Content, headings } = await render(article);
+
+const areaLabels: Record<string, string> = {
+  'naha': '那覇',
+  'chatan': '北谷',
+  'nago': '名護',
+  'onna': '恩納村',
+  'itoman': '糸満',
+  'churaumi': '美ら海',
+  'nanjo': '南城',
+  'ginowan': '宜野湾',
+  'okinawa-city': '沖縄市',
+  'yomitan': '読谷',
+  'miyako': '宮古島',
+  'ishigaki': '石垣島',
+  'kerama': '慶良間',
+  'north': '北部',
+  'central': '中部',
+  'south': '南部',
+};
 
 const categoryLabels: Record<string, string> = {
   'model-course': 'Model Course',
@@ -163,6 +183,9 @@ const relatedArticles = allArticles
           </div>
         </div>
       </div>
+
+      <!-- Booking Affiliate -->
+      <AffiliateBox type="hotel" spotName={article.data.area ? areaLabels[article.data.area] : undefined} />
 
       <!-- CTA Box -->
       <CTABox />
