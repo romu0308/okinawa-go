@@ -1,0 +1,11 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import ThreadsManager from '../../../components/admin/ThreadsManager.tsx';
+---
+<AdminLayout title="Threads自動投稿">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="font-size: 18px; font-weight: 500;">Threads自動投稿</h2>
+  </div>
+  <ThreadsManager client:load />
+</AdminLayout>
