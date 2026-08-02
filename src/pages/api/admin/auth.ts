@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { ADMIN_PASSWORD, AUTH_COOKIE } from '../../../lib/auth';
+import { ADMIN_PASSWORD, AUTH_COOKIE, getAuthToken } from '../../../lib/auth';
 
 export const prerender = false;
 
@@ -72,9 +72,10 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 
   if (password === ADMIN_PASSWORD) {
     clearAttempts(ip);
-    cookies.set(AUTH_COOKIE, 'authenticated', {
+    cookies.set(AUTH_COOKIE, getAuthToken(), {
       path: '/',
       httpOnly: true,
+      secure: import.meta.env.PROD,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });

@@ -1,10 +1,13 @@
 import type { APIRoute } from 'astro';
+import { requireAdmin } from '../../../lib/auth';
 import { getArticles, saveArticles } from '../../../lib/articles';
 import type { Article } from '../../../lib/articles';
 
 export const prerender = false;
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     const articles = getArticles();
     return new Response(JSON.stringify(articles), {
@@ -19,7 +22,9 @@ export const GET: APIRoute = async () => {
   }
 };
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     const body = await request.json();
 
@@ -76,7 +81,9 @@ export const POST: APIRoute = async ({ request }) => {
   }
 };
 
-export const DELETE: APIRoute = async ({ request }) => {
+export const DELETE: APIRoute = async ({ request, cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     let slug: string | null = null;
 

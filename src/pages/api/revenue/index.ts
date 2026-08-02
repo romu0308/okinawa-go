@@ -1,6 +1,9 @@
 import type { APIRoute } from 'astro';
+import { requireAdmin } from '../../../lib/auth';
 import fs from 'node:fs';
 import path from 'node:path';
+
+export const prerender = false;
 
 const revenuePath = path.join(process.cwd(), 'src/data/revenue.json');
 
@@ -16,7 +19,9 @@ function writeRevenue(data: any[]): void {
   fs.writeFileSync(revenuePath, JSON.stringify(data, null, 2), 'utf-8');
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     const body = await request.json();
     const { month, source, amount } = body;

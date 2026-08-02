@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { requireAdmin } from '../../../lib/auth';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -24,7 +25,9 @@ function saveSubscribers(subscribers: Subscriber[]) {
   fs.writeFileSync(SUBSCRIBERS_PATH, JSON.stringify(subscribers, null, 2));
 }
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     const subscribers = getSubscribers();
     return new Response(JSON.stringify(subscribers), {
@@ -39,7 +42,9 @@ export const GET: APIRoute = async () => {
   }
 };
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     const body = await request.json();
     const { email } = body;

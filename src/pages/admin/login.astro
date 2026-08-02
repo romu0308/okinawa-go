@@ -1,10 +1,10 @@
 ---
 export const prerender = false;
 
-import { AUTH_COOKIE } from '../../lib/auth';
+import { isAuthenticated } from '../../lib/auth';
 
 // If already authenticated, redirect to dashboard
-if (Astro.cookies.get(AUTH_COOKIE)?.value === 'authenticated') {
+if (isAuthenticated(Astro.cookies)) {
   return Astro.redirect('/admin');
 }
 

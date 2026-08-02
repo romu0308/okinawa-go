@@ -1,10 +1,13 @@
 import type { APIRoute } from 'astro';
+import { requireAdmin } from '../../../lib/auth';
 import { getAffiliates, saveAffiliates } from '../../../lib/affiliates';
 import type { Affiliate } from '../../../lib/affiliates';
 
 export const prerender = false;
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     const affiliates = getAffiliates();
     return new Response(JSON.stringify(affiliates), {
@@ -19,7 +22,9 @@ export const GET: APIRoute = async () => {
   }
 };
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     const body: Affiliate = await request.json();
 
@@ -62,7 +67,9 @@ export const POST: APIRoute = async ({ request }) => {
   }
 };
 
-export const DELETE: APIRoute = async ({ request }) => {
+export const DELETE: APIRoute = async ({ request, cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     let id: string | null = null;
 
