@@ -1,0 +1,113 @@
+{
+  "name": "izumo-engiri-main-funnel",
+  "description": "縁切り診断→LINE登録→7日間ステップ配信→5万円講座の本流シナリオ",
+  "timezone": "Asia/Tokyo",
+  "tags": [
+    { "key": "type_a", "label": "タイプA：腐れ縁・しがらみ型" },
+    { "key": "type_b", "label": "タイプB：消耗・エナジードレイン型" },
+    { "key": "type_c", "label": "タイプC：自分縛り型" },
+    { "key": "type_d", "label": "タイプD：転機・環境型" },
+    { "key": "step_active", "label": "ステップ配信中" },
+    { "key": "step_done", "label": "ステップ配信完了（週1ナーチャリングへ）" },
+    { "key": "course_purchased", "label": "講座購入済み" }
+  ],
+  "keyword_rules": [
+    {
+      "id": "kw-type-a",
+      "trigger": { "type": "message_exact", "keywords": ["A", "a", "Ａ", "ａ"] },
+      "actions": [
+        { "type": "add_tag", "tag": "type_a" },
+        { "type": "add_tag", "tag": "step_active" },
+        { "type": "send_message", "template": "messages/day0-welcome.md", "variables": { "type_name": "タイプA【腐れ縁・しがらみ型】" } },
+        { "type": "start_scenario", "scenario": "izumo-engiri-main-funnel" }
+      ],
+      "once_per_user": true
+    },
+    {
+      "id": "kw-type-b",
+      "trigger": { "type": "message_exact", "keywords": ["B", "b", "Ｂ", "ｂ"] },
+      "actions": [
+        { "type": "add_tag", "tag": "type_b" },
+        { "type": "add_tag", "tag": "step_active" },
+        { "type": "send_message", "template": "messages/day0-welcome.md", "variables": { "type_name": "タイプB【消耗・エナジードレイン型】" } },
+        { "type": "start_scenario", "scenario": "izumo-engiri-main-funnel" }
+      ],
+      "once_per_user": true
+    },
+    {
+      "id": "kw-type-c",
+      "trigger": { "type": "message_exact", "keywords": ["C", "c", "Ｃ", "ｃ"] },
+      "actions": [
+        { "type": "add_tag", "tag": "type_c" },
+        { "type": "add_tag", "tag": "step_active" },
+        { "type": "send_message", "template": "messages/day0-welcome.md", "variables": { "type_name": "タイプC【自分縛り型】" } },
+        { "type": "start_scenario", "scenario": "izumo-engiri-main-funnel" }
+      ],
+      "once_per_user": true
+    },
+    {
+      "id": "kw-type-d",
+      "trigger": { "type": "message_exact", "keywords": ["D", "d", "Ｄ", "ｄ"] },
+      "actions": [
+        { "type": "add_tag", "tag": "type_d" },
+        { "type": "add_tag", "tag": "step_active" },
+        { "type": "send_message", "template": "messages/day0-welcome.md", "variables": { "type_name": "タイプD【転機・環境型】" } },
+        { "type": "start_scenario", "scenario": "izumo-engiri-main-funnel" }
+      ],
+      "once_per_user": true
+    }
+  ],
+  "steps": [
+    {
+      "day": 1,
+      "send_time": "08:00",
+      "note": "★感動ポイント。タグでタイプ分岐して詳細鑑定を送る",
+      "branches": [
+        { "if_tag": "type_a", "template": "messages/day1-type-a.md" },
+        { "if_tag": "type_b", "template": "messages/day1-type-b.md" },
+        { "if_tag": "type_c", "template": "messages/day1-type-c.md" },
+        { "if_tag": "type_d", "template": "messages/day1-type-d.md" }
+      ]
+    },
+    {
+      "day": 2,
+      "send_time": "08:00",
+      "template": "messages/day2-work.md"
+    },
+    {
+      "day": 3,
+      "send_time": "20:00",
+      "note": "事例は夜のほうが読まれやすい想定。数字を見て調整",
+      "template": "messages/day3-story.md"
+    },
+    {
+      "day": 4,
+      "send_time": "20:00",
+      "note": "講座骨子の確定後に本文差し替え",
+      "template": "messages/day4-tease.md"
+    },
+    {
+      "day": 5,
+      "send_time": "20:00",
+      "note": "Day5〜7は同一ファイル内の3通を1日1通ずつ送る。講座骨子の確定後に差し替え",
+      "template": "messages/day5-7-offer.md#day5"
+    },
+    {
+      "day": 6,
+      "send_time": "20:00",
+      "template": "messages/day5-7-offer.md#day6"
+    },
+    {
+      "day": 7,
+      "send_time": "20:00",
+      "template": "messages/day5-7-offer.md#day7",
+      "after_actions": [
+        { "type": "remove_tag", "tag": "step_active" },
+        { "type": "add_tag", "tag": "step_done" }
+      ]
+    }
+  ],
+  "post_scenario": {
+    "note": "step_done タグの人に週1配信（手動 or AI下書き）。月1で講座再案内。course_purchased が付いたら再案内から除外"
+  }
+}
