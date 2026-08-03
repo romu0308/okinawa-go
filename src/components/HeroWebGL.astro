@@ -1,118 +1,69 @@
 ---
-interface ArticleData {
-  slug: string;
-  title: string;
-  description: string;
-  publishedAt: string;
-  category: string;
-  thumbnail: string;
-  thumbnailAlt: string;
-  number: string;
-}
-
-interface Props {
-  articles: ArticleData[];
-}
-
-const { articles } = Astro.props;
-
-const categoryLabels: Record<string, string> = {
-  'model-course': 'Model Course',
-  'area-guide': 'Area Guide',
-  'food': 'Food',
-  'activity': 'Activity',
-  'tips': 'Tips',
-  'seasonal': 'Seasonal',
-};
-
-const formatDate = (dateStr: string) => {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-};
-
-const totalCount = articles.length;
+const imageUrl = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=85';
 ---
 
-<a href="#" id="hero-link" class="block no-underline">
-  <div class="hero-webgl relative w-full overflow-hidden cursor-pointer" style="height: 560px" id="hero-container">
-    <!-- Fallback image -->
+<section class="hero-webgl relative w-full overflow-hidden" id="hero-container" aria-labelledby="hero-copy">
+  <div id="hero-media-layer" class="absolute inset-0 hero-media">
     <img
-      src=""
-      alt=""
-      class="absolute inset-0 w-full h-full object-cover"
+      src={imageUrl}
+      alt="沖縄の青い海と白い砂浜"
+      class="absolute inset-0 h-full w-full object-cover"
       id="hero-fallback-img"
       loading="eager"
       fetchpriority="high"
     />
-
-    <!-- WebGL canvas overlay -->
-    <canvas id="hero-canvas" class="absolute inset-0 w-full h-full" style="opacity: 0; transition: opacity 0.6s ease;"></canvas>
-
-    <!-- Gradient overlay -->
-    <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.01) 30%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0.55) 100%);"></div>
-
-    <!-- Content overlay -->
-    <div class="absolute inset-0 flex flex-col justify-between px-5 py-6 md:px-10 md:py-10 pointer-events-none">
-      <!-- Top row -->
-      <div class="flex items-start justify-between">
-        <!-- Top left label -->
-        <span class="font-['Inter'] text-[9px] tracking-[0.2em] uppercase" style="color: rgba(255,255,255,0.4);">
-          Okinawa Local Guide
-        </span>
-        <!-- Top right indicator -->
-        <div class="flex items-center gap-[6px]" id="hero-indicators">
-          {articles.map((_, i) => (
-            <span
-              class="hero-indicator block rounded-[1px]"
-              style="width: 16px; height: 1.5px; background: rgba(255,255,255,0.2);"
-              data-index={i}
-            ></span>
-          ))}
-        </div>
-      </div>
-
-      <!-- Bottom row -->
-      <div class="flex items-end justify-between">
-        <!-- Left: article info -->
-        <div class="max-w-[560px]">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="font-['Inter'] text-[9px] tracking-[0.12em]" style="color: rgba(255,255,255,0.45);" id="hero-number"></span>
-            <span class="font-['Inter'] text-[9px] tracking-[0.12em] uppercase" style="color: rgba(255,255,255,0.45);" id="hero-category"></span>
-            <span class="font-['Inter'] text-[9px] tracking-[0.12em]" style="color: rgba(255,255,255,0.45);" id="hero-date"></span>
-          </div>
-          <h2 class="hero-line text-[26px] md:text-[32px] font-medium leading-[1.35] text-white mb-3" id="hero-title"></h2>
-          <p class="hero-line text-[11px] leading-[1.7] mb-5 line-clamp-2 hidden md:block" style="color: rgba(255,255,255,0.5);" id="hero-desc"></p>
-          <span class="hero-line inline-flex items-center gap-3 font-['Inter'] text-[10px] tracking-[0.08em]" style="color: rgba(255,255,255,0.6);">
-            Read article
-            <span class="block w-6 h-[0.5px]" style="background: rgba(255,255,255,0.4);"></span>
-          </span>
-        </div>
-
-        <!-- Right: scroll indicator -->
-        <div class="flex flex-col items-center gap-2 shrink-0 ml-6">
-          <span class="font-['Inter'] text-[9px] tracking-[0.2em] uppercase" style="color: rgba(255,255,255,0.35); writing-mode: vertical-lr;">Scroll</span>
-          <div class="w-[1px] h-6" style="background: rgba(255,255,255,0.3);"></div>
-        </div>
-      </div>
-    </div>
+    <canvas
+      id="hero-canvas"
+      class="absolute inset-0 h-full w-full"
+      style="opacity: 0; transition: opacity 0.6s ease;"
+      aria-hidden="true"
+    ></canvas>
   </div>
-</a>
 
-<!-- Article data for client-side random pick -->
-<script
-  id="hero-articles-data"
-  type="application/json"
-  set:html={JSON.stringify(articles.map((a) => ({
-    ...a,
-    categoryLabel: categoryLabels[a.category] || a.category,
-    formattedDate: formatDate(a.publishedAt),
-  })))}
-/>
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style="background: linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 40%, rgba(255,255,255,0.6) 85%, #fff 100%);"
+  ></div>
+
+  <div class="absolute inset-0 px-5 py-6 md:px-10 md:py-10 pointer-events-none">
+    <span class="absolute left-5 top-6 md:left-10 md:top-10 font-['Inter'] text-[9px] tracking-[0.25em] uppercase text-white/50">
+      Okinawa Local Guide
+    </span>
+
+    <h1
+      id="hero-copy"
+      class="absolute left-1/2 top-[39%] w-[calc(100%-40px)] -translate-x-1/2 -translate-y-1/2 text-center text-[38px] md:text-[56px] font-medium leading-[1.2] tracking-[-0.03em] text-white"
+      style="text-shadow: 0 1px 30px rgba(0,0,0,0.1);"
+    >
+      <span class="hero-copy-line block md:hidden">住んでる</span>
+      <span class="hero-copy-line block md:hidden">からこそ、</span>
+      <span class="hero-copy-line block md:hidden">わかる</span>
+      <span class="hero-copy-line block md:hidden">沖縄がある。</span>
+      <span class="hero-copy-line hidden md:block">住んでるからこそ、</span>
+      <span class="hero-copy-line hidden md:block">わかる沖縄がある。</span>
+    </h1>
+
+    <div class="absolute bottom-7 left-5 md:bottom-10 md:left-10 flex flex-col items-center gap-2">
+      <span class="font-['Inter'] text-[9px] tracking-[0.2em] uppercase text-[#aaa] [writing-mode:vertical-lr]">Scroll</span>
+      <span class="block h-6 w-px bg-[#aaa]"></span>
+    </div>
+
+    <p class="absolute bottom-7 right-5 md:bottom-10 md:right-10 max-w-[210px] text-right text-[11px] leading-[1.7] text-[#777]">
+      ガイドブックに載らない沖縄を、<br />在住者の目線で。
+    </p>
+  </div>
+</section>
 
 <style>
+  .hero-webgl {
+    height: 560px;
+  }
+
   @media (min-width: 768px) {
     .hero-webgl {
-      height: 90vh !important;
+      height: 90vh;
+      min-height: 640px;
+      max-height: 980px;
     }
   }
 </style>
@@ -120,177 +71,205 @@ const totalCount = articles.length;
 <script>
   import * as THREE from 'three';
 
-  function initHero() {
-    const dataEl = document.getElementById('hero-articles-data');
-    if (!dataEl) return;
+  type HeroCleanup = () => void;
+  const cleanupMap = new WeakMap<HTMLElement, HeroCleanup>();
 
-    const articles = JSON.parse(dataEl.textContent || '[]');
-    if (articles.length === 0) return;
+  function initHeroWebGL() {
+    const container = document.getElementById('hero-container');
+    const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
+    const fallbackImg = document.getElementById('hero-fallback-img') as HTMLImageElement | null;
+    if (!container || !canvas || !fallbackImg || cleanupMap.has(container)) return;
 
-    // Random pick
-    const randomIndex = Math.floor(Math.random() * articles.length);
-    const article = articles[randomIndex];
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
-    // Populate DOM
-    const heroLink = document.getElementById('hero-link') as HTMLAnchorElement;
-    const heroTitle = document.getElementById('hero-title');
-    const heroDesc = document.getElementById('hero-desc');
-    const heroNumber = document.getElementById('hero-number');
-    const heroCategory = document.getElementById('hero-category');
-    const heroDate = document.getElementById('hero-date');
-    const fallbackImg = document.getElementById('hero-fallback-img') as HTMLImageElement;
-
-    if (heroLink) heroLink.href = `/articles/${article.slug}/`;
-    if (heroTitle) heroTitle.textContent = article.title;
-    if (heroDesc) heroDesc.textContent = article.description;
-    if (heroNumber) heroNumber.textContent = article.number;
-    if (heroCategory) heroCategory.textContent = article.categoryLabel;
-    if (heroDate) heroDate.textContent = article.formattedDate;
-    if (fallbackImg) {
-      fallbackImg.src = article.thumbnail;
-      fallbackImg.alt = article.thumbnailAlt;
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: 'high-performance' });
+    } catch {
+      return;
     }
 
-    // Highlight indicator
-    const indicators = document.querySelectorAll('.hero-indicator');
-    indicators.forEach((ind, i) => {
-      (ind as HTMLElement).style.background =
-        i === randomIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)';
-    });
-
-    // Hero line stagger animation
-    const lines = document.querySelectorAll('.hero-line');
-    lines.forEach((line, i) => {
-      const el = line as HTMLElement;
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(12px)';
-      el.style.transition = `opacity 0.7s ease ${i * 0.15 + 0.2}s, transform 0.7s ease ${i * 0.15 + 0.2}s`;
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          el.style.opacity = '1';
-          el.style.transform = 'translateY(0)';
-        });
-      });
-    });
-
-    // WebGL
-    initHeroWebGL(article.thumbnail);
-  }
-
-  function initHeroWebGL(imageUrl: string) {
-    const container = document.getElementById('hero-container');
-    const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
-    const fallbackImg = document.getElementById('hero-fallback-img') as HTMLImageElement;
-    if (!container || !canvas) return;
-
-    const isMobile = window.innerWidth < 768;
-
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
-    renderer.setSize(container.offsetWidth, container.offsetHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.25 : 1.75));
+    renderer.setSize(container.clientWidth, container.clientHeight, false);
 
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
     camera.position.z = 1;
 
-    const vertexShader = `
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = vec4(position, 1.0);
-      }
-    `;
-
-    const fragmentShader = `
-      precision mediump float;
-      uniform sampler2D uTexture;
-      uniform float uTime;
-      uniform vec2 uMouse;
-      uniform float uMouseIntensity;
-      varying vec2 vUv;
-
-      void main() {
-        vec2 uv = vUv;
-        float dist = distance(uv, uMouse);
-        float ripple = sin(dist * 20.0 - uTime * 2.0) * exp(-dist * 5.0) * 0.008 * uMouseIntensity;
-        float autoWave = sin(uv.x * 4.0 + uTime * 0.5) * cos(uv.y * 3.0 + uTime * 0.3) * 0.003;
-        uv += vec2(ripple + autoWave, ripple + autoWave);
-        vec4 color = texture2D(uTexture, uv);
-        float noise = fract(sin(dot(uv * uTime * 0.01, vec2(12.9898, 78.233))) * 43758.5453);
-        color.rgb += (noise - 0.5) * 0.015;
-        gl_FragColor = color;
-      }
-    `;
-
     const uniforms = {
       uTexture: { value: new THREE.Texture() },
       uTime: { value: 0 },
       uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-      uMouseIntensity: { value: isMobile ? 0.6 : 0.0 },
+      uMouseIntensity: { value: isMobile ? 0.35 : 0 },
+      uResolution: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) },
+      uImageResolution: { value: new THREE.Vector2(1400, 933) },
     };
 
-    const geometry = new THREE.PlaneGeometry(2, 2);
-    const material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms });
-    scene.add(new THREE.Mesh(geometry, material));
+    const material = new THREE.ShaderMaterial({
+      uniforms,
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        precision mediump float;
+        uniform sampler2D uTexture;
+        uniform float uTime;
+        uniform vec2 uMouse;
+        uniform float uMouseIntensity;
+        uniform vec2 uResolution;
+        uniform vec2 uImageResolution;
+        varying vec2 vUv;
 
-    const loader = new THREE.TextureLoader();
-    loader.load(
-      imageUrl,
+        vec2 coverUv(vec2 uv) {
+          float viewportAspect = uResolution.x / uResolution.y;
+          float imageAspect = uImageResolution.x / uImageResolution.y;
+          vec2 scale = vec2(1.0);
+          if (imageAspect > viewportAspect) {
+            scale.x = viewportAspect / imageAspect;
+          } else {
+            scale.y = imageAspect / viewportAspect;
+          }
+          return (uv - 0.5) * scale + 0.5;
+        }
+
+        void main() {
+          vec2 uv = coverUv(vUv);
+          float dist = distance(vUv, uMouse);
+          float ripple = sin(dist * 24.0 - uTime * 2.2) * exp(-dist * 6.0) * 0.006 * uMouseIntensity;
+          float ambient = sin(vUv.x * 4.0 + uTime * 0.35) * cos(vUv.y * 3.0 + uTime * 0.25) * 0.0018;
+          uv += vec2(ripple + ambient);
+          vec4 color = texture2D(uTexture, uv);
+          float grain = fract(sin(dot(vUv + uTime * 0.0005, vec2(12.9898, 78.233))) * 43758.5453);
+          color.rgb += (grain - 0.5) * 0.008;
+          gl_FragColor = color;
+        }
+      `,
+    });
+
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    let frame = 0;
+    let running = true;
+    let visible = true;
+    const clock = new THREE.Clock();
+    const targetMouse = new THREE.Vector2(0.5, 0.5);
+
+    const render = () => {
+      if (!running) return;
+      frame = requestAnimationFrame(render);
+      if (!visible || reduceMotion) return;
+
+      const elapsed = clock.getElapsedTime();
+      uniforms.uTime.value = elapsed;
+      if (isMobile) {
+        uniforms.uMouse.value.set(
+          0.5 + Math.sin(elapsed * 0.25) * 0.18,
+          0.5 + Math.cos(elapsed * 0.3) * 0.12,
+        );
+      } else {
+        uniforms.uMouse.value.lerp(targetMouse, 0.06);
+      }
+      renderer.render(scene, camera);
+    };
+
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.setCrossOrigin('anonymous');
+    textureLoader.load(
+      fallbackImg.currentSrc || fallbackImg.src,
       (texture) => {
         texture.minFilter = THREE.LinearFilter;
         texture.magFilter = THREE.LinearFilter;
+        texture.colorSpace = THREE.SRGBColorSpace;
         uniforms.uTexture.value = texture;
+        const image = texture.image as HTMLImageElement;
+        uniforms.uImageResolution.value.set(image.naturalWidth || image.width, image.naturalHeight || image.height);
+        renderer.render(scene, camera);
         canvas.style.opacity = '1';
-        if (fallbackImg) fallbackImg.style.opacity = '0';
+        fallbackImg.style.opacity = '0';
+        if (!reduceMotion) render();
       },
       undefined,
-      () => {} // keep fallback on error
+      () => {
+        canvas.style.display = 'none';
+      },
     );
 
-    if (!isMobile) {
-      let targetMouse = new THREE.Vector2(0.5, 0.5);
-      container.addEventListener('mousemove', (e) => {
-        const rect = container.getBoundingClientRect();
-        targetMouse.x = (e.clientX - rect.left) / rect.width;
-        targetMouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
-        uniforms.uMouseIntensity.value = 1.0;
-      });
-      container.addEventListener('mouseleave', () => {
-        uniforms.uMouseIntensity.value = 0.0;
-      });
+    const handlePointerMove = (event: PointerEvent) => {
+      if (isMobile) return;
+      const rect = container.getBoundingClientRect();
+      targetMouse.set(
+        (event.clientX - rect.left) / rect.width,
+        1 - (event.clientY - rect.top) / rect.height,
+      );
+      uniforms.uMouseIntensity.value = 1;
+    };
 
-      const clock = new THREE.Clock();
-      function animate() {
-        requestAnimationFrame(animate);
-        uniforms.uTime.value = clock.getElapsedTime();
-        uniforms.uMouse.value.x += (targetMouse.x - uniforms.uMouse.value.x) * 0.05;
-        uniforms.uMouse.value.y += (targetMouse.y - uniforms.uMouse.value.y) * 0.05;
-        renderer.render(scene, camera);
-      }
-      animate();
-    } else {
-      const clock = new THREE.Clock();
-      function animate() {
-        requestAnimationFrame(animate);
-        const t = clock.getElapsedTime();
-        uniforms.uTime.value = t;
-        uniforms.uMouse.value.x = 0.5 + Math.sin(t * 0.3) * 0.2;
-        uniforms.uMouse.value.y = 0.5 + Math.cos(t * 0.4) * 0.15;
-        renderer.render(scene, camera);
-      }
-      animate();
-    }
+    const handlePointerLeave = () => {
+      if (!isMobile) uniforms.uMouseIntensity.value = 0;
+    };
 
-    window.addEventListener('resize', () => {
-      renderer.setSize(container.offsetWidth, container.offsetHeight);
+    const handleResize = () => {
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      renderer.setSize(width, height, false);
+      uniforms.uResolution.value.set(width, height);
+      renderer.render(scene, camera);
+    };
+
+    const visibilityObserver = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+    });
+    visibilityObserver.observe(container);
+
+    container.addEventListener('pointermove', handlePointerMove, { passive: true });
+    container.addEventListener('pointerleave', handlePointerLeave, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    const cleanup = () => {
+      running = false;
+      cancelAnimationFrame(frame);
+      visibilityObserver.disconnect();
+      container.removeEventListener('pointermove', handlePointerMove);
+      container.removeEventListener('pointerleave', handlePointerLeave);
+      window.removeEventListener('resize', handleResize);
+      geometry.dispose();
+      material.dispose();
+      const texture = uniforms.uTexture.value;
+      if (texture instanceof THREE.Texture) texture.dispose();
+      renderer.dispose();
+      cleanupMap.delete(container);
+    };
+
+    cleanupMap.set(container, cleanup);
+  }
+
+  function animateHeroCopy() {
+    const lines = document.querySelectorAll<HTMLElement>('.hero-copy-line');
+    lines.forEach((line, index) => {
+      line.style.opacity = '0';
+      line.style.transform = 'translateY(16px)';
+      line.animate(
+        [
+          { opacity: 0, transform: 'translateY(16px)' },
+          { opacity: 1, transform: 'translateY(0)' },
+        ],
+        { duration: 800, delay: 180 + index * 150, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' },
+      );
     });
   }
 
-  // Init
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHero);
-  } else {
-    initHero();
+  function initHero() {
+    initHeroWebGL();
+    animateHeroCopy();
   }
+
+  initHero();
   document.addEventListener('astro:page-load', initHero);
 </script>
