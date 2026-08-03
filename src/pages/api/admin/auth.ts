@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { ADMIN_PASSWORD, AUTH_COOKIE } from '../../../lib/auth';
+import { AUTH_COOKIE, SESSION_COOKIE_OPTIONS, createSessionToken, verifyPassword } from '../../../lib/auth';
 
 export const prerender = false;
 
@@ -70,14 +70,14 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     password = body.password || '';
   }
 
-  if (password === ADMIN_PASSWORD) {
+  if (verifyPassword(password)) {
+    const token = createSessionToken();
+    if (!token) {
+      console.error('ADMIN_SESSION_SECRET is not configured');
+      return redirect('/admin/login?error=1', 302);
+    }
     clearAttempts(ip);
-    cookies.set(AUTH_COOKIE, 'authenticated', {
-      path: '/',
-      httpOnly: true,
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-    });
+    cookies.set(AUTH_COOKIE, token, SESSION_COOKIE_OPTIONS);
     return redirect('/admin', 302);
   }
 

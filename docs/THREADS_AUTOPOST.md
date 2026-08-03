@@ -45,15 +45,22 @@ Vercel プロジェクトの Settings → Environment Variables に以下を追�
 
 | 変数名 | 説明 |
 | --- | --- |
-| `THREADS_ACCESS_TOKEN` | 長期アクセストークン |
+| `ADMIN_PASSWORD` | 管理画面のログインパスワード（コードには書かない） |
+| `ADMIN_SESSION_SECRET` | ログインCookieの署名用シークレット（`openssl rand -hex 32` などで生成） |
+| `SUPABASE_URL` | Supabase プロジェクトURL |
+| `SUPABASE_SECRET_KEY` | Supabase のシークレット（service role）キー。**サーバー側専用・RLSをバイパスするため絶対に公開しない** |
+| `THREADS_ACCESS_TOKEN` | Threads の長期アクセストークン |
 | `THREADS_USER_ID` | Threads ユーザーID（数値） |
 | `CRON_SECRET` | Cron エンドポイント保護用のランダムな文字列（`openssl rand -hex 32` などで生成） |
 
-`CRON_SECRET` を設定すると、Vercel Cron は自動的に `Authorization: Bearer <CRON_SECRET>` ヘッダー付きでエンドポイントを呼び出します。
+- `CRON_SECRET` を設定すると、Vercel Cron は自動的に `Authorization: Bearer <CRON_SECRET>` ヘッダー付きでエンドポイントを呼び出します。
+- `ADMIN_PASSWORD` と `ADMIN_SESSION_SECRET` が未設定の場合、管理画面へのログインは常に失敗します（フェイルクローズ）。
 
 ### 4. Supabase テーブルを作成（推奨）
 
 `supabase/threads.sql` を Supabase の SQL Editor で実行してください。
+
+`threads_posts` / `threads_settings` は RLS が有効で、`anon` / `authenticated` ロールからの読み書き権限は剥奪されています。アクセスできるのは `SUPABASE_SECRET_KEY` を使うサーバー側クライアント（`src/lib/supabaseAdmin.ts`）だけです。Threads のアクセストークンは `threads_settings` に保存されますが、管理APIのレスポンスからは除外され、ブラウザやログには出力されません。
 
 > Supabase 未設定の場合は `src/data/threads-posts.json` へのローカルJSONフォールバックで動作しますが、Vercel のサーバーレス環境ではファイル書き込みが永続化されないため、**本番運用では Supabase が必須**です。トークンの自動リフレッシュも Supabase 利用時のみ永続化されます。
 
@@ -90,6 +97,7 @@ curl "https://okinawa-go.jp/api/threads/cron?key=<CRON_SECRET>"
 | --- | --- |
 | `src/lib/threads.ts` | Threads Graph API クライアント |
 | `src/lib/threadsQueue.ts` | 投稿キュー・設定ストア（Supabase / JSONフォールバック） |
+| `src/lib/supabaseAdmin.ts` | サーバー専用 Supabase クライアント（SUPABASE_SECRET_KEY 使用） |
 | `src/lib/threadsGenerator.ts` | 記事からの投稿文生成 |
 | `src/lib/threadsService.ts` | 公開処理・オートパイロット・トークン更新 |
 | `src/pages/api/threads/cron.ts` | Cron エンドポイント |

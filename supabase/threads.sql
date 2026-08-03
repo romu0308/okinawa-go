@@ -29,3 +29,12 @@ create table if not exists threads_settings (
 );
 
 insert into threads_settings (id) values (1) on conflict (id) do nothing;
+
+-- Security: these tables hold the Threads access token and the posting queue.
+-- They must only be reachable through the server-side client using the
+-- secret (service role) key, which bypasses RLS. Lock out anon/authenticated.
+alter table threads_posts enable row level security;
+alter table threads_settings enable row level security;
+
+revoke select, insert, update, delete on threads_posts from anon, authenticated;
+revoke select, insert, update, delete on threads_settings from anon, authenticated;

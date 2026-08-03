@@ -1,6 +1,7 @@
 // Threads post queue + settings store
-// Uses Supabase when configured, falls back to local JSON (same pattern as supabase.ts)
-import { supabase } from './supabase';
+// Uses Supabase (server-only secret-key client — threads_* tables are RLS-locked
+// and unreadable with the anon key) when configured, falls back to local JSON
+import { supabaseAdmin as supabase } from './supabaseAdmin';
 import fs from 'node:fs';
 import path from 'node:path';
 
