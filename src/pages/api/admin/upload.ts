@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { requireAdmin } from '../../../lib/auth';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -7,7 +8,9 @@ export const prerender = false;
 const UPLOAD_DIR = path.join(process.cwd(), 'public/images/articles');
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     if (!fs.existsSync(UPLOAD_DIR)) {
       return new Response(JSON.stringify({ files: [] }), {
@@ -29,7 +32,9 @@ export const GET: APIRoute = async () => {
   }
 };
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
@@ -86,7 +91,9 @@ export const POST: APIRoute = async ({ request }) => {
   }
 };
 
-export const DELETE: APIRoute = async ({ request }) => {
+export const DELETE: APIRoute = async ({ request, cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     const body = await request.json();
     const filePath = body.path as string;

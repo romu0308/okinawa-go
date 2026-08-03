@@ -1,12 +1,10 @@
 import type { APIRoute } from 'astro';
+import { requireAdmin } from '../../../lib/auth';
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, cookies }) => {
-  // Admin auth check
-  const authCookie = cookies.get('admin-auth')?.value;
-  if (!authCookie) {
-    return new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401 });
-  }
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
 
   const { action, id } = await request.json();
   if (!action || !id) {

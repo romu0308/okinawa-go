@@ -1,10 +1,13 @@
 import type { APIRoute } from 'astro';
+import { requireAdmin } from '../../../lib/auth';
 import fs from 'node:fs';
 import path from 'node:path';
 
 export const prerender = false;
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ cookies }) => {
+  const denied = requireAdmin(cookies);
+  if (denied) return denied;
   try {
     const uploadDir = path.join(process.cwd(), 'public/images/articles');
     if (!fs.existsSync(uploadDir)) {
