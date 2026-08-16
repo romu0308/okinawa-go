@@ -1,35 +1,63 @@
 # L Harness 出雲縁切りファネル — シナリオ自動投入パッケージ
 
 L Harness 管理画面（l-harness-izumo-admin.pages.dev）で手作業する予定だった
-「キーワード応答ルール4本＋ステップ配信シナリオ」を、コードから一括投入するためのパッケージ。
+「キーワード応答ルール4本＋7日間ステップ配信」を、コードから一括投入するためのパッケージ。
+
+## 設計の全体像
+
+- 分岐は **Day0 と Day2 のみレベル別（A〜D）**。他は共通。運用が軽く、効果検証もしやすい
+- ゴールの階段：無料で価値を渡す → 診断レポート1,000円（Day3） → カウンセリング4,980円（Day5） → 講座49,800円（Day7）
+- レベル定義（診断結果と紐づけ）
+  - A：今すぐ離れたい相手がいる（緊急度高）
+  - B：離れたいが迷いが強い
+  - C：モヤモヤはあるが相手が特定できていない
+  - D：今は平気。予防・興味層
+- 配信時刻：Day1以降は 20:00（悩み系は夜に開封率が上がる）
 
 ## 中身
 
 | ファイル | 役割 |
 |---|---|
 | `scenario.json` | キーワードルール・タグ・ステップ配信スケジュールの機械可読な定義 |
-| `messages/day0-welcome.md` | Day0 即時返信（A〜D共通テンプレ、タイプ名だけ差し込み） |
-| `messages/day1-type-a.md` 〜 `day1-type-d.md` | Day1 タイプ別詳細鑑定文 ★感動ポイント |
-| `messages/day2-work.md` | Day2 縁切りワーク①（価値提供） |
-| `messages/day3-story.md` | Day3 事例ストーリー |
-| `messages/day4-tease.md` | Day4 講座チラ見せ（講座骨子確定後に差し替え前提の暫定版） |
-| `messages/day5-7-offer.md` | Day5〜7 講座案内（同上・骨子確定待ち） |
+| `messages/day0-common.md` | Day0 共通パート（登録直後の1通目） |
+| `messages/day0-level-a.md` 〜 `day0-level-d.md` | Day0 レベル別（2通目） |
+| `messages/day1-common.md` | Day1「縁を切る＝悪ではない」 |
+| `messages/day2-level-a.md` 〜 `day2-level-d.md` | Day2 最初の一歩（レベル別） |
+| `messages/day3-offer-report.md` | Day3 診断レポート 1,000円 |
+| `messages/day4-common.md` | Day4 よくある相談パターン |
+| `messages/day5-offer-counseling.md` | Day5 カウンセリング 4,980円 |
+| `messages/day6-course-preview.md` | Day6 講座の中身公開 |
+| `messages/day7-offer-course.md` | Day7 講座オファー 49,800円 |
 | `seed-prompt.md` | ローカルの L Harness リポジトリで Claude Code に貼るだけの投入指示文 |
 
 ## 使い方（自動投入）
 
-1. ローカルの L Harness プロジェクトのフォルダでこのディレクトリ一式を持ち込む
-   （このリポジトリを clone するか、`l-harness-izumo/` フォルダごとコピー）
-2. そのフォルダで Claude Code / Codex を開き、`seed-prompt.md` の中身を貼り付ける
+1. ローカルの L Harness プロジェクト（`~/line-harness`）でこのフォルダを取得する
+2. そこで Claude Code を起動し、`seed-prompt.md` の中身を貼り付ける
 3. Claude Code が L Harness 側のスキーマ（D1 / KV / 管理API）を読み取り、
    `scenario.json` と `messages/` の本文をそのまま登録する
 
 管理画面から手で作る場合も、`scenario.json` の構造どおりに
-ルール4本＋シナリオ1本を作り、本文は `messages/` からコピペすればよい。
+ルール4本＋ステップ7本を作り、本文は `messages/` からコピペすればよい。
 
-## 注意
+## 埋めるべきURL（3つ）
 
-- A〜D のタイプ定義は診断アプリ（izumo-engiri）側の結果分類と一致させること。
-  ズレていたら `messages/` の各ファイル冒頭のタイプ名・説明を修正する。
-- Day4 以降は5万円講座の骨子が固まったら本文を差し替える（現状は汎用の暫定文）。
-- 配信時刻はすべて `scenario.json` の `send_time` で管理（デフォルト 08:00 JST）。
+`scenario.json` の `variables` にプレースホルダで入っている。決済ページができたら差し替える。
+
+- `report_url` … 1,000円レポートの決済URL
+- `counseling_url` … 4,980円カウンセリングの申込URL
+- `course_url` … 49,800円講座のLP URL
+
+いずれも UTM 付きで登録すること（`utm_source=line&utm_medium=step&utm_campaign=step_dayN`）。
+どのDayで売れているかが計測できる。
+
+## 法的注意（全文面で守っていること）
+
+- 効果の断定なし。「縁が切れる」と約束しない。決めるのは本人、という立場を崩さない
+- ウソの締切・限定を付けない（景表法の有利誤認）。延長した瞬間に信頼が死ぬ。
+  カウンセリングは対応枠が実際に有限なので「月◯名まで」は正当に使える
+
+## 今後の追加予定
+
+- Day8〜10：買わなかった人向けフォロー3通（講座のQ&A形式が定番）
+- 開封率が取れるなら、Day3とDay7の開封率を最初のKPIにする

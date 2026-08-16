@@ -1,106 +1,122 @@
 {
-  "name": "izumo-engiri-main-funnel",
-  "description": "縁切り診断→LINE登録→7日間ステップ配信→5万円講座の本流シナリオ",
+  "name": "izumo-engiri-step7",
+  "description": "出雲縁切り LINEステップ配信（Day0〜7）。分岐はDay0とDay2のみレベル別、他は共通。1,000円レポート→4,980円カウンセリング→49,800円講座の3段階オファー",
   "timezone": "Asia/Tokyo",
   "tags": [
-    { "key": "type_a", "label": "タイプA：腐れ縁・しがらみ型" },
-    { "key": "type_b", "label": "タイプB：消耗・エナジードレイン型" },
-    { "key": "type_c", "label": "タイプC：自分縛り型" },
-    { "key": "type_d", "label": "タイプD：転機・環境型" },
+    { "key": "level_a", "label": "レベルA：今すぐ離れたい相手がいる（緊急度高）" },
+    { "key": "level_b", "label": "レベルB：離れたいが迷いが強い" },
+    { "key": "level_c", "label": "レベルC：モヤモヤはあるが相手が特定できていない" },
+    { "key": "level_d", "label": "レベルD：今は平気。予防・興味層" },
     { "key": "step_active", "label": "ステップ配信中" },
     { "key": "step_done", "label": "ステップ配信完了（週1ナーチャリングへ）" },
-    { "key": "course_purchased", "label": "講座購入済み" }
+    { "key": "bought_report", "label": "診断レポート購入済み（1,000円）" },
+    { "key": "bought_counseling", "label": "カウンセリング申込済み（4,980円）" },
+    { "key": "bought_course", "label": "講座購入済み（49,800円）" }
   ],
   "keyword_rules": [
     {
-      "id": "kw-type-a",
+      "id": "kw-level-a",
       "trigger": { "type": "message_exact", "keywords": ["A", "a", "Ａ", "ａ"] },
       "actions": [
-        { "type": "add_tag", "tag": "type_a" },
+        { "type": "add_tag", "tag": "level_a" },
         { "type": "add_tag", "tag": "step_active" },
-        { "type": "send_message", "template": "messages/day0-welcome.md", "variables": { "type_name": "タイプA【腐れ縁・しがらみ型】" } },
-        { "type": "start_scenario", "scenario": "izumo-engiri-main-funnel" }
+        { "type": "send_message", "template": "messages/day0-common.md" },
+        { "type": "send_message", "template": "messages/day0-level-a.md" },
+        { "type": "start_scenario", "scenario": "izumo-engiri-step7" }
       ],
       "once_per_user": true
     },
     {
-      "id": "kw-type-b",
+      "id": "kw-level-b",
       "trigger": { "type": "message_exact", "keywords": ["B", "b", "Ｂ", "ｂ"] },
       "actions": [
-        { "type": "add_tag", "tag": "type_b" },
+        { "type": "add_tag", "tag": "level_b" },
         { "type": "add_tag", "tag": "step_active" },
-        { "type": "send_message", "template": "messages/day0-welcome.md", "variables": { "type_name": "タイプB【消耗・エナジードレイン型】" } },
-        { "type": "start_scenario", "scenario": "izumo-engiri-main-funnel" }
+        { "type": "send_message", "template": "messages/day0-common.md" },
+        { "type": "send_message", "template": "messages/day0-level-b.md" },
+        { "type": "start_scenario", "scenario": "izumo-engiri-step7" }
       ],
       "once_per_user": true
     },
     {
-      "id": "kw-type-c",
+      "id": "kw-level-c",
       "trigger": { "type": "message_exact", "keywords": ["C", "c", "Ｃ", "ｃ"] },
       "actions": [
-        { "type": "add_tag", "tag": "type_c" },
+        { "type": "add_tag", "tag": "level_c" },
         { "type": "add_tag", "tag": "step_active" },
-        { "type": "send_message", "template": "messages/day0-welcome.md", "variables": { "type_name": "タイプC【自分縛り型】" } },
-        { "type": "start_scenario", "scenario": "izumo-engiri-main-funnel" }
+        { "type": "send_message", "template": "messages/day0-common.md" },
+        { "type": "send_message", "template": "messages/day0-level-c.md" },
+        { "type": "start_scenario", "scenario": "izumo-engiri-step7" }
       ],
       "once_per_user": true
     },
     {
-      "id": "kw-type-d",
+      "id": "kw-level-d",
       "trigger": { "type": "message_exact", "keywords": ["D", "d", "Ｄ", "ｄ"] },
       "actions": [
-        { "type": "add_tag", "tag": "type_d" },
+        { "type": "add_tag", "tag": "level_d" },
         { "type": "add_tag", "tag": "step_active" },
-        { "type": "send_message", "template": "messages/day0-welcome.md", "variables": { "type_name": "タイプD【転機・環境型】" } },
-        { "type": "start_scenario", "scenario": "izumo-engiri-main-funnel" }
+        { "type": "send_message", "template": "messages/day0-common.md" },
+        { "type": "send_message", "template": "messages/day0-level-d.md" },
+        { "type": "start_scenario", "scenario": "izumo-engiri-step7" }
       ],
       "once_per_user": true
     }
   ],
+  "variables": {
+    "report_url": "https://example.com/report?utm_source=line&utm_medium=step&utm_campaign=step_day3",
+    "counseling_url": "https://example.com/counseling?utm_source=line&utm_medium=step&utm_campaign=step_day5",
+    "course_url": "https://example.com/course?utm_source=line&utm_medium=step&utm_campaign=step_day7"
+  },
   "steps": [
     {
       "day": 1,
-      "send_time": "08:00",
-      "note": "★感動ポイント。タグでタイプ分岐して詳細鑑定を送る",
-      "branches": [
-        { "if_tag": "type_a", "template": "messages/day1-type-a.md" },
-        { "if_tag": "type_b", "template": "messages/day1-type-b.md" },
-        { "if_tag": "type_c", "template": "messages/day1-type-c.md" },
-        { "if_tag": "type_d", "template": "messages/day1-type-d.md" }
-      ]
+      "send_time": "20:00",
+      "title": "縁を切る＝悪ではない",
+      "template": "messages/day1-common.md"
     },
     {
       "day": 2,
-      "send_time": "08:00",
-      "template": "messages/day2-work.md"
+      "send_time": "20:00",
+      "title": "最初の一歩（レベル別）",
+      "branches": [
+        { "if_tag": "level_a", "template": "messages/day2-level-a.md" },
+        { "if_tag": "level_b", "template": "messages/day2-level-b.md" },
+        { "if_tag": "level_c", "template": "messages/day2-level-c.md" },
+        { "if_tag": "level_d", "template": "messages/day2-level-d.md" }
+      ]
     },
     {
       "day": 3,
       "send_time": "20:00",
-      "note": "事例は夜のほうが読まれやすい想定。数字を見て調整",
-      "template": "messages/day3-story.md"
+      "title": "低額オファー：診断レポート 1,000円",
+      "template": "messages/day3-offer-report.md",
+      "kpi": "開封率＋クリック率を最初のKPIにする"
     },
     {
       "day": 4,
       "send_time": "20:00",
-      "note": "講座骨子の確定後に本文差し替え",
-      "template": "messages/day4-tease.md"
+      "title": "よくある相談パターン",
+      "template": "messages/day4-common.md"
     },
     {
       "day": 5,
       "send_time": "20:00",
-      "note": "Day5〜7は同一ファイル内の3通を1日1通ずつ送る。講座骨子の確定後に差し替え",
-      "template": "messages/day5-7-offer.md#day5"
+      "title": "中額オファー：カウンセリング 4,980円",
+      "template": "messages/day5-offer-counseling.md"
     },
     {
       "day": 6,
       "send_time": "20:00",
-      "template": "messages/day5-7-offer.md#day6"
+      "title": "講座の中身公開",
+      "template": "messages/day6-course-preview.md"
     },
     {
       "day": 7,
       "send_time": "20:00",
-      "template": "messages/day5-7-offer.md#day7",
+      "title": "講座オファー 49,800円",
+      "template": "messages/day7-offer-course.md",
+      "kpi": "開封率＋クリック率を最初のKPIにする",
       "after_actions": [
         { "type": "remove_tag", "tag": "step_active" },
         { "type": "add_tag", "tag": "step_done" }
@@ -108,6 +124,18 @@
     }
   ],
   "post_scenario": {
-    "note": "step_done タグの人に週1配信（手動 or AI下書き）。月1で講座再案内。course_purchased が付いたら再案内から除外"
+    "note": "Day8〜10に『買わなかった人向け』フォロー3通を後日追加（講座のQ&A形式が定番）。step_done タグの人に週1配信、月1で講座再案内。bought_course が付いた人は再案内から除外",
+    "planned_steps": [
+      { "day": 8, "title": "講座Q&A①（未作成）" },
+      { "day": 9, "title": "講座Q&A②（未作成）" },
+      { "day": 10, "title": "最終フォロー（未作成）" }
+    ]
+  },
+  "compliance": {
+    "notes": [
+      "効果の断定をしない。『縁が切れる』と約束しない。決めるのは本人という立場を全文面で崩さない",
+      "ウソの締切・限定を付けない（景表法の有利誤認）。カウンセリングは対応枠が実際に有限なので『月◯名まで』は正当に使える",
+      "全オファーURLにUTMを付ける（utm_source=line&utm_medium=step&utm_campaign=step_dayN）"
+    ]
   }
 }
