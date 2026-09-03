@@ -38,6 +38,42 @@
     {
       "key": "bought_course",
       "label": "講座購入済み（49,800円）"
+    },
+    {
+      "key": "kantei_level_a",
+      "label": "AI鑑定 レベルA（合言葉受付）"
+    },
+    {
+      "key": "kantei_level_b",
+      "label": "AI鑑定 レベルB（合言葉受付）"
+    },
+    {
+      "key": "kantei_level_c",
+      "label": "AI鑑定 レベルC（合言葉受付）"
+    },
+    {
+      "key": "kantei_level_d",
+      "label": "AI鑑定 レベルD（合言葉受付）"
+    },
+    {
+      "key": "kantei_waiting",
+      "label": "AI鑑定 状況入力待ち"
+    },
+    {
+      "key": "kantei_done",
+      "label": "AI鑑定 送信済み"
+    },
+    {
+      "key": "kantei_followup_ok",
+      "label": "AI鑑定 追加質問 残り1回"
+    },
+    {
+      "key": "kantei_safety_hold",
+      "label": "AI鑑定 危険ワード検知・運営確認"
+    },
+    {
+      "key": "course_member",
+      "label": "講座受講生（LINEで『講座』送信）"
     }
   ],
   "keyword_rules": [
@@ -180,6 +216,97 @@
         }
       ],
       "once_per_user": true
+    },
+    {
+      "id": "kw-kantei-passcode",
+      "trigger": {
+        "type": "message_exact",
+        "keywords": [
+          "縁A-717",
+          "縁B-323",
+          "縁C-505",
+          "縁D-141"
+        ],
+        "normalize": "trim+fullwidth+case"
+      },
+      "actions": [
+        {
+          "type": "custom",
+          "handler": "ai_kantei.on_passcode",
+          "note": "レベル判定→bought_report/kantei_level_x/kantei_waiting 付与→intake送信。kantei_done 済みなら再受付しない"
+        }
+      ]
+    },
+    {
+      "id": "kw-kantei-input",
+      "trigger": {
+        "type": "free_text_if_tag",
+        "tag": "kantei_waiting"
+      },
+      "actions": [
+        {
+          "type": "custom",
+          "handler": "ai_kantei.on_input",
+          "note": "危険ワード→safety / 20文字未満→short / それ以外→Claude API で生成し push"
+        }
+      ]
+    },
+    {
+      "id": "kw-kantei-followup",
+      "trigger": {
+        "type": "free_text_if_tag",
+        "tag": "kantei_followup_ok"
+      },
+      "actions": [
+        {
+          "type": "custom",
+          "handler": "ai_kantei.on_followup",
+          "note": "履歴付きで1回だけ生成。以後は followup_end を返す"
+        }
+      ]
+    },
+    {
+      "id": "kw-course-member",
+      "trigger": {
+        "type": "message_exact",
+        "keywords": [
+          "講座"
+        ]
+      },
+      "actions": [
+        {
+          "type": "add_tag",
+          "tag": "course_member"
+        },
+        {
+          "type": "add_tag",
+          "tag": "bought_course"
+        },
+        {
+          "type": "send_message",
+          "text": "受講生として登録した。週1相談会の案内は、このLINEに届く。質問はいつでもここに送ってほしい。"
+        }
+      ]
+    },
+    {
+      "id": "kw-counseling-applied",
+      "trigger": {
+        "type": "message_exact",
+        "keywords": [
+          "申込みました",
+          "申し込みました"
+        ]
+      },
+      "actions": [
+        {
+          "type": "add_tag",
+          "tag": "bought_counseling"
+        },
+        {
+          "type": "send_message",
+          "text": "確認した。予約した日時の前日までに、Zoomのリンクをここに送る。当日までに①関係 ②いつから ③一番困っている場面、をメモしておいてほしい。"
+        }
+      ]
     }
   ],
   "variables": {
@@ -189,7 +316,9 @@
     "report_url_d": "https://note.com/USER/n/REPORT_D",
     "counseling_url": "https://note.com/USER/n/COUNSELING",
     "course_url": "https://note.com/USER/n/COURSE",
-    "_note": "noteの記事URLが決まったら差し替える。配信時は L Harness のトラッキングリンク経由にする"
+    "_note": "noteの記事URLが決まったら差し替える。配信時は L Harness のトラッキングリンク経由にする",
+    "booking_url": "https://calendar.app.google/XXXX",
+    "course_line_url": "https://lin.ee/y8Mrezf8"
   },
   "steps": [
     {
@@ -325,6 +454,34 @@
       "49,800円の記事を出すには noteプレミアム（有料記事の価格上限が上がる）が必要。上限・手数料は最新のnoteヘルプで確認",
       "有料記事の『購入者限定エリア』に、レポート本文／セッション予約導線／講座動画リンク＋週1相談のZoomを置く",
       "クリック計測はUTMではなく L Harness のトラッキングリンク（/t/）を使う（noteのアクセス解析はUTMを表示しない）"
+    ]
+  },
+  "ai_kantei": {
+    "spec": "ai-kantei/spec.md",
+    "system_prompt": "ai-kantei/system-prompt.md",
+    "reference_impl": "ai-kantei/worker-reference.ts",
+    "model": "claude-opus-5",
+    "passcodes": {
+      "縁A-717": "a",
+      "縁B-323": "b",
+      "縁C-505": "c",
+      "縁D-141": "d"
+    },
+    "limits": {
+      "kantei_per_purchase": 1,
+      "followup_per_purchase": 1
+    },
+    "danger_words": [
+      "死にたい",
+      "消えたい",
+      "自殺",
+      "殴られ",
+      "暴力",
+      "監禁",
+      "脅され",
+      "殺す",
+      "ストーカー",
+      "逃げられない"
     ]
   }
 }

@@ -28,7 +28,11 @@ L Harness 管理画面（l-harness-izumo-admin.pages.dev）で手作業する予
 | `messages/day5-offer-counseling.md` | Day5 カウンセリング 4,980円 |
 | `messages/day6-course-preview.md` | Day6 講座の中身公開 |
 | `messages/day7-offer-course.md` | Day7 講座オファー 49,800円 |
-| `seed-prompt.md` | ローカルの L Harness リポジトリで Claude Code に貼るだけの投入指示文 |
+| `seed-prompt.md` | ローカルの L Harness リポジトリで Claude Code に貼るだけの投入指示文（AI鑑定の実装込み） |
+| `STRATEGY.md` | 事業設計の全体（note一本化・自動化・匿名運営チェックリスト・実行順） |
+| `ai-kantei/` | AI 個別鑑定の仕様・システムプロンプト・参考実装 |
+| `note/` | note 記事の下書き6本（レポート×4、カウンセリング、講座） |
+| `prompts/izumo-kaiun-site-prompt.md` | izumo-kaiun.com から Stripe・特商法・特定情報を撤去する改修プロンプト |
 
 ## 使い方（自動投入）
 
