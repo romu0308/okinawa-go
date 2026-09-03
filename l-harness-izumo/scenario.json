@@ -1,72 +1,195 @@
 {
   "name": "izumo-engiri-step7",
-  "description": "出雲縁切り LINEステップ配信（Day0〜7）。分岐はDay0とDay2のみレベル別、他は共通。1,000円レポート→4,980円カウンセリング→49,800円講座の3段階オファー",
+  "description": "出雲縁切り LINEステップ配信（Day0〜7）。分岐はDay0/Day2/Day3のみレベル別、他は共通。販売は全てnote（1,000円レベル別レポート→4,980円カウンセリング→49,800円講座）",
   "timezone": "Asia/Tokyo",
   "tags": [
-    { "key": "level_a", "label": "レベルA：今すぐ離れたい相手がいる（緊急度高）" },
-    { "key": "level_b", "label": "レベルB：離れたいが迷いが強い" },
-    { "key": "level_c", "label": "レベルC：モヤモヤはあるが相手が特定できていない" },
-    { "key": "level_d", "label": "レベルD：今は平気。予防・興味層" },
-    { "key": "step_active", "label": "ステップ配信中" },
-    { "key": "step_done", "label": "ステップ配信完了（週1ナーチャリングへ）" },
-    { "key": "bought_report", "label": "診断レポート購入済み（1,000円）" },
-    { "key": "bought_counseling", "label": "カウンセリング申込済み（4,980円）" },
-    { "key": "bought_course", "label": "講座購入済み（49,800円）" }
+    {
+      "key": "level_a",
+      "label": "レベルA：今すぐ離れたい相手がいる（緊急度高）"
+    },
+    {
+      "key": "level_b",
+      "label": "レベルB：離れたいが迷いが強い"
+    },
+    {
+      "key": "level_c",
+      "label": "レベルC：モヤモヤはあるが相手が特定できていない"
+    },
+    {
+      "key": "level_d",
+      "label": "レベルD：今は平気。予防・興味層"
+    },
+    {
+      "key": "step_active",
+      "label": "ステップ配信中"
+    },
+    {
+      "key": "step_done",
+      "label": "ステップ配信完了（週1ナーチャリングへ）"
+    },
+    {
+      "key": "bought_report",
+      "label": "診断レポート購入済み（1,000円）"
+    },
+    {
+      "key": "bought_counseling",
+      "label": "カウンセリング申込済み（4,980円）"
+    },
+    {
+      "key": "bought_course",
+      "label": "講座購入済み（49,800円）"
+    }
   ],
   "keyword_rules": [
     {
       "id": "kw-level-a",
-      "trigger": { "type": "message_exact", "keywords": ["A", "a", "Ａ", "ａ"] },
+      "trigger": {
+        "type": "message_exact",
+        "keywords": [
+          "A",
+          "a",
+          "Ａ",
+          "ａ"
+        ]
+      },
       "actions": [
-        { "type": "add_tag", "tag": "level_a" },
-        { "type": "add_tag", "tag": "step_active" },
-        { "type": "send_message", "template": "messages/day0-common.md" },
-        { "type": "send_message", "template": "messages/day0-level-a.md" },
-        { "type": "start_scenario", "scenario": "izumo-engiri-step7" }
+        {
+          "type": "add_tag",
+          "tag": "level_a"
+        },
+        {
+          "type": "add_tag",
+          "tag": "step_active"
+        },
+        {
+          "type": "send_message",
+          "template": "messages/day0-common.md"
+        },
+        {
+          "type": "send_message",
+          "template": "messages/day0-level-a.md"
+        },
+        {
+          "type": "start_scenario",
+          "scenario": "izumo-engiri-step7"
+        }
       ],
       "once_per_user": true
     },
     {
       "id": "kw-level-b",
-      "trigger": { "type": "message_exact", "keywords": ["B", "b", "Ｂ", "ｂ"] },
+      "trigger": {
+        "type": "message_exact",
+        "keywords": [
+          "B",
+          "b",
+          "Ｂ",
+          "ｂ"
+        ]
+      },
       "actions": [
-        { "type": "add_tag", "tag": "level_b" },
-        { "type": "add_tag", "tag": "step_active" },
-        { "type": "send_message", "template": "messages/day0-common.md" },
-        { "type": "send_message", "template": "messages/day0-level-b.md" },
-        { "type": "start_scenario", "scenario": "izumo-engiri-step7" }
+        {
+          "type": "add_tag",
+          "tag": "level_b"
+        },
+        {
+          "type": "add_tag",
+          "tag": "step_active"
+        },
+        {
+          "type": "send_message",
+          "template": "messages/day0-common.md"
+        },
+        {
+          "type": "send_message",
+          "template": "messages/day0-level-b.md"
+        },
+        {
+          "type": "start_scenario",
+          "scenario": "izumo-engiri-step7"
+        }
       ],
       "once_per_user": true
     },
     {
       "id": "kw-level-c",
-      "trigger": { "type": "message_exact", "keywords": ["C", "c", "Ｃ", "ｃ"] },
+      "trigger": {
+        "type": "message_exact",
+        "keywords": [
+          "C",
+          "c",
+          "Ｃ",
+          "ｃ"
+        ]
+      },
       "actions": [
-        { "type": "add_tag", "tag": "level_c" },
-        { "type": "add_tag", "tag": "step_active" },
-        { "type": "send_message", "template": "messages/day0-common.md" },
-        { "type": "send_message", "template": "messages/day0-level-c.md" },
-        { "type": "start_scenario", "scenario": "izumo-engiri-step7" }
+        {
+          "type": "add_tag",
+          "tag": "level_c"
+        },
+        {
+          "type": "add_tag",
+          "tag": "step_active"
+        },
+        {
+          "type": "send_message",
+          "template": "messages/day0-common.md"
+        },
+        {
+          "type": "send_message",
+          "template": "messages/day0-level-c.md"
+        },
+        {
+          "type": "start_scenario",
+          "scenario": "izumo-engiri-step7"
+        }
       ],
       "once_per_user": true
     },
     {
       "id": "kw-level-d",
-      "trigger": { "type": "message_exact", "keywords": ["D", "d", "Ｄ", "ｄ"] },
+      "trigger": {
+        "type": "message_exact",
+        "keywords": [
+          "D",
+          "d",
+          "Ｄ",
+          "ｄ"
+        ]
+      },
       "actions": [
-        { "type": "add_tag", "tag": "level_d" },
-        { "type": "add_tag", "tag": "step_active" },
-        { "type": "send_message", "template": "messages/day0-common.md" },
-        { "type": "send_message", "template": "messages/day0-level-d.md" },
-        { "type": "start_scenario", "scenario": "izumo-engiri-step7" }
+        {
+          "type": "add_tag",
+          "tag": "level_d"
+        },
+        {
+          "type": "add_tag",
+          "tag": "step_active"
+        },
+        {
+          "type": "send_message",
+          "template": "messages/day0-common.md"
+        },
+        {
+          "type": "send_message",
+          "template": "messages/day0-level-d.md"
+        },
+        {
+          "type": "start_scenario",
+          "scenario": "izumo-engiri-step7"
+        }
       ],
       "once_per_user": true
     }
   ],
   "variables": {
-    "report_url": "https://example.com/report?utm_source=line&utm_medium=step&utm_campaign=step_day3",
-    "counseling_url": "https://example.com/counseling?utm_source=line&utm_medium=step&utm_campaign=step_day5",
-    "course_url": "https://example.com/course?utm_source=line&utm_medium=step&utm_campaign=step_day7"
+    "report_url_a": "https://note.com/USER/n/REPORT_A",
+    "report_url_b": "https://note.com/USER/n/REPORT_B",
+    "report_url_c": "https://note.com/USER/n/REPORT_C",
+    "report_url_d": "https://note.com/USER/n/REPORT_D",
+    "counseling_url": "https://note.com/USER/n/COUNSELING",
+    "course_url": "https://note.com/USER/n/COURSE",
+    "_note": "noteの記事URLが決まったら差し替える。配信時は L Harness のトラッキングリンク経由にする"
   },
   "steps": [
     {
@@ -80,18 +203,59 @@
       "send_time": "20:00",
       "title": "最初の一歩（レベル別）",
       "branches": [
-        { "if_tag": "level_a", "template": "messages/day2-level-a.md" },
-        { "if_tag": "level_b", "template": "messages/day2-level-b.md" },
-        { "if_tag": "level_c", "template": "messages/day2-level-c.md" },
-        { "if_tag": "level_d", "template": "messages/day2-level-d.md" }
+        {
+          "if_tag": "level_a",
+          "template": "messages/day2-level-a.md"
+        },
+        {
+          "if_tag": "level_b",
+          "template": "messages/day2-level-b.md"
+        },
+        {
+          "if_tag": "level_c",
+          "template": "messages/day2-level-c.md"
+        },
+        {
+          "if_tag": "level_d",
+          "template": "messages/day2-level-d.md"
+        }
       ]
     },
     {
       "day": 3,
       "send_time": "20:00",
-      "title": "低額オファー：診断レポート 1,000円",
-      "template": "messages/day3-offer-report.md",
-      "kpi": "開封率＋クリック率を最初のKPIにする"
+      "title": "低額オファー：レベル別診断レポート 1,000円（note有料記事×4）",
+      "kpi": "開封率＋クリック率を最初のKPIにする",
+      "branches": [
+        {
+          "if_tag": "level_a",
+          "template": "messages/day3-offer-report.md",
+          "variables": {
+            "report_url": "{{report_url_a}}"
+          }
+        },
+        {
+          "if_tag": "level_b",
+          "template": "messages/day3-offer-report.md",
+          "variables": {
+            "report_url": "{{report_url_b}}"
+          }
+        },
+        {
+          "if_tag": "level_c",
+          "template": "messages/day3-offer-report.md",
+          "variables": {
+            "report_url": "{{report_url_c}}"
+          }
+        },
+        {
+          "if_tag": "level_d",
+          "template": "messages/day3-offer-report.md",
+          "variables": {
+            "report_url": "{{report_url_d}}"
+          }
+        }
+      ]
     },
     {
       "day": 4,
@@ -102,7 +266,7 @@
     {
       "day": 5,
       "send_time": "20:00",
-      "title": "中額オファー：カウンセリング 4,980円",
+      "title": "中額オファー：カウンセリング 4,980円（note有料記事＝申込チケット）",
       "template": "messages/day5-offer-counseling.md"
     },
     {
@@ -114,28 +278,53 @@
     {
       "day": 7,
       "send_time": "20:00",
-      "title": "講座オファー 49,800円",
+      "title": "講座オファー 49,800円（note有料記事、プレミアム必須）",
       "template": "messages/day7-offer-course.md",
       "kpi": "開封率＋クリック率を最初のKPIにする",
       "after_actions": [
-        { "type": "remove_tag", "tag": "step_active" },
-        { "type": "add_tag", "tag": "step_done" }
+        {
+          "type": "remove_tag",
+          "tag": "step_active"
+        },
+        {
+          "type": "add_tag",
+          "tag": "step_done"
+        }
       ]
     }
   ],
   "post_scenario": {
     "note": "Day8〜10に『買わなかった人向け』フォロー3通を後日追加（講座のQ&A形式が定番）。step_done タグの人に週1配信、月1で講座再案内。bought_course が付いた人は再案内から除外",
     "planned_steps": [
-      { "day": 8, "title": "講座Q&A①（未作成）" },
-      { "day": 9, "title": "講座Q&A②（未作成）" },
-      { "day": 10, "title": "最終フォロー（未作成）" }
+      {
+        "day": 8,
+        "title": "講座Q&A①（未作成）"
+      },
+      {
+        "day": 9,
+        "title": "講座Q&A②（未作成）"
+      },
+      {
+        "day": 10,
+        "title": "最終フォロー（未作成）"
+      }
     ]
   },
   "compliance": {
     "notes": [
       "効果の断定をしない。『縁が切れる』と約束しない。決めるのは本人という立場を全文面で崩さない",
       "ウソの締切・限定を付けない（景表法の有利誤認）。カウンセリングは対応枠が実際に有限なので『月◯名まで』は正当に使える",
-      "全オファーURLにUTMを付ける（utm_source=line&utm_medium=step&utm_campaign=step_dayN）"
+      "全オファーURLは L Harness のトラッキングリンク経由で送る（どのDayで押されたかを計測）。noteの購入数と突き合わせる",
+      "noteの禁止事項に触れないよう、占い的な効果の標榜・宗教的勧誘の表現は使わない。『人間関係の整理の手順』として書く"
+    ]
+  },
+  "sales_platform": {
+    "name": "note",
+    "why": "特商法表記をnote側が担うため個人の住所・電話を公開せずに販売できる。Stripe・自前LPは使わない",
+    "requirements": [
+      "49,800円の記事を出すには noteプレミアム（有料記事の価格上限が上がる）が必要。上限・手数料は最新のnoteヘルプで確認",
+      "有料記事の『購入者限定エリア』に、レポート本文／セッション予約導線／講座動画リンク＋週1相談のZoomを置く",
+      "クリック計測はUTMではなく L Harness のトラッキングリンク（/t/）を使う（noteのアクセス解析はUTMを表示しない）"
     ]
   }
 }
