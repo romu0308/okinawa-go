@@ -31,12 +31,22 @@ export const PASSCODES: Record<string, Level> = {
 
 const DANGER_WORDS = ["死にたい", "消えたい", "自殺", "殴られ", "暴力", "監禁", "脅され", "殺す", "ストーカー", "逃げられない"];
 
+// 打ち間違いで弾かれるのが最大の機会損失なので、照合は寛容にする。
+// 縁A-717 / 縁A717 / 縁ａ-717 / 縁 A 717 / 　縁A－717　 / 縁a_717 を全部同じとみなす。
 export function normalize(text: string): string {
   return text
     .trim()
     .replace(/[Ａ-Ｚａ-ｚ０-９－]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0))
-    .replace(/[‐‑‒–—―]/g, "-")
-    .toUpperCase();
+    .replace(/[‐‑‒–—―ー]/g, "-")
+    .toUpperCase()
+    .replace(/[-_\s]/g, "");
+}
+
+const RESCUE_WORDS = ["鑑定", "合言葉", "パスワード", "あいことば"];
+
+export function isRescue(text: string): boolean {
+  const t = text.trim();
+  return RESCUE_WORDS.some((w) => t === w || t.includes(w)) && !matchPasscode(text);
 }
 
 export function matchPasscode(text: string): Level | null {

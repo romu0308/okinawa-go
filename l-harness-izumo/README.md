@@ -34,7 +34,10 @@ L Harness 管理画面（l-harness-izumo-admin.pages.dev）で手作業する予
 | `assets/bonus-videos.csv` | 既存の特典動画の棚卸しシート（自分で埋める） |
 | `prompts/weekly-broadcast-prompt.md` | 週1配信を1回で1ヶ月分書かせるプロンプト |
 | `prompts/bonus-video-audit.md` | 既存の特典動画を新ファネルに再配置させるプロンプト |
-| `TESTING.md` | 公開前の通しテスト手順（30〜40分） |
+| `TESTING.md` | 公開前の通しテスト手順（30〜40分。note購入は不要） |
+| `elgram/setup.md` | エルグラムに貼るだけの設定表（キーワード・公開返信・DM文面） |
+| `elgram/troubleshooting.md` | DMが届かない等の切り分け表 |
+| `prompts/elgram-browser-automation.md` | （任意）エルグラム設定をブラウザ自動操作する場合 |
 | `seed-prompt.md` | ローカルの L Harness リポジトリで Claude Code に貼るだけの投入指示文（AI鑑定の実装込み） |
 | `STRATEGY.md` | 事業設計の全体（note一本化・自動化・匿名運営チェックリスト・実行順） |
 | `ai-kantei/` | AI 個別鑑定の仕様・システムプロンプト・参考実装 |
