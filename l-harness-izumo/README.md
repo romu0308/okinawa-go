@@ -28,6 +28,13 @@ L Harness 管理画面（l-harness-izumo-admin.pages.dev）で手作業する予
 | `messages/day5-offer-counseling.md` | Day5 カウンセリング 4,980円 |
 | `messages/day6-course-preview.md` | Day6 講座の中身公開 |
 | `messages/day7-offer-course.md` | Day7 講座オファー 49,800円 |
+| `messages/day8-followup.md` 〜 `day10-followup.md` | Day8〜10 買わなかった人向けフォロー3通 |
+| `messages/weekly/` | 週1ナーチャリング配信の型と保存先 |
+| `assets/reel-scripts.md` | Instagram リール台本12本（3〜4週間分） |
+| `assets/bonus-videos.csv` | 既存の特典動画の棚卸しシート（自分で埋める） |
+| `prompts/weekly-broadcast-prompt.md` | 週1配信を1回で1ヶ月分書かせるプロンプト |
+| `prompts/bonus-video-audit.md` | 既存の特典動画を新ファネルに再配置させるプロンプト |
+| `TESTING.md` | 公開前の通しテスト手順（30〜40分） |
 | `seed-prompt.md` | ローカルの L Harness リポジトリで Claude Code に貼るだけの投入指示文（AI鑑定の実装込み） |
 | `STRATEGY.md` | 事業設計の全体（note一本化・自動化・匿名運営チェックリスト・実行順） |
 | `ai-kantei/` | AI 個別鑑定の仕様・システムプロンプト・参考実装 |
@@ -70,6 +77,12 @@ Day ごとのクリック数と note の購入数を突き合わせれば、ど�
 - 効果の断定なし。「縁が切れる」と約束しない。決めるのは本人、という立場を崩さない
 - ウソの締切・限定を付けない（景表法の有利誤認）。延長した瞬間に信頼が死ぬ。
   カウンセリングは対応枠が実際に有限なので「月◯名まで」は正当に使える
+
+## 運用の週次ルーティン
+
+- リール：週3〜4本（`assets/reel-scripts.md` に12本ぶんの台本）。コメント誘導は全部「縁切り」に統一
+- 週1配信：`prompts/weekly-broadcast-prompt.md` で月1回まとめて4本書く
+- 数字チェック：週1回。見るのは「LINE登録数」と「note購入数（3商品）」だけ
 
 ## 今後の追加予定
 

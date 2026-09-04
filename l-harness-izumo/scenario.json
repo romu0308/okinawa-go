@@ -74,6 +74,10 @@
     {
       "key": "course_member",
       "label": "講座受講生（LINEで『講座』送信）"
+    },
+    {
+      "key": "nurture_active",
+      "label": "週1ナーチャリング配信の対象"
     }
   ],
   "keyword_rules": [
@@ -420,24 +424,48 @@
           "tag": "step_done"
         }
       ]
+    },
+    {
+      "day": 8,
+      "send_time": "20:00",
+      "title": "フォロー①よくある質問",
+      "template": "messages/day8-followup.md",
+      "audience": {
+        "has_tag": "step_done",
+        "not_tag": "bought_course"
+      }
+    },
+    {
+      "day": 9,
+      "send_time": "20:00",
+      "title": "フォロー②この講座で扱わないこと",
+      "template": "messages/day9-followup.md",
+      "audience": {
+        "has_tag": "step_done",
+        "not_tag": "bought_course"
+      }
+    },
+    {
+      "day": 10,
+      "send_time": "20:00",
+      "title": "フォロー③最後の連絡",
+      "template": "messages/day10-followup.md",
+      "audience": {
+        "has_tag": "step_done",
+        "not_tag": "bought_course"
+      },
+      "after_actions": [
+        {
+          "type": "add_tag",
+          "tag": "nurture_active"
+        }
+      ]
     }
   ],
   "post_scenario": {
-    "note": "Day8〜10に『買わなかった人向け』フォロー3通を後日追加（講座のQ&A形式が定番）。step_done タグの人に週1配信、月1で講座再案内。bought_course が付いた人は再案内から除外",
-    "planned_steps": [
-      {
-        "day": 8,
-        "title": "講座Q&A①（未作成）"
-      },
-      {
-        "day": 9,
-        "title": "講座Q&A②（未作成）"
-      },
-      {
-        "day": 10,
-        "title": "最終フォロー（未作成）"
-      }
-    ]
+    "note": "Day10 の後は nurture_active タグの人に週1配信。型と量産プロンプトは messages/weekly/README.md と prompts/weekly-broadcast-prompt.md。bought_course が付いた人は講座案内から除外する",
+    "cadence": "週1回・水または木の20:00。4回のうち売り込みは1回だけ",
+    "templates": "messages/weekly/"
   },
   "compliance": {
     "notes": [

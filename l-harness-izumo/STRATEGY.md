@@ -103,4 +103,7 @@ LINE ステップ配信 Day0〜7（L Harness、全自動）
 3. **サイト改修（Claude Code に `prompts/izumo-kaiun-site-prompt.md` を貼る）**: Stripe・特商法撤去、CTA を note に
 4. **L Harness 投入（Claude Code に `seed-prompt.md` を貼る）**: シナリオ＋AI鑑定を実装。note の URL を `scenario.json` の `variables` に入れてから
 5. **自分で通しテスト**: 診断 → LINE 登録 → A 送信 → Day0 → (時刻を早めて) Day3 → note 購入 → 合言葉 → AI 鑑定が返る
-6. リール投稿開始。数字は「LINE登録数」「note購入数（3商品）」だけ見る
+6. **通しテスト**: `TESTING.md` のチェックリストを上から潰す（30〜40分）。特にAI鑑定と安全弁
+7. **既存の特典動画を再配置**: `assets/bonus-videos.csv` を埋めて `prompts/bonus-video-audit.md` を貼る
+8. リール投稿開始（`assets/reel-scripts.md` に台本12本）。数字は「LINE登録数」「note購入数（3商品）」だけ見る
+9. Day10 到達者が出たら、週1配信を開始（`prompts/weekly-broadcast-prompt.md` で1ヶ月分まとめて書く）
