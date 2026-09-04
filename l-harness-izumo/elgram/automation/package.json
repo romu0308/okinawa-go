@@ -1,0 +1,15 @@
+{
+  "name": "elgram-setup",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "login": "node login.mjs",
+    "explore": "node explore.mjs",
+    "apply": "node apply.mjs",
+    "dry": "node apply.mjs --dry-run"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}

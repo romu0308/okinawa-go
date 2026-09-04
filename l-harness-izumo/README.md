@@ -37,7 +37,7 @@ L Harness 管理画面（l-harness-izumo-admin.pages.dev）で手作業する予
 | `TESTING.md` | 公開前の通しテスト手順（30〜40分。note購入は不要） |
 | `elgram/setup.md` | エルグラムに貼るだけの設定表（キーワード・公開返信・DM文面） |
 | `elgram/troubleshooting.md` | DMが届かない等の切り分け表 |
-| `prompts/elgram-browser-automation.md` | （任意）エルグラム設定をブラウザ自動操作する場合 |
+| `elgram/automation/` | Mac で動くエルグラム設定の自動化ツール（ログインだけ手動） |
 | `seed-prompt.md` | ローカルの L Harness リポジトリで Claude Code に貼るだけの投入指示文（AI鑑定の実装込み） |
 | `STRATEGY.md` | 事業設計の全体（note一本化・自動化・匿名運営チェックリスト・実行順） |
 | `ai-kantei/` | AI 個別鑑定の仕様・システムプロンプト・参考実装 |

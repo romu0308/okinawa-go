@@ -53,7 +53,7 @@ LINE ステップ配信 Day0〜7（L Harness、全自動）
 
 | 工程 | 担当 | 状態 |
 |---|---|---|
-| リールのコメント → 診断URLのDM | エルグラム | `elgram/setup.md` の通りに設定すれば済 |
+| リールのコメント → 診断URLのDM | エルグラム | `elgram/automation/` で自動設定（ログインのみ手動） |
 | 診断 → LINE 誘導 | izumo-kaiun.com | 済（Stripe撤去のみ必要） |
 | A〜D 受付・ステップ配信 | L Harness | `scenario.json` を投入すれば済 |
 | 1,000円 レポート販売 | note | 記事4本を公開すれば済 |
