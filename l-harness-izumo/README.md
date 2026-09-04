@@ -44,6 +44,12 @@ L Harness 管理画面（l-harness-izumo-admin.pages.dev）で手作業する予
 | `note/` | note 記事の下書き6本（レポート×4、カウンセリング、講座） |
 | `prompts/izumo-kaiun-site-prompt.md` | izumo-kaiun.com から Stripe・特商法・特定情報を撤去する改修プロンプト |
 
+## Mac への取り込み（最初にこれ）
+
+```bash
+cd ~ && rm -rf izumo-package && git clone -b claude/line-harness-scenario-setup-f5srml --depth 1 https://github.com/romu0308/okinawa-go.git izumo-package && bash izumo-package/l-harness-izumo/setup-mac.sh
+```
+
 ## 使い方（自動投入）
 
 1. ローカルの L Harness プロジェクト（`~/line-harness`）でこのフォルダを取得する

@@ -5,17 +5,14 @@ ID・パスワードはコードにもファイルにも保存しない。
 
 ## 準備（1回だけ・5分）
 
-```bash
-mkdir -p ~/elgram-setup
-```
-
-このフォルダ（`elgram/automation/` の中身）を `~/elgram-setup` にコピーして、
+ターミナルに**これをまるごと貼って Enter**。取得・配置・インストールまで全部やる。
 
 ```bash
-cd ~/elgram-setup
-npm install
-npx playwright install chromium
+cd ~ && rm -rf izumo-package && git clone -b claude/line-harness-scenario-setup-f5srml --depth 1 https://github.com/romu0308/okinawa-go.git izumo-package && mkdir -p ~/elgram-setup && cp -R izumo-package/l-harness-izumo/elgram/automation/. ~/elgram-setup/ && cd ~/elgram-setup && npm install && npx playwright install chromium && echo "=== 準備完了 ==="
 ```
+
+最後に `=== 準備完了 ===` と出れば成功。
+（`~/izumo-package` に note 記事の下書きなど全資料も入る）
 
 ## 手順1：ログイン（1回だけ）
 
