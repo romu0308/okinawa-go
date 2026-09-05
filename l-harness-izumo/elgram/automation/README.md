@@ -26,25 +26,25 @@ npm run login
 > パスワードは私には見えないし、保存もされない。保存されるのはセッション情報だけ。
 > `auth.json` は他人に渡さないこと（.gitignore 済み）。
 
-## 手順2：画面の構造を書き出す
-
-私はエルグラムの画面を見られないので、まず見えるようにする。
-キーワード応答を作る画面まで手で進んでから、そのURLを渡す。
+## 手順2：画面を自動で読み取る（URLを探す必要はない）
 
 ```bash
-node explore.mjs "https://lgram.jp/（キーワード応答の作成画面のURL）" keyword-form
+npm run scan
 ```
 
-`pagemap/keyword-form.json`（入力欄とボタンの一覧）と
-`pagemap/keyword-form.png`（画面全体の画像）ができる。
+管理画面を自動で歩き回って、全ページの入力欄・ボタン・見出しを書き出す。
+ログアウトや削除のリンクは踏まないようにしてある。2〜3分で終わる。
+
+終わると `pagemap/ALL.json` ができる。**これを Claude に貼る。**
+
+（特定の1画面だけ見たいときは `node explore.mjs "<URL>" <保存名>` も使える）
 
 ## 手順3：plan.json を埋める
 
-同じフォルダで `claude` を起動して、これを貼る。
+`pagemap/ALL.json` の中身を Claude に貼るか、同じフォルダで `claude` を起動してこれを貼る。
 
 ```
-pagemap/keyword-form.json と pagemap/keyword-form.png を読んで、
-plan.json を完成させて。
+pagemap/ALL.json を読んで、plan.json を完成させて。
 
 やりたいこと：エルグラムに「縁切り」というキーワード応答ルールを1本作る。
 入れる値は settings.json に全部入っている（@keyword のように参照する）。
@@ -104,7 +104,8 @@ npm run apply
 | ファイル | 役割 |
 |---|---|
 | `login.mjs` | ログイン状態を保存する（手動ログイン） |
-| `explore.mjs` | 画面の入力欄・ボタンを JSON と画像に書き出す |
+| `scan.mjs` | 管理画面を自動で歩いて全ページを書き出す（**これを使う**） |
+| `explore.mjs` | 特定の1画面だけ書き出す |
 | `apply.mjs` | plan.json の手順どおりに操作する |
 | `settings.json` | **入れる値。文面を直すならここ** |
 | `plan.json` | 画面ごとの操作手順（手順3で埋める） |

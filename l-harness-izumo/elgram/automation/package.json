@@ -7,7 +7,8 @@
     "login": "node login.mjs",
     "explore": "node explore.mjs",
     "apply": "node apply.mjs",
-    "dry": "node apply.mjs --dry-run"
+    "dry": "node apply.mjs --dry-run",
+    "scan": "node scan.mjs"
   },
   "dependencies": {
     "playwright": "^1.49.0"
