@@ -1,28 +1,78 @@
 {
-  "_readme": "画面の実物を見てから埋める。埋め方は README.md の『手順3』を参照。@で始まる値は settings.json から取る。",
-  "_actions": {
-    "goto": "{do:'goto', url:'...'}",
-    "click": "{do:'click', text:'ボタンの表示文字'}",
-    "fill": "{do:'fill', label:'項目名', value:'@keyword'} または {do:'fill', selector:'textarea', index:0, value:'@dm_1'}",
-    "select": "{do:'select', label:'一致方法', value:'@match'}",
-    "check": "{do:'check', label:'同一ユーザーへの再送を防ぐ'}",
-    "confirm": "{do:'confirm', message:'保存を押していい？'}",
-    "danger": "保存など戻せない操作には danger:true を付ける。dry-run で飛ばされ、本番では確認が入る"
-  },
+  "_readme": "エルグラム自動応答ルール作成。まず1画面目（応答名＋キーワード）だけ入れて、次の画面をスクショに撮る。2画面目以降の手順はそのスクショを見てから追加する。",
+  "_notes": [
+    "@で始まる値は settings.json から取る",
+    "danger:true の手順は dry-run では飛ばされ、本番では必ず確認が入る",
+    "要素が見つからなければ推測せず止まり、pagemap/error-*.png を残す"
+  ],
   "steps": [
     {
       "do": "goto",
-      "url": "https://lgram.jp/",
-      "note": "管理画面トップ（実際のURLに直す）"
+      "url": "https://go.lgram.jp/instagram/auto-reply",
+      "note": "自動応答の一覧を開く"
+    },
+    {
+      "do": "wait",
+      "ms": 1500
     },
     {
       "do": "screenshot",
-      "name": "00-top",
-      "note": "開始時点の記録"
+      "name": "a1-list",
+      "note": "一覧の状態を記録（既存4本を壊していないか後で確認できる）"
+    },
+    {
+      "do": "click",
+      "text": "新規作成",
+      "note": "新しいルールを作る（ボタン名が違ったらここで止まる）"
+    },
+    {
+      "do": "wait",
+      "ms": 2500
+    },
+    {
+      "do": "screenshot",
+      "name": "a2-new-blank",
+      "note": "新規作成画面（入力前）"
+    },
+    {
+      "do": "fill",
+      "selector": "input[name=\"reply_name\"]",
+      "value": "@rule_name",
+      "note": "応答名を入れる"
+    },
+    {
+      "do": "fill",
+      "selector": "input[name=\"keyword_0\"]",
+      "value": "@keyword",
+      "note": "キーワード『縁切り』を入れる"
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "screenshot",
+      "name": "a3-filled",
+      "note": "入力後。この画像を見て内容を確認する"
     },
     {
       "do": "confirm",
-      "message": "ここから先は、画面を見て plan.json を埋めてから実行する。いまは止める。"
+      "message": "ブラウザの画面を見て、応答名とキーワードが正しく入っているか確認してほしい。問題なければ Enter で「保存して次へ」に進む。おかしければ q で中止。"
+    },
+    {
+      "do": "click",
+      "text": "保存して次へ",
+      "danger": true,
+      "note": "1画面目を保存して次へ"
+    },
+    {
+      "do": "wait",
+      "ms": 3000
+    },
+    {
+      "do": "screenshot",
+      "name": "a4-step2",
+      "note": "★2画面目。この画像を Claude に見せると、続きの手順を書ける"
     }
   ]
 }
