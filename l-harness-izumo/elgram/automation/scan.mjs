@@ -5,11 +5,16 @@ import { chromium } from "playwright";
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 
-const START = process.argv[2] ?? "https://lgram.jp/";
+const START =
+  process.argv[2] ??
+  (existsSync("start-url.txt") ? (await fs.readFile("start-url.txt", "utf8")).trim() : null) ??
+  "https://go.lgram.jp/";
 const MAX_PAGES = 30;
 
 // 触ってはいけないリンク（押すと危ない・意味がない）
 const SKIP = /logout|signout|ログアウト|削除|delete|destroy|退会|解約|支払|決済|billing|invoice|password|パスワード変更/i;
+// 公開サイト・マニュアル・事例ページは管理画面ではないので歩かない
+const MARKETING = /\/manual\/|interview|privacy|\/legal\/|\/terms|pricing|\/about\/|\/lp\/|\/blog\//i;
 
 if (!existsSync("auth.json")) {
   console.error("auth.json がない。先に `npm run login` を実行してほしい。");
@@ -70,6 +75,7 @@ const DUMP = () => {
   return out;
 };
 
+console.log(`起点: ${START}`);
 await page.goto(START, { waitUntil: "domcontentloaded" });
 await page.waitForLoadState("networkidle").catch(() => {});
 await page.waitForTimeout(1500);
@@ -107,6 +113,7 @@ while (queue.length && results.length < MAX_PAGES) {
 
   for (const l of map.links) {
     if (SKIP.test(l.text) || SKIP.test(l.href)) continue;
+    if (MARKETING.test(l.href)) continue;
     let u;
     try { u = new URL(l.href); } catch { continue; }
     if (u.origin !== origin) continue;
@@ -115,7 +122,15 @@ while (queue.length && results.length < MAX_PAGES) {
   }
 }
 
+const looksMarketing = results.filter((r) => MARKETING.test(r.url)).length;
 await fs.writeFile("pagemap/ALL.json", JSON.stringify({ origin, pages: results }, null, 2));
+if (looksMarketing > results.length / 2) {
+  console.log(`
+⚠️  読み取った${results.length}ページのうち${looksMarketing}ページが公開サイト・マニュアルだった。
+   管理画面にログインできていない可能性が高い。
+   ブラウザで管理画面を開いてそのURLをコピーし、
+   node scan.mjs "<そのURL>"  で起点を指定してやり直してほしい。`);
+}
 await browser.close();
 
 console.log(`
