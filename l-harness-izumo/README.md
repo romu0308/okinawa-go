@@ -42,6 +42,9 @@ L Harness 管理画面（l-harness-izumo-admin.pages.dev）で手作業する予
 | `STRATEGY.md` | 事業設計の全体（note一本化・自動化・匿名運営チェックリスト・実行順） |
 | `ai-kantei/` | AI 個別鑑定の仕様・システムプロンプト・参考実装 |
 | `note/` | note 記事の下書き6本（レポート×4、カウンセリング、講座） |
+| `course/SPEC.md` | **講座の正式仕様（唯一の正）。変えるときは必ずここを先に直す** |
+| `course/chapter-01-script.md` | 第1章の動画台本（15分・顔出しなし） |
+| `prompts/course-room-sync.md` | 別の作業部屋と講座仕様を突き合わせるためのプロンプト |
 | `prompts/izumo-kaiun-site-prompt.md` | izumo-kaiun.com から Stripe・特商法・特定情報を撤去する改修プロンプト |
 
 ## Mac への取り込み（最初にこれ）
