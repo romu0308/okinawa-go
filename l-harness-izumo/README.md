@@ -3,6 +3,19 @@
 L Harness 管理画面（l-harness-izumo-admin.pages.dev）で手作業する予定だった
 「キーワード応答ルール4本＋7日間ステップ配信」を、コードから一括投入するためのパッケージ。
 
+## 導線（サイトを経由しない）
+
+```
+リール → コメント「縁切り」→ エルグラム自動DM（ボタン）
+　→ LINE友だち追加（https://lin.ee/69dc6YF）
+　→ LINE内で3問診断 → レベルA〜D判定
+　→ Day0 → Day1〜Day10 のステップ配信
+　→ 販売は全て note（特商法は note が担う）
+```
+
+**診断サイトは使わない。** サイトで鑑定・販売を行うと特商法の表記（氏名・住所・電話）が
+必要になるため、診断は LINE の中で完結させる。
+
 ## 設計の全体像
 
 - 分岐は **Day0・Day2・Day3 のみレベル別（A〜D）**。他は共通。運用が軽く、効果検証もしやすい
@@ -30,6 +43,7 @@ L Harness 管理画面（l-harness-izumo-admin.pages.dev）で手作業する予
 | `messages/day7-offer-course.md` | Day7 講座オファー 49,800円 |
 | `messages/day8-followup.md` 〜 `day10-followup.md` | Day8〜10 買わなかった人向けフォロー3通 |
 | `messages/weekly/` | 週1ナーチャリング配信の型と保存先 |
+| `messages/diagnosis/` | **LINE内の3問診断（サイトの代わり）** |
 | `messages/buttons/` | **LINEのリンクをボタンにする（Flex Message）。Day3・5・7・10用** |
 | `assets/reel-scripts.md` | Instagram リール台本12本（3〜4週間分） |
 | `assets/bonus-videos.csv` | 既存の特典動画の棚卸しシート（自分で埋める） |

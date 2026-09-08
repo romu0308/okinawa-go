@@ -1,6 +1,6 @@
 {
   "name": "izumo-engiri-step7",
-  "description": "出雲縁切り LINEステップ配信（Day0〜7）。分岐はDay0/Day2/Day3のみレベル別、他は共通。販売は全てnote（1,000円レベル別レポート→4,980円カウンセリング→49,800円講座）",
+  "description": "出雲縁切り LINEステップ配信。診断はLINE内で完結（サイト経由なし）。分岐はDay0/Day2/Day3のみレベル別。販売は全てnote",
   "timezone": "Asia/Tokyo",
   "tags": [
     {
@@ -78,6 +78,58 @@
     {
       "key": "nurture_active",
       "label": "週1ナーチャリング配信の対象"
+    },
+    {
+      "key": "dx_active",
+      "label": "診断の途中"
+    },
+    {
+      "key": "dx_q1_a",
+      "label": "診断Q1=A"
+    },
+    {
+      "key": "dx_q1_b",
+      "label": "診断Q1=B"
+    },
+    {
+      "key": "dx_q1_c",
+      "label": "診断Q1=C"
+    },
+    {
+      "key": "dx_q1_d",
+      "label": "診断Q1=D"
+    },
+    {
+      "key": "dx_q2_a",
+      "label": "診断Q2=A"
+    },
+    {
+      "key": "dx_q2_b",
+      "label": "診断Q2=B"
+    },
+    {
+      "key": "dx_q2_c",
+      "label": "診断Q2=C"
+    },
+    {
+      "key": "dx_q2_d",
+      "label": "診断Q2=D"
+    },
+    {
+      "key": "dx_q3_a",
+      "label": "診断Q3=A"
+    },
+    {
+      "key": "dx_q3_b",
+      "label": "診断Q3=B"
+    },
+    {
+      "key": "dx_q3_c",
+      "label": "診断Q3=C"
+    },
+    {
+      "key": "dx_q3_d",
+      "label": "診断Q3=D"
     }
   ],
   "keyword_rules": [
@@ -114,7 +166,8 @@
           "scenario": "izumo-engiri-step7"
         }
       ],
-      "once_per_user": true
+      "once_per_user": true,
+      "note": "旧・サイト診断からの流入用（結果画面のA〜Dを送ってもらう方式）。LINE内診断に移行後も、念のため残しておく"
     },
     {
       "id": "kw-level-b",
@@ -149,7 +202,8 @@
           "scenario": "izumo-engiri-step7"
         }
       ],
-      "once_per_user": true
+      "once_per_user": true,
+      "note": "旧・サイト診断からの流入用（結果画面のA〜Dを送ってもらう方式）。LINE内診断に移行後も、念のため残しておく"
     },
     {
       "id": "kw-level-c",
@@ -184,7 +238,8 @@
           "scenario": "izumo-engiri-step7"
         }
       ],
-      "once_per_user": true
+      "once_per_user": true,
+      "note": "旧・サイト診断からの流入用（結果画面のA〜Dを送ってもらう方式）。LINE内診断に移行後も、念のため残しておく"
     },
     {
       "id": "kw-level-d",
@@ -219,7 +274,8 @@
           "scenario": "izumo-engiri-step7"
         }
       ],
-      "once_per_user": true
+      "once_per_user": true,
+      "note": "旧・サイト診断からの流入用（結果画面のA〜Dを送ってもらう方式）。LINE内診断に移行後も、念のため残しておく"
     },
     {
       "id": "kw-kantei-passcode",
@@ -345,7 +401,8 @@
     "course_url": "https://note.com/USER/n/COURSE",
     "_note": "noteの記事URLが決まったら差し替える。配信時は L Harness のトラッキングリンク経由にする",
     "booking_url": "https://calendar.app.google/XXXX",
-    "course_line_url": "https://lin.ee/y8Mrezf8"
+    "course_line_url": "https://lin.ee/69dc6YF",
+    "line_add_url": "https://lin.ee/69dc6YF"
   },
   "steps": [
     {
@@ -561,5 +618,138 @@
     "why": "長文の中のURLはLINEでタップされにくい。本文とは別に、ボタンだけのメッセージをもう1通送る",
     "how": "messages/buttons/README.md を参照。エルメなら管理画面のボタンブロック、L Harness なら Flex Message JSON",
     "rule": "本文にURLは書かない。ボタンは1通につき1つ。ボタンの文字は20文字以内"
+  },
+  "entry": {
+    "flow": "リール→コメント「縁切り」→エルグラム自動DM（ボタン）→LINE友だち追加→LINE内で3問診断→レベル判定→Day0→ステップ配信",
+    "line_add_url": "https://lin.ee/69dc6YF",
+    "why_no_site": "診断サイトで鑑定・販売を行うと特商法の表記（氏名・住所・電話）が必要になる。販売は全てnoteに寄せ、診断はLINE内で完結させることで匿名運営を保つ",
+    "diagnosis": "messages/diagnosis/"
+  },
+  "diagnosis": {
+    "spec": "messages/diagnosis/README.md",
+    "on_follow": {
+      "template": "messages/diagnosis/greeting.md",
+      "button": {
+        "label": "診断をはじめる",
+        "postback": "dx:start"
+      }
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "template": "messages/diagnosis/q1.md",
+        "options": [
+          {
+            "label": "はっきり1人いる",
+            "postback": "dx:q1:a",
+            "score": "a"
+          },
+          {
+            "label": "いるけど迷ってる",
+            "postback": "dx:q1:b",
+            "score": "b"
+          },
+          {
+            "label": "誰か分からない",
+            "postback": "dx:q1:c",
+            "score": "c"
+          },
+          {
+            "label": "特にいない",
+            "postback": "dx:q1:d",
+            "score": "d"
+          }
+        ]
+      },
+      {
+        "id": "q2",
+        "template": "messages/diagnosis/q2.md",
+        "tiebreaker": true,
+        "options": [
+          {
+            "label": "もう限界。離れたい",
+            "postback": "dx:q2:a",
+            "score": "a"
+          },
+          {
+            "label": "離れたいが怖い",
+            "postback": "dx:q2:b",
+            "score": "b"
+          },
+          {
+            "label": "誰といても疲れる",
+            "postback": "dx:q2:c",
+            "score": "c"
+          },
+          {
+            "label": "いまは落ち着いてる",
+            "postback": "dx:q2:d",
+            "score": "d"
+          }
+        ]
+      },
+      {
+        "id": "q3",
+        "template": "messages/diagnosis/q3.md",
+        "options": [
+          {
+            "label": "具体的な離れ方を知る",
+            "postback": "dx:q3:a",
+            "score": "a"
+          },
+          {
+            "label": "迷う気持ちを整理する",
+            "postback": "dx:q3:b",
+            "score": "b"
+          },
+          {
+            "label": "疲れの原因を知る",
+            "postback": "dx:q3:c",
+            "score": "c"
+          },
+          {
+            "label": "これから備える",
+            "postback": "dx:q3:d",
+            "score": "d"
+          }
+        ]
+      }
+    ],
+    "scoring": "3問の記号を集計し最多をレベルとする。同数の場合は q2 の回答を採用（tiebreaker）",
+    "on_complete": [
+      {
+        "type": "remove_tag",
+        "tag": "dx_active"
+      },
+      {
+        "type": "add_tag",
+        "tag": "level_{result}"
+      },
+      {
+        "type": "add_tag",
+        "tag": "step_active"
+      },
+      {
+        "type": "send_message",
+        "template": "messages/day0-common.md"
+      },
+      {
+        "type": "send_message",
+        "template": "messages/day0-level-{result}.md"
+      },
+      {
+        "type": "start_scenario",
+        "scenario": "izumo-engiri-step7"
+      }
+    ],
+    "fallback": {
+      "if_tag": "dx_active",
+      "template": "messages/diagnosis/fallback.md"
+    },
+    "restart_keywords": [
+      "診断",
+      "やり直し",
+      "最初から"
+    ]
   }
 }

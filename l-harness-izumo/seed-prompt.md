@@ -19,7 +19,14 @@ GitHubの公開リポジトリ romu0308/okinawa-go のブランチ claude/line-h
 4. `{{report_url_a〜d}}` `{{counseling_url}}` `{{course_url}}` は scenario.json の variables の値で置換する。まだ note.com/USER のプレースホルダなので、Day3・Day5・Day7 は下書き（無効）状態で登録し、URL確定後に有効化できるようにしておく。可能なら各URLは L Harness のトラッキングリンクとして発行し、その /t/ URL を本文に入れる
 5. 登録に使ったスクリプトを scripts/seed-scenario.(ts|js|sql) として残す。冪等な作り（既存データがあれば上書き）にして、文面を直したら再実行するだけで更新できるようにする
 6. 登録後、実際に保存された内容を読み出して、ルール（A〜D の4本＋合言葉・講座・申込の各ルール）とステップ10本が入っていることを確認して報告する
-7. **AI 個別鑑定を実装する**（ai-kantei/spec.md の仕様どおり）
+7. **LINE内の診断フローを実装する**（messages/diagnosis/README.md の仕様どおり）
+   - 友だち追加時（follow イベント）に greeting を送り、「診断をはじめる」ボタン（postback `dx:start`）を付ける
+   - Q1→Q2→Q3 を postback ボタンで進める。回答は `dx_qN_x` タグで保持する
+   - 3問そろったら最多の記号をレベルとする（同数なら Q2 を採用）
+   - 判定後：`dx_active` を外し、`level_x` と `step_active` を付け、day0-common → day0-level-X を送り、ステップ配信を開始
+   - `dx_active` の人が自由入力してきたら fallback.md を返す
+   - 「診断」「やり直し」「最初から」で診断を再開（`level_x` が付いている人は再診断させず、その旨を案内）
+8. **AI 個別鑑定を実装する**（ai-kantei/spec.md の仕様どおり）
    - `npm i @anthropic-ai/sdk`、`wrangler secret put ANTHROPIC_API_KEY`（値は私が後で入れる。コードに書かない）
    - ai-kantei/worker-reference.ts を土台に、このプロジェクトの Webhook ハンドラ・タグ操作・LINE push 関数に合わせて移植する
    - ai-kantei/system-prompt.md の common / level_a〜d を、そのままの文字列でビルドに埋め込む（プロンプトキャッシュのため変更しない）
@@ -27,6 +34,7 @@ GitHubの公開リポジトリ romu0308/okinawa-go のブランチ claude/line-h
    - 生成は `ctx.waitUntil()` で非同期にし、LINE Push で送る
    - 危険ワード時は Claude API を呼ばず spec の safety メッセージを返す
    - 実装後、`wrangler dev` でモックの LINE イベント（合言葉 → 状況文）を流して、鑑定文が返ることを確認して報告する
+9. 診断フローも `wrangler dev` で通しテストする（follow → dx:start → q1〜q3 → Day0が届く）
 
 管理画面のUIコードは変更しない。データ登録のみ。
 
