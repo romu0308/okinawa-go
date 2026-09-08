@@ -30,6 +30,7 @@ L Harness 管理画面（l-harness-izumo-admin.pages.dev）で手作業する予
 | `messages/day7-offer-course.md` | Day7 講座オファー 49,800円 |
 | `messages/day8-followup.md` 〜 `day10-followup.md` | Day8〜10 買わなかった人向けフォロー3通 |
 | `messages/weekly/` | 週1ナーチャリング配信の型と保存先 |
+| `messages/buttons/` | **LINEのリンクをボタンにする（Flex Message）。Day3・5・7・10用** |
 | `assets/reel-scripts.md` | Instagram リール台本12本（3〜4週間分） |
 | `assets/bonus-videos.csv` | 既存の特典動画の棚卸しシート（自分で埋める） |
 | `prompts/weekly-broadcast-prompt.md` | 週1配信を1回で1ヶ月分書かせるプロンプト |

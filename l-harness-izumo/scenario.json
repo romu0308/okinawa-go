@@ -411,7 +411,12 @@
             "report_url": "{{report_url_d}}"
           }
         }
-      ]
+      ],
+      "follow_up_message": {
+        "template": "messages/buttons/day3-report-button.json",
+        "type": "flex"
+      },
+      "note": "本文の直後にボタン付きメッセージをもう1通送る（URLはボタンにのみ入れる）"
     },
     {
       "day": 4,
@@ -423,7 +428,12 @@
       "day": 5,
       "send_time": "20:00",
       "title": "中額オファー：カウンセリング 4,980円（note有料記事＝申込チケット）",
-      "template": "messages/day5-offer-counseling.md"
+      "template": "messages/day5-offer-counseling.md",
+      "follow_up_message": {
+        "template": "messages/buttons/day5-counseling-button.json",
+        "type": "flex"
+      },
+      "note": "本文の直後にボタン付きメッセージをもう1通送る（URLはボタンにのみ入れる）"
     },
     {
       "day": 6,
@@ -446,7 +456,12 @@
           "type": "add_tag",
           "tag": "step_done"
         }
-      ]
+      ],
+      "follow_up_message": {
+        "template": "messages/buttons/day7-course-button.json",
+        "type": "flex"
+      },
+      "note": "本文の直後にボタン付きメッセージをもう1通送る（URLはボタンにのみ入れる）"
     },
     {
       "day": 8,
@@ -482,7 +497,12 @@
           "type": "add_tag",
           "tag": "nurture_active"
         }
-      ]
+      ],
+      "follow_up_message": {
+        "template": "messages/buttons/day10-course-button.json",
+        "type": "flex"
+      },
+      "note": "本文の直後にボタン付きメッセージをもう1通送る（URLはボタンにのみ入れる）"
     }
   ],
   "post_scenario": {
@@ -536,5 +556,10 @@
     ],
     "passcode_matching": "trim → 全角英数を半角 → 大文字化 → ハイフン/アンダースコア/空白を除去 してから比較",
     "rotation": "3ヶ月に1回 passcodes の値を変え、note 記事の末尾も同時に更新する"
+  },
+  "line_buttons": {
+    "why": "長文の中のURLはLINEでタップされにくい。本文とは別に、ボタンだけのメッセージをもう1通送る",
+    "how": "messages/buttons/README.md を参照。エルメなら管理画面のボタンブロック、L Harness なら Flex Message JSON",
+    "rule": "本文にURLは書かない。ボタンは1通につき1つ。ボタンの文字は20文字以内"
   }
 }

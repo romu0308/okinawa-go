@@ -1,0 +1,49 @@
+{
+  "type": "flex",
+  "altText": "個別カウンセリング",
+  "contents": {
+    "type": "bubble",
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "md",
+      "paddingAll": "20px",
+      "contents": [
+        {
+          "type": "text",
+          "text": "個別カウンセリング",
+          "weight": "bold",
+          "size": "lg",
+          "wrap": true,
+          "color": "#333333"
+        },
+        {
+          "type": "text",
+          "text": "60分・4,980円。Zoom、顔出し不要。あなたの状況に合わせて、距離の取り方の順番を一緒に決める。",
+          "size": "sm",
+          "wrap": true,
+          "color": "#666666"
+        }
+      ]
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "paddingAll": "16px",
+      "paddingTop": "0px",
+      "contents": [
+        {
+          "type": "button",
+          "style": "primary",
+          "height": "sm",
+          "color": "#8B7355",
+          "action": {
+            "type": "uri",
+            "label": "申し込む",
+            "uri": "{{counseling_url}}"
+          }
+        }
+      ]
+    }
+  }
+}

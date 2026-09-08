@@ -1,0 +1,49 @@
+{
+  "type": "flex",
+  "altText": "診断レポート",
+  "contents": {
+    "type": "bubble",
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "md",
+      "paddingAll": "20px",
+      "contents": [
+        {
+          "type": "text",
+          "text": "診断レポート",
+          "weight": "bold",
+          "size": "lg",
+          "wrap": true,
+          "color": "#333333"
+        },
+        {
+          "type": "text",
+          "text": "あなたのレベル別に、消耗のクセをまとめた1,000円のレポート。購入するとその場で読める。",
+          "size": "sm",
+          "wrap": true,
+          "color": "#666666"
+        }
+      ]
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "paddingAll": "16px",
+      "paddingTop": "0px",
+      "contents": [
+        {
+          "type": "button",
+          "style": "primary",
+          "height": "sm",
+          "color": "#8B7355",
+          "action": {
+            "type": "uri",
+            "label": "レポートを見る",
+            "uri": "{{report_url}}"
+          }
+        }
+      ]
+    }
+  }
+}
